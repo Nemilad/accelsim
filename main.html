@@ -10,9 +10,9 @@
 			<div class="container">
 				<div class="main-content">
 					<div class="tabs">
-						<button class="tab">Входные<br> данные</button>
-						<button class="tab">Параметры</button>
-						<button class="tab">Макро<br> слияние</button>
+						<button class="tab" onclick="openCity(event, 'input')" id="defaultOpen">Входные<br> данные</button>
+						<button class="tab" onclick="openCity(event, 'parameters')">Параметры</button>
+						<button class="tab" onclick="openCity(event, 'macro')">Макро<br> слияние</button>
 						<button class="tab">Микро<br> слияние</button>
 						<button class="tab">Нуль<br> идиомы</button>
 						<button class="tab">Один<br> идиомы</button>
@@ -20,7 +20,7 @@
 						<button class="tab-last">Сводка</button>
 					</div>
 					<div class="content">
-						<div class="tabcontent-not-active">
+						<div id="parameters" class="tabcontent">
 							<div class="tab-title-wrapper">
 								<p class="tab-title">Параметры архитектуры</p>
 							</div>
@@ -131,7 +131,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="tabcontent-not-active">
+						<div id="input" class="tabcontent">
 							<div class="column-1">
 								<p class="subtitle">Исходный код</p>
 								<textarea class="textarea"></textarea>
@@ -150,7 +150,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="tabcontent">
+						<div id="macro" class="tabcontent">
 							<div class="column-1">
 								<p class="subtitle">Итоги симуляции</p>
 								<div class="table-wrapper">
@@ -338,5 +338,6 @@
 				</div>
 			</div>
 		</div>
+		<script src="script.js"></script>
 	</body>
 </html>
