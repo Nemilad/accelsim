@@ -4,23 +4,26 @@
 		<meta charset="utf-8">
 		<title>Симулятор</title>
 		<link rel="stylesheet" type="text/css" href="app.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.9.0/brython.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.9.0/brython_stdlib.min.js"></script>
 	</head>
-	<body>
+	<body onload="brython()">
+		<script type="text/python" src="app.py"></script>
 		<div class="wrapper">
 			<div class="container">
 				<div class="main-content">
 					<div class="tabs">
-						<button class="tab" onclick="openCity(event, 'input')" id="defaultOpen">Входные<br> данные</button>
-						<button class="tab" onclick="openCity(event, 'parameters')">Параметры</button>
-						<button class="tab" onclick="openCity(event, 'macro')">Макро<br> слияние</button>
-						<button class="tab">Микро<br> слияние</button>
-						<button class="tab">Нуль<br> идиомы</button>
-						<button class="tab">Один<br> идиомы</button>
-						<button class="tab">LSD</button>
+						<button class="tab active" id="input_tab_button">Входные<br> данные</button>
+						<button class="tab" id="parameters_tab_button">Параметры</button>
+						<button class="tab" id="macro_tab_button">Макро<br> слияние</button>
+						<button class="tab" id="micro_tab_button">Микро<br> слияние</button>
+						<button class="tab" id="zeroing_tab_button">Нуль<br> идиомы</button>
+						<button class="tab" id="ones_tab_button">Один<br> идиомы</button>
+						<button class="tab" id="lsd_tab_button">LSD</button>
 						<button class="tab-last">Сводка</button>
 					</div>
 					<div class="content">
-						<div id="parameters" class="tabcontent">
+						<div id="parameters_tab" class="tabcontent" style="display: none;">
 							<div class="tab-title-wrapper">
 								<p class="tab-title">Параметры архитектуры</p>
 							</div>
@@ -131,7 +134,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="input" class="tabcontent">
+						<div id="input_tab" class="tabcontent" style="display: block;">
 							<div class="column-1">
 								<p class="subtitle">Исходный код</p>
 								<textarea class="textarea"></textarea>
@@ -150,7 +153,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="macro" class="tabcontent">
+						<div id="macro_tab" class="tabcontent" style="display: none;">
 							<div class="column-1">
 								<p class="subtitle">Итоги симуляции</p>
 								<div class="table-wrapper">
@@ -338,6 +341,5 @@
 				</div>
 			</div>
 		</div>
-		<script src="script.js"></script>
 	</body>
 </html>
