@@ -13,14 +13,14 @@
 			<div class="container">
 				<div class="main-content">
 					<div class="tabs">
-						<button class="tab active" id="input_tab_button">Входные<br> данные</button>
-						<button class="tab" id="parameters_tab_button">Параметры</button>
-						<button class="tab" id="macro_tab_button">Макро<br> слияние</button>
-						<button class="tab" id="micro_tab_button">Микро<br> слияние</button>
-						<button class="tab" id="zeroing_tab_button">Нуль<br> идиомы</button>
-						<button class="tab" id="ones_tab_button">Один<br> идиомы</button>
-						<button class="tab" id="lsd_tab_button">LSD</button>
-						<button class="tab-last">Сводка</button>
+						<button class="tab active" id="input_tab_button" tabindex="-1">Входные<br> данные</button>
+						<button class="tab" id="parameters_tab_button" tabindex="-1">Параметры</button>
+						<button class="tab" id="macro_tab_button" tabindex="-1">Макро<br> слияние</button>
+						<button class="tab" id="micro_tab_button" tabindex="-1">Микро<br> слияние</button>
+						<button class="tab" id="zeroing_tab_button" tabindex="-1">Нуль<br> идиомы</button>
+						<button class="tab" id="ones_tab_button" tabindex="-1">Один<br> идиомы</button>
+						<button class="tab" id="lsd_tab_button" tabindex="-1">LSD</button>
+						<button class="tab-last" tabindex="-1">Сводка</button>
 					</div>
 					<div class="content">
 						<div id="parameters_tab" class="tabcontent" style="display: none;">
@@ -321,22 +321,22 @@
 				</div>
 				<div class="global-settings">
 					<p>Язык</p>
-					<select class="language">
+					<select class="language" tabindex="-1">
 						<option>Русский</option>
 						<option>Английский</option>
 					</select>
 					<div class="blocks-wrapper">
 						<p class="blocks-title">Блоки</p>
 						<div class="blocks">
-							<p class="checkbox"><input type="checkbox" class="checkbox">Макро слияние</p>
-							<p class="checkbox"><input type="checkbox" class="checkbox">Микро слияние</p>
-							<p class="checkbox"><input type="checkbox" class="checkbox">Нуль идиомы</p>
-							<p class="checkbox"><input type="checkbox" class="checkbox">Один идиомы</p>
-							<p class="checkbox"><input type="checkbox" class="checkbox">LSD</p>
+							<p class="checkbox"><input type="checkbox" class="checkbox" tabindex="-1">Макро слияние</p>
+							<p class="checkbox"><input type="checkbox" class="checkbox" tabindex="-1">Микро слияние</p>
+							<p class="checkbox"><input type="checkbox" class="checkbox" tabindex="-1">Нуль идиомы</p>
+							<p class="checkbox"><input type="checkbox" class="checkbox" tabindex="-1">Один идиомы</p>
+							<p class="checkbox"><input type="checkbox" class="checkbox" tabindex="-1">LSD</p>
 						</div>
 					</div>
 					<div class="start-wrapper">
-						<button class="start">Запуск симуляции</button>
+						<button class="start" tabindex="-1">Запуск симуляции</button>
 					</div>
 				</div>
 			</div>

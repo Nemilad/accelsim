@@ -44,7 +44,7 @@ html, body {
 	}
 
 	.textarea {
-		height: 471px;
+		height: 451px;
 	}
 
 	.table-wrapper {
@@ -86,7 +86,7 @@ html, body {
 	}
 
 	.textarea {
-		height: 611px;
+		height: 591px;
 	}
 
 	.table-wrapper {
@@ -128,7 +128,7 @@ html, body {
 	}
 
 	.textarea {
-		height: 791px;
+		height: 771px;
 	}
 
 	.table-wrapper {
@@ -432,9 +432,12 @@ input.panel-checkbox-last {
 }
 
 .textarea {
-	width: 608px;
+	width: 588px;
 	margin-left: 10px;
+	padding: 10px;
 	resize: none;
+	font-size: 16px;
+	line-height: 1.4;
 }
 
 .load-file-wrapper {
