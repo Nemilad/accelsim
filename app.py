@@ -10,3 +10,30 @@ def switch_tab(ev):
         document[x.id].class_name = document[x.id].class_name.replace(" active", "")
     tab.style.display = "block"
     button.class_name += " active"
+
+def load_example():
+    pass
+
+def load_file():
+    pass
+
+def code_check(code):
+    pass
+
+def simulation():
+    pass
+
+def macro_fusion(code):
+    pass
+
+def micro_fusion(code):
+    pass
+
+def LSD(code):
+    pass
+
+def zeroing_idiom(code):
+    pass
+
+def ones_idiom(code):
+    pass
