@@ -1,4 +1,4 @@
-from browser import document, bind, alert
+from browser import document, bind, console
 
 @bind("button.tab", "click")
 def switch_tab(ev):
@@ -18,10 +18,17 @@ def load_file():
     pass
 
 def code_check(code):
+    for line in code:
+        pass
     pass
 
-def simulation():
-    pass
+@bind("button.start", "click")
+def simulation(ev):
+    code = document["inputarea"].value
+    if code_check(code):
+        pass
+    else:
+        pass
 
 def macro_fusion(code):
     pass
