@@ -50,38 +50,110 @@
 								<div class="parameters-column">
 									<div class="parameters-sub-row-1">
 										<p class="subtitle-1">Параметры архитектуры</p>
-										<p>Количество простых декодеров:<input type="number" class="counter" min="1" max="8" value="4"></p>
-										<p class="label">Количество сложных декодеров:<input type="number" class="counter" min="1" max="8" value="1"></p>
-										<p class="label">Максимальное число микро операций<br> для сложного декодера:<input type="number" class="counter" min="2" max="8" value="4"></p>
+										<div class="cpu-wrapper">
+											<p>Количество простых декодеров:<input type="number" class="counter" min="1" max="8" value="4"></p>
+											<p class="label">Количество сложных декодеров:<input type="number" class="counter" min="1" max="8" value="1"></p>
+											<p class="label">Максимальное число микро операций<br> для сложного декодера:<input type="number" class="counter" min="2" max="8" value="4"></p>
+										</div>
 									</div>
 									<div class="parameters-sub-row-2">
 										<div class="parameters-sub-column">
 											<div class="parameters-sub-row-3">
 												<p class="subtitle-1">Микро слияние</p>
-												<p>read-modify<input type="checkbox" class="checkbox-1"></p>
-												<p class="label">address-write<input type="checkbox" class="checkbox-1"></p>
-												<p class="label">Два вида слияния<br> в одной инструкции<input type="checkbox" class="checkbox-1"></p>
+												<div class="micro-wrapper">
+													<p>read-modify<input type="checkbox" class="checkbox-1"></p>
+													<p class="label">address-write<input type="checkbox" class="checkbox-1"></p>
+													<p class="label">Два вида слияния<br> в одной инструкции<input type="checkbox" class="checkbox-1"></p>
+												</div>
 											</div>
 											<div class="parameters-sub-row-4">
 												<p class="subtitle-1">LSD</p>
-												<p class="label-1">Размер буфера<br> микро операций:<input type="number" class="counter" min="2" max="32" value="16"></p>
+												<div class="lsd-wrapper">
+													<p class="label-1">Размер буфера<br> микро операций:<input type="number" class="counter" min="2" max="32" value="16"></p>
+												</div>
 											</div>
 										</div>
 										<div class="parameters-sub-column">
 											<div class="parameters-sub-row-3">
 												<p class="subtitle-1">Нуль идиомы</p>
-												<p>XOR reg reg<input type="checkbox" class="checkbox-1"></p>
-												<p class="label">SUB reg reg<input type="checkbox" class="checkbox-1"></p>
+												<div class="idiom-0-wrapper">
+													<p>XOR reg reg<input type="checkbox" class="checkbox-1"></p>
+													<p class="label">SUB reg reg<input type="checkbox" class="checkbox-1"></p>
+												</div>
 											</div>
 											<div class="parameters-sub-row-4">
 												<p class="subtitle-1">Один идиомы</p>
-												<p>CMP reg reg<input type="checkbox" class="checkbox-1"></p>
+												<div class="idiom-1-wrapper">
+													<p>CMP reg reg<input type="checkbox" class="checkbox-1"></p>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="parameters-column">
-									<p class="subtitle-1">Макро слияние</p>
+									<p class="subtitle-2">Макро слияние</p>
+									<div class="macro-align-wrapper">
+										<p class="subtitle-3">Сливаемые пары операций</p>
+										<div class="macro-operations-wrapper">
+											<p class="subtitle-3">Первая операция</p>
+											<div class="macro-first-operation">
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">ADD</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">SUB</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">ADC</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">SBB</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">INC</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">DEC</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">CMP</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">TEST</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">AND</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">OR</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">XOR</p>
+												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">NOT</p>
+												<p class="checkbox-last"><input type="radio" name="operation-1" class="checkbox">NEG</p>
+											</div>
+										</div>
+										<div class="macro-operations-wrapper">
+											<p class="subtitle-3">Вторая операция</p>
+											<div class="macro-second-operation">
+												<p class="checkbox"><input type="checkbox" class="checkbox">JA</p>
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNA</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JAE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNAE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JB</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNB</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JBE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNBE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JC</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNC</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JG</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNG</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JGE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNGE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JL</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNL</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JLE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNLE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JS</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNS</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JO</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNO</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JP</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JNP</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JPO</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JPE</p> 
+												<p class="checkbox"><input type="checkbox" class="checkbox">JZ</p> 
+												<p class="checkbox-last"><input type="checkbox" class="checkbox">JNZ</p> 
+											</div>
+										</div>
+									<div class="macro-checkbox-wrapper">
+										<div class="vertical-align">
+											<p class="center-align"><input type="checkbox" class="checkbox">Две пары в такт</p>
+											<p class="checkbox-2"><input type="checkbox" class="checkbox">Перенос первой инструкции на следующий такт<br> при попадании на последний декодер</p>
+										</div>
+									</div>
+									</div>
 								</div>
 							</div>
 						</div>
