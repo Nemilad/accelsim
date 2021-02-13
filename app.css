@@ -883,3 +883,43 @@ input.panel-checkbox-last {
 	left: 0;
 	margin: auto;
 }
+
+.cpu-column-1 {
+	height: 100%;
+	width: 17%;
+	float: left;
+}
+
+.cpu-column-2 {
+	height: 100%;
+	width: 52%;
+	float: left;
+	text-align: center;
+}
+
+.cpu-column-3 {
+	height: 100%;
+	width: 31%;
+	float: left;
+	text-align: left;
+}
+
+.micro-column-1 {
+	height: 100%;
+	width: 18%;
+	float: left;
+}
+
+.micro-column-2 {
+	height: 100%;
+	width: 53%;
+	float: left;
+	text-align: center;
+}
+
+.micro-column-3 {
+	height: 100%;
+	width: 29%;
+	float: left;
+	text-align: left;
+}

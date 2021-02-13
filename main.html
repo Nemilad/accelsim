@@ -51,9 +51,19 @@
 									<div class="parameters-sub-row-1">
 										<p class="subtitle-1">Параметры архитектуры</p>
 										<div class="cpu-wrapper">
-											<p>Количество простых декодеров:<input type="number" class="counter" min="1" max="8" value="4"></p>
-											<p class="label">Количество сложных декодеров:<input type="number" class="counter" min="1" max="8" value="1"></p>
-											<p class="label">Максимальное число микро операций<br> для сложного декодера:<input type="number" class="counter" min="2" max="8" value="4"></p>
+											<div class="cpu-column-1"></div>
+											<div class="cpu-column-2">
+												<p style="line-height: 1.65;">Количество простых декодеров:</p>
+												<p class="label">Количество сложных декодеров:</p>
+												<p class="label">Максимальное число микро операций<br> для сложного декодера:</p>
+											</div>
+											<div class="cpu-column-3">
+												<p><input type="number" class="counter" min="1" max="8" value="4" id="input_decoders" style="margin-left: 10px; margin-top: 1px;">
+												</p>
+												<p><input type="number" class="counter" min="1" max="8" value="1" style="margin-top: 18px; margin-left: 10px;">
+												</p>
+												<p><input type="number" class="counter" min="2" max="8" value="4" style="margin-top: 30px; margin-left: 10px;"></p>
+											</div>
 										</div>
 									</div>
 									<div class="parameters-sub-row-2">
@@ -61,9 +71,17 @@
 											<div class="parameters-sub-row-3">
 												<p class="subtitle-1">Микро слияние</p>
 												<div class="micro-wrapper">
-													<p>read-modify<input type="checkbox" class="checkbox-1"></p>
-													<p class="label">address-write<input type="checkbox" class="checkbox-1"></p>
-													<p class="label">Два вида слияния<br> в одной инструкции<input type="checkbox" class="checkbox-1"></p>
+													<div class="micro-column-1"></div>
+													<div class="micro-column-2">
+														<p style="line-height: 1.65;">read-modify</p>
+														<p class="label">address-write</p>
+														<p class="label">Два вида слияния<br> в одной инструкции</p>
+													</div>
+													<div class="micro-column-3">
+														<p><input type="checkbox" class="checkbox-1" style="margin-top: 7px;"></p>
+														<p><input type="checkbox" class="checkbox-1" style="margin-top: 24px;"></p>
+														<p><input type="checkbox" class="checkbox-1" style="margin-top: 37px;"></p>
+													</div>
 												</div>
 											</div>
 											<div class="parameters-sub-row-4">
@@ -149,7 +167,7 @@
 										</div>
 									<div class="macro-checkbox-wrapper">
 										<div class="vertical-align">
-											<p class="center-align"><input type="checkbox" class="checkbox">Две пары в такт</p>
+											<p class="center-align">Количество слияний в такт:<input type="number" class="counter" min="1" max="8" value="2" id="input_fusions"></p>
 											<p class="checkbox-2"><input type="checkbox" class="checkbox">Перенос первой инструкции на следующий такт<br> при попадании на последний декодер</p>
 										</div>
 									</div>

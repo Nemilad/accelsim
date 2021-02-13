@@ -1,4 +1,5 @@
-from browser import document, bind, console
+from browser import document, bind, console, alert
+import re
 
 @bind("button.tab", "click")
 def switch_tab(ev):
@@ -44,3 +45,30 @@ def zeroing_idiom(code):
 
 def ones_idiom(code):
     pass
+
+@bind("input.counter", "change")
+def counter_validation(ev):
+    if (ev.target.value == ''):
+        alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
+        ev.target.value = ev.target.min
+        macro_fusions_validation()
+    else:
+        if (re.match('[0-9]*[.,][0-9]*|\\s', ev.target.value)):
+            alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
+            ev.target.value = ev.target.min
+            macro_fusions_validation()
+        else:
+            if (int(ev.target.value) < int(ev.target.min) or int(ev.target.value) > int(ev.target.max)):
+                alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
+                ev.target.value = ev.target.min
+                macro_fusions_validation()
+            else:
+                dummy = ev.target.value
+                ev.target.value = ''
+                ev.target.value = dummy
+                macro_fusions_validation()
+
+def macro_fusions_validation():
+    if (int(document["input_fusions"].value) > int(document["input_decoders"].value)):
+        alert("Количество макро слияний в такт не может быть больше, чем количество простых декодеров")
+        document["input_fusions"].value = document["input_decoders"].value
