@@ -186,7 +186,7 @@
 								<div class="macro-column-1">
 									<p class="subtitle">С макро слиянием</p>
 									<div class="table-wrapper-1">
-										<table class="table">
+										<table class="table" id="macro_table">
 											<tr>
 												<th class="th"></th>
 												<th class="th">Инструкция</th>
@@ -194,14 +194,6 @@
 												<th class="th">Операнд 2</th>
 												<th class="th">Декодер</th>
 												<th class="th">Такт<br> декодирования</th>
-											</tr>
-											<tr>
-												<td class="td">1</td>
-												<td class="td">ADD</td>
-												<td class="td">RAX</td>
-												<td class="td">MEM1</td>
-												<td class="td">Простой</td>
-												<td class="td">1</td>
 											</tr>
 										</table>
 									</div>
@@ -209,7 +201,7 @@
 								<div class="macro-column-2">
 									<p class="subtitle">Без макро слияния</p>
 									<div class="table-wrapper-1">
-										<table class="table">
+										<table class="table" id="macro_table_2">
 											<tr>
 												<th class="th"></th>
 												<th class="th">Инструкция</th>
@@ -217,14 +209,6 @@
 												<th class="th">Операнд 2</th>
 												<th class="th">Декодер</th>
 												<th class="th">Такт<br> декодирования</th>
-											</tr>
-											<tr>
-												<td class="td">1</td>
-												<td class="td">ADD</td>
-												<td class="td">RAX</td>
-												<td class="td">MEM1</td>
-												<td class="td">Простой</td>
-												<td class="td">1</td>
 											</tr>
 											</tr>
 										</table>
@@ -242,7 +226,7 @@
 							<div class="macro-row-2">
 								<p class="subtitle">Результат</p>
 								<div class="table-wrapper-1">
-									<table class="table">
+									<table class="table" id="micro_table">
 										<tr>
 											<th class="th"></th>
 											<th class="th">Инструкция</th>
@@ -254,18 +238,6 @@
 											<th class="th">Операции WRITE</th>
 											<th class="th">Операции до слияния</th>
 											<th class="th">Операции после слияния</th>
-										</tr>
-										<tr>
-											<td class="td">1</td>
-											<td class="td">TEST</td>
-											<td class="td">ECX</td>
-											<td class="td">EBX</td>
-											<td class="td">1</td>
-											<td class="td">1</td>
-											<td class="td"></td>
-											<td class="td"></td>
-											<td class="td">2</td>
-											<td class="td">1</td>
 										</tr>
 									</table>
 								</div>

@@ -1,4 +1,5 @@
-from browser import document, bind, console, alert
+from browser import document, bind, console, alert, html
+from browser.html import TABLE, TR, TH, TD
 import re
 
 settings = {
@@ -67,6 +68,8 @@ def simulation(ev):
                     'op2': '',
                     'dec_type': '',
                     'dec_cycle': '',
+                    'dec_type_2': '',
+                    'dec_cycle_2': '',
                     'uop_read': '',
                     'uop_modify': '',
                     'uop_address': '',
@@ -100,6 +103,13 @@ def simulation(ev):
         print(code_table)
         print(mark_list)
 
+        micro_fusion(code_table)
+        zeroing_idiom(code_table)
+        ones_idiom(code_table)
+        LSD(code_table, mark_list)
+        macro_fusion(code_table)
+        fill_tables(code_table)
+
     else:
         pass
 
@@ -116,6 +126,41 @@ def zeroing_idiom(code_table):
     pass
 
 def ones_idiom(code_table):
+    pass
+
+def fill_tables(code_table):
+    for i, line in enumerate(code_table):
+        document["micro_table"].get(selector="tbody")[0] <= html.TR()
+        document["macro_table"].get(selector="tbody")[0] <= html.TR()
+        document["macro_table_2"].get(selector="tbody")[0] <= html.TR()
+
+        u_row = document["micro_table"].get(selector="tbody")[0].get(selector="tr")[i + 1]
+        u_row <= TD(f"{i+1}", Class="td")
+        u_row <= TD(line["op"], Class="td")
+        u_row <= TD(line["op1"], Class="td")
+        u_row <= TD(line["op2"], Class="td")
+        u_row <= TD(line["uop_read"], Class="td")
+        u_row <= TD(line["uop_modify"], Class="td")
+        u_row <= TD(line["uop_address"], Class="td")
+        u_row <= TD(line["uop_write"], Class="td")
+        u_row <= TD(line["uop_before"], Class="td")
+        u_row <= TD(line["uop_after"], Class="td")
+
+        m_row = document["macro_table"].get(selector="tbody")[0].get(selector="tr")[i + 1]
+        m_row <= TD(f"{i+1}", Class="td")
+        m_row <= TD(line["op"], Class="td")
+        m_row <= TD(line["op1"], Class="td")
+        m_row <= TD(line["op2"], Class="td")
+        m_row <= TD(line["dec_type"], Class="td")
+        m_row <= TD(line["dec_cycle"], Class="td")
+
+        m2_row = document["macro_table_2"].get(selector="tbody")[0].get(selector="tr")[i + 1]
+        m2_row <= TD(f"{i+1}", Class="td")
+        m2_row <= TD(line["op"], Class="td")
+        m2_row <= TD(line["op1"], Class="td")
+        m2_row <= TD(line["op2"], Class="td")
+        m2_row <= TD(line["dec_type_2"], Class="td")
+        m2_row <= TD(line["dec_cycle_2"], Class="td")
     pass
 
 @bind("input.counter", "change")
