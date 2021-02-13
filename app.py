@@ -122,17 +122,26 @@ def ones_idiom(code_table):
 def counter_validation(ev):
     if (ev.target.value == ''):
         alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
-        ev.target.value = ev.target.min
+        if ev.target.value > ev.target.min:
+            ev.target.value = ev.target.max
+        else:
+            ev.target.value = ev.target.min
         macro_fusions_validation()
     else:
         if (re.match('[0-9]*[.,][0-9]*|\\s', ev.target.value)):
             alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
-            ev.target.value = ev.target.min
+            if ev.target.value > ev.target.min:
+                ev.target.value = ev.target.max
+            else:
+                ev.target.value = ev.target.min
             macro_fusions_validation()
         else:
             if (int(ev.target.value) < int(ev.target.min) or int(ev.target.value) > int(ev.target.max)):
                 alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
-                ev.target.value = ev.target.min
+                if ev.target.value > ev.target.min:
+                    ev.target.value = ev.target.max
+                else:
+                    ev.target.value = ev.target.min
                 macro_fusions_validation()
             else:
                 dummy = ev.target.value
