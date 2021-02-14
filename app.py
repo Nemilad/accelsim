@@ -7,8 +7,8 @@ settings = {
         'macro_fusion': True,
         'micro_fusion': True,
         'LSD': True,
-        'Zeroing_Idioms': True,
-        'Ones_Idioms': True
+        'zeroing_idioms': True,
+        'ones_idioms': True
     },
     'arch_parameters': {
         'simple_decoders': 4,
@@ -97,17 +97,21 @@ def simulation(ev):
                     template['op'] = line.split()[0]
                     template['op1'] = line.split()[1]
                 else:
-                    template['op'] = line.split()[1]
+                    template['op'] = line.split()[0]
             code_table.append(template.copy())
             template.clear()
-        print(code_table)
-        print(mark_list)
 
-        micro_fusion(code_table)
-        zeroing_idiom(code_table)
-        ones_idiom(code_table)
-        LSD(code_table, mark_list)
-        macro_fusion(code_table)
+        if settings["block_enabled"]["micro_fusion"]:
+            micro_fusion(code_table)
+        if settings["block_enabled"]["zeroing_idioms"]:
+            zeroing_idioms(code_table)
+        if settings["block_enabled"]["ones_idioms"]:
+            ones_idioms(code_table)
+        if settings["block_enabled"]["LSD"]:
+            LSD(code_table, mark_list)
+        if settings["block_enabled"]["macro_fusion"]:
+            macro_fusion(code_table)
+
         fill_tables(code_table)
 
     else:
@@ -122,19 +126,28 @@ def micro_fusion(code_table):
 def LSD(code_table, mark_list):
     pass
 
-def zeroing_idiom(code_table):
+def zeroing_idioms(code_table):
     pass
 
-def ones_idiom(code_table):
+def ones_idioms(code_table):
     pass
+
+def clear_tables():
+    for row in document["micro_table"].select('tbody')[0].select('tr')[1:]:
+        row.remove()
+    for row in document["macro_table"].select('tbody')[0].select('tr')[1:]:
+        row.remove()
+    for row in document["macro_table_2"].select('tbody')[0].select('tr')[1:]:
+        row.remove()
 
 def fill_tables(code_table):
+    clear_tables()
     for i, line in enumerate(code_table):
-        document["micro_table"].get(selector="tbody")[0] <= html.TR()
-        document["macro_table"].get(selector="tbody")[0] <= html.TR()
-        document["macro_table_2"].get(selector="tbody")[0] <= html.TR()
+        document["micro_table"].select('tbody')[0] <= html.TR()
+        document["macro_table"].select('tbody')[0] <= html.TR()
+        document["macro_table_2"].select('tbody')[0] <= html.TR()
 
-        u_row = document["micro_table"].get(selector="tbody")[0].get(selector="tr")[i + 1]
+        u_row = document["micro_table"].select('tbody')[0].select('tr')[i + 1]
         u_row <= TD(f"{i+1}", Class="td")
         u_row <= TD(line["op"], Class="td")
         u_row <= TD(line["op1"], Class="td")
@@ -146,7 +159,7 @@ def fill_tables(code_table):
         u_row <= TD(line["uop_before"], Class="td")
         u_row <= TD(line["uop_after"], Class="td")
 
-        m_row = document["macro_table"].get(selector="tbody")[0].get(selector="tr")[i + 1]
+        m_row = document["macro_table"].select('tbody')[0].select('tr')[i + 1]
         m_row <= TD(f"{i+1}", Class="td")
         m_row <= TD(line["op"], Class="td")
         m_row <= TD(line["op1"], Class="td")
@@ -154,7 +167,7 @@ def fill_tables(code_table):
         m_row <= TD(line["dec_type"], Class="td")
         m_row <= TD(line["dec_cycle"], Class="td")
 
-        m2_row = document["macro_table_2"].get(selector="tbody")[0].get(selector="tr")[i + 1]
+        m2_row = document["macro_table_2"].select('tbody')[0].select('tr')[i + 1]
         m2_row <= TD(f"{i+1}", Class="td")
         m2_row <= TD(line["op"], Class="td")
         m2_row <= TD(line["op1"], Class="td")
