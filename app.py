@@ -286,3 +286,11 @@ def macro_fusions_validation():
     if (int(document["input_fusions"].value) > int(document["input_decoders"].value)):
         alert("Количество макро слияний в такт не может быть больше, чем количество простых декодеров")
         document["input_fusions"].value = document["input_decoders"].value
+
+@bind("input.micro-checkbox", "change")
+def micro_settings_validation(ev):
+    if (document["micro-checkbox-1"].checked == False or document["micro-checkbox-2"].checked == False):
+        document["micro-checkbox-3"].checked = False
+        document["micro-checkbox-3"].setAttribute('disabled', 'disabled')
+    else:
+        document["micro-checkbox-3"].removeAttribute('disabled')
