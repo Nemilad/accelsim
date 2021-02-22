@@ -16,7 +16,112 @@ settings = {
         'uop_complex': 4
     },
     'macro_parameters': {
-
+        'ADD': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'SUB': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'ADC': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'SBB': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'INC': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'DEC': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'CMP': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'TEST': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'AND': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'OR': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'XOR': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'NOT': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'NEG': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
+                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+                'JZ': False, 'JNZ': False},
+        'max_fusions': 2,
+        'transition': True
     },
     'micro_parameters': {
         'read_modify': True,
@@ -31,7 +136,7 @@ settings = {
         'SUB': True
     },
     'Ones_parameters': {
-        
+        'CMP': True
     },
 }
 
@@ -44,6 +149,8 @@ cell_style = {
     "combined": {"background-color": "#00ffff"}
 }
 
+current_radio_button = ""
+
 @bind("button.tab", "click")
 def switch_tab(ev):
     button = document[ev.target.id]
@@ -54,6 +161,21 @@ def switch_tab(ev):
         document[x.id].class_name = document[x.id].class_name.replace(" active", "")
     tab.style.display = "block"
     button.class_name += " active"
+
+@bind(document.select("div.macro-first-operation")[0].select("input.checkbox"), "click")
+def switch_macro(ev):
+    global current_radio_button
+    current_radio_button = ev.target.parent.text
+    for box in document.select("div.macro-second-operation")[0].select("input.checkbox"):
+        box.checked = settings["macro_parameters"][ev.target.parent.text][box.parent.text]
+
+@bind(document.select("div.macro-second-operation")[0].select("input.checkbox"), "click")
+def macro_update(ev):
+    global current_radio_button
+    if ev.target.checked and current_radio_button != "":
+        settings["macro_parameters"][current_radio_button][ev.target.parent.text] = True
+    elif not(ev.target.checked) and current_radio_button != "":
+        settings["macro_parameters"][current_radio_button][ev.target.parent.text] = False
 
 def load_example():
     pass
