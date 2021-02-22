@@ -35,6 +35,12 @@ settings = {
     },
 }
 
+cell_style = {
+    "read_modify": {"background-color": "#40ff00"},
+    "address_write": {"background-color": "#0040ff"},
+    "combined": {"background-color": "#00ffff"}
+}
+
 @bind("button.tab", "click")
 def switch_tab(ev):
     button = document[ev.target.id]
@@ -66,7 +72,7 @@ def update_settings():
     settings["arch_parameters"]["simple_decoders"] = input_value[0].value
     settings["arch_parameters"]["complex_decoders"] = input_value[1].value
     settings["arch_parameters"]["uop_complex"] = input_value[2].value
-    input_value = document.select("div.micro-column-3")[0].select(".checkbox-1")
+    input_value = document.select("div.micro-column-3")[0].select(".micro-checkbox")
     settings["micro_parameters"]["read_modify"] = input_value[0].checked
     settings["micro_parameters"]["address_write"] = input_value[1].checked
     settings["micro_parameters"]["combined_enabled"] = input_value[2].checked
@@ -232,7 +238,14 @@ def fill_tables(code_table):
         u_row <= TD(line["uop_address"], Class="td")
         u_row <= TD(line["uop_write"], Class="td")
         u_row <= TD(line["uop_before"], Class="td")
-        u_row <= TD(line["uop_after"], Class="td")
+        if line["uop_fusion"] == "combined":
+            u_row <= TD(line["uop_after"], Class="td", Style=cell_style["combined"])
+        elif line["uop_fusion"] == "address_write":
+            u_row <= TD(line["uop_after"], Class="td", Style=cell_style["address_write"])
+        elif line["uop_fusion"] == "read_modify":
+            u_row <= TD(line["uop_after"], Class="td", Style=cell_style["read_modify"])
+        else:
+            u_row <= TD(line["uop_after"], Class="td")
 
         m_row = document["macro_table"].select('tbody')[0].select('tr')[i + 1]
         m_row <= TD(f"{i+1}", Class="td")
