@@ -36,6 +36,9 @@ settings = {
 }
 
 cell_style = {
+    "zeroing_idiom": {"background-color": "#ff00ff"},
+    "ones_idiom": {"background-color": "#ff007b"},
+    "macro_fusion": {"background-color": "#ffff00"},
     "read_modify": {"background-color": "#40ff00"},
     "address_write": {"background-color": "#0040ff"},
     "combined": {"background-color": "#00ffff"}
@@ -98,7 +101,7 @@ def simulation(ev):
                     'uop_write': '',
                     'uop_before': '',
                     'uop_after': '',
-                    'uop_fusion': ''
+                    'uop_type': ''
             }
             if line.split()[0][-1] == ':':
                 mark_list.append({'mark': line.split()[0][:-1], 'pos': num})
@@ -172,17 +175,17 @@ def micro_fusion(code_table):
             line["uop_address"] > 0 and \
             line["uop_write"] > 0:
             line["uop_after"] -= 2
-            line["uop_fusion"] = "combined"
+            line["uop_type"] = "combined"
         elif settings["micro_parameters"]["address_write"] and \
             line["uop_address"] > 0 and \
             line["uop_write"] > 0:
             line["uop_after"] -= 1
-            line["uop_fusion"] = "address_write"
+            line["uop_type"] = "address_write"
         elif settings["micro_parameters"]["read_modify"] and \
             line["uop_read"] > 0 and \
             line["uop_modify"] > 0:
             line["uop_after"] -= 1
-            line["uop_fusion"] = "read_modify"
+            line["uop_type"] = "read_modify"
 
 def LSD(code_table, mark_list):
     pass
@@ -238,11 +241,11 @@ def fill_tables(code_table):
         u_row <= TD(line["uop_address"], Class="td")
         u_row <= TD(line["uop_write"], Class="td")
         u_row <= TD(line["uop_before"], Class="td")
-        if line["uop_fusion"] == "combined":
+        if line["uop_type"] == "combined":
             u_row <= TD(line["uop_after"], Class="td", Style=cell_style["combined"])
-        elif line["uop_fusion"] == "address_write":
+        elif line["uop_type"] == "address_write":
             u_row <= TD(line["uop_after"], Class="td", Style=cell_style["address_write"])
-        elif line["uop_fusion"] == "read_modify":
+        elif line["uop_type"] == "read_modify":
             u_row <= TD(line["uop_after"], Class="td", Style=cell_style["read_modify"])
         else:
             u_row <= TD(line["uop_after"], Class="td")
