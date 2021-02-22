@@ -149,7 +149,7 @@ cell_style = {
     "combined": {"background-color": "#00ffff"}
 }
 
-current_radio_button = ""
+current_radio_button = "ADD"
 
 @bind("button.tab", "click")
 def switch_tab(ev):
