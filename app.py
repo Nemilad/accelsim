@@ -73,13 +73,13 @@ settings = {
                 'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
                 'JZ': True, 'JNZ': True},
         'TEST': {'JA': True, 'JNA': True, 'JAE': True, 'JNAE': True,
-                'JB': True, 'JNB': True, 'JBE': True, 'JNBE': True,
-                'JC': True, 'JNC': True, 'JE': True, 'JNE': True,
-                'JG': True, 'JNG': True, 'JGE': True, 'JNGE': True,
-                'JL': True, 'JNL': True, 'JLE': True, 'JNLE': True,
-                'JS': True, 'JNS': True, 'JO': True, 'JNO': True,
-                'JP': True, 'JNP': True, 'JPO': True, 'JPE': True,
-                'JZ': True, 'JNZ': True},
+                 'JB': True, 'JNB': True, 'JBE': True, 'JNBE': True,
+                 'JC': True, 'JNC': True, 'JE': True, 'JNE': True,
+                 'JG': True, 'JNG': True, 'JGE': True, 'JNGE': True,
+                 'JL': True, 'JNL': True, 'JLE': True, 'JNLE': True,
+                 'JS': True, 'JNS': True, 'JO': True, 'JNO': True,
+                 'JP': True, 'JNP': True, 'JPO': True, 'JPE': True,
+                 'JZ': True, 'JNZ': True},
         'AND': {'JA': True, 'JNA': True, 'JAE': True, 'JNAE': True,
                 'JB': True, 'JNB': True, 'JBE': True, 'JNBE': True,
                 'JC': True, 'JNC': True, 'JE': True, 'JNE': True,
@@ -89,13 +89,13 @@ settings = {
                 'JP': True, 'JNP': True, 'JPO': True, 'JPE': True,
                 'JZ': True, 'JNZ': True},
         'OR': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
-                'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
-                'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
-                'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
-                'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
-                'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
-                'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
-                'JZ': False, 'JNZ': False},
+               'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
+               'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
+               'JG': False, 'JNG': False, 'JGE': False, 'JNGE': False,
+               'JL': False, 'JNL': False, 'JLE': False, 'JNLE': False,
+               'JS': False, 'JNS': False, 'JO': False, 'JNO': False,
+               'JP': False, 'JNP': False, 'JPO': False, 'JPE': False,
+               'JZ': False, 'JNZ': False},
         'XOR': {'JA': False, 'JNA': False, 'JAE': False, 'JNAE': False,
                 'JB': False, 'JNB': False, 'JBE': False, 'JNBE': False,
                 'JC': False, 'JNC': False, 'JE': False, 'JNE': False,
@@ -128,14 +128,14 @@ settings = {
         'address_write': True,
         'combined_enabled': True
     },
-    'LSD_parameters': {
+    'lsd_parameters': {
         'buffer size': 16
     },
-    'Zeroing_parameters': {
+    'zeroing_parameters': {
         'XOR': True,
         'SUB': True
     },
-    'Ones_parameters': {
+    'ones_parameters': {
         'CMP': True
     },
 }
@@ -151,6 +151,7 @@ cell_style = {
 
 current_radio_button = "ADD"
 
+
 @bind("button.tab", "click")
 def switch_tab(ev):
     button = document[ev.target.id]
@@ -162,6 +163,7 @@ def switch_tab(ev):
     tab.style.display = "block"
     button.class_name += " active"
 
+
 @bind(document.select("div.macro-first-operation")[0].select("input.checkbox"), "click")
 def switch_macro(ev):
     global current_radio_button
@@ -169,22 +171,27 @@ def switch_macro(ev):
     for box in document.select("div.macro-second-operation")[0].select("input.checkbox"):
         box.checked = settings["macro_parameters"][ev.target.parent.text][box.parent.text]
 
+
 @bind(document.select("div.macro-second-operation")[0].select("input.checkbox"), "click")
 def macro_update(ev):
     global current_radio_button
     if ev.target.checked and current_radio_button != "":
         settings["macro_parameters"][current_radio_button][ev.target.parent.text] = True
-    elif not(ev.target.checked) and current_radio_button != "":
+    elif not ev.target.checked and current_radio_button != "":
         settings["macro_parameters"][current_radio_button][ev.target.parent.text] = False
+
 
 def load_example():
     pass
 
+
 def load_file():
     pass
 
+
 def code_check(code):
     return True
+
 
 def update_settings():
     input_value = document.select("div.blocks")[0].select("input.checkbox")
@@ -194,13 +201,21 @@ def update_settings():
     settings["block_enabled"]["ones_idioms"] = input_value[3].checked
     settings["block_enabled"]["LSD"] = input_value[4].checked
     input_value = document.select("div.cpu-column-3")[0].select(".counter")
-    settings["arch_parameters"]["simple_decoders"] = input_value[0].value
-    settings["arch_parameters"]["complex_decoders"] = input_value[1].value
-    settings["arch_parameters"]["uop_complex"] = input_value[2].value
+    settings["arch_parameters"]["simple_decoders"] = int(input_value[0].value)
+    settings["arch_parameters"]["complex_decoders"] = int(input_value[1].value)
+    settings["arch_parameters"]["uop_complex"] = int(input_value[2].value)
     input_value = document.select("div.micro-column-3")[0].select(".micro-checkbox")
     settings["micro_parameters"]["read_modify"] = input_value[0].checked
     settings["micro_parameters"]["address_write"] = input_value[1].checked
     settings["micro_parameters"]["combined_enabled"] = input_value[2].checked
+    input_value = document.select("div.macro-checkbox-wrapper")[0].select(".counter")
+    settings["macro_parameters"]["max_fusions"] = input_value[0].value
+    input_value = document.select("div.macro-checkbox-wrapper")[0].select(".checkbox")
+    settings["macro_parameters"]["transition"] = input_value[0].checked
+    input_value = document.select("div.idiom-0-wrapper")[0].select(".checkbox-1")
+    settings["zeroing_parameters"]["XOR"] = input_value[0].checked
+    settings["zeroing_parameters"]["SUB"] = input_value[1].checked
+
 
 @bind("button.start", "click")
 def simulation(ev):
@@ -210,20 +225,20 @@ def simulation(ev):
     if code_check(code):
         for num, line in enumerate(code.splitlines()):
             template = {
-                    'op': '',
-                    'op1': '',
-                    'op2': '',
-                    'dec_type': '',
-                    'dec_cycle': '',
-                    'dec_type_2': '',
-                    'dec_cycle_2': '',
-                    'uop_read': '',
-                    'uop_modify': '',
-                    'uop_address': '',
-                    'uop_write': '',
-                    'uop_before': '',
-                    'uop_after': '',
-                    'uop_type': ''
+                'op': '',
+                'op1': '',
+                'op2': '',
+                'dec_type': '',
+                'dec_cycle': '',
+                'dec_type_2': '',
+                'dec_cycle_2': '',
+                'uop_read': '',
+                'uop_modify': '',
+                'uop_address': '',
+                'uop_write': '',
+                'uop_before': '',
+                'uop_after': '',
+                'uop_type': ''
             }
             if line.split()[0][-1] == ':':
                 mark_list.append({'mark': line.split()[0][:-1], 'pos': num})
@@ -250,6 +265,7 @@ def simulation(ev):
             template.clear()
 
         update_settings()
+        micro_table(code_table)
         if settings["block_enabled"]["micro_fusion"]:
             micro_fusion(code_table)
         if settings["block_enabled"]["zeroing_idioms"]:
@@ -258,85 +274,192 @@ def simulation(ev):
             ones_idioms(code_table)
         if settings["block_enabled"]["LSD"]:
             LSD(code_table, mark_list)
+        macro_table(code_table)
         if settings["block_enabled"]["macro_fusion"]:
             macro_fusion(code_table)
-        print(code_table)
         fill_tables(code_table)
 
     else:
         pass
 
-def macro_fusion(code_table):
-    pass
 
-def micro_fusion(code_table):
+def macro_table(code_table):
+    current_cycle = 1
+    free_simple_dec = settings["arch_parameters"]["simple_decoders"]
+    free_complex_dec = settings["arch_parameters"]["complex_decoders"]
+    complex_max = settings["arch_parameters"]["uop_complex"]
+    for line in code_table:
+        redo = True
+        while redo:
+            if line["uop_after"] < 1:
+                line["dec_cycle_2"] = current_cycle
+                redo = False
+            elif free_simple_dec > 0 and line["uop_after"] == 1:
+                free_simple_dec -= 1
+                line["dec_type_2"] = "simple"
+                line["dec_cycle_2"] = current_cycle
+                redo = False
+            elif free_simple_dec == 0 and free_complex_dec > 0 and line["uop_after"] == 1:
+                free_complex_dec -= 1
+                line["dec_type_2"] = "complex"
+                line["dec_cycle_2"] = current_cycle
+                redo = False
+            elif free_complex_dec > 0 and 1 < line["uop_after"] <= complex_max:
+                free_complex_dec -= 1
+                line["dec_type_2"] = "complex"
+                line["dec_cycle_2"] = current_cycle
+                redo = False
+            elif free_complex_dec > 0 and complex_max < line["uop_after"] <= complex_max + free_simple_dec:
+                free_complex_dec -= 1
+                free_simple_dec -= line["uop_after"]-complex_max
+                line["dec_type_2"] = "complex"
+                line["dec_cycle_2"] = current_cycle
+                redo = False
+            elif free_complex_dec > 0 and line["uop_after"] > complex_max + settings["arch_parameters"]["simple_decoders"]:
+                free_complex_dec = settings["arch_parameters"]["simple_decoders"]
+                free_simple_dec = settings["arch_parameters"]["complex_decoders"]
+                current_cycle += 1
+                line["dec_type_2"] = "ERROR"
+                line["dec_cycle_2"] = current_cycle
+                redo = False
+            else:
+                free_simple_dec = settings["arch_parameters"]["simple_decoders"]
+                free_complex_dec = settings["arch_parameters"]["complex_decoders"]
+                current_cycle += 1
+                redo = True
+    print(code_table)
+
+
+def macro_fusion(code_table):
+    current_cycle = 1
+    free_simple_dec = settings["arch_parameters"]["simple_decoders"]
+    free_complex_dec = settings["arch_parameters"]["complex_decoders"]
+    complex_max = settings["arch_parameters"]["uop_complex"]
+    for line in code_table:
+        redo = True
+        while redo:
+            if line["uop_after"] < 1:
+                line["dec_cycle"] = current_cycle
+                redo = False
+            elif free_simple_dec > 0 and line["uop_after"] == 1:
+                free_simple_dec -= 1
+                line["dec_type"] = "simple"
+                line["dec_cycle"] = current_cycle
+                redo = False
+            elif free_simple_dec == 0 and free_complex_dec > 0 and line["uop_after"] == 1:
+                free_complex_dec -= 1
+                line["dec_type"] = "complex"
+                line["dec_cycle"] = current_cycle
+                redo = False
+            elif free_complex_dec > 0 and 1 < line["uop_after"] <= complex_max:
+                free_complex_dec -= 1
+                line["dec_type"] = "complex"
+                line["dec_cycle"] = current_cycle
+                redo = False
+            elif free_complex_dec > 0 and complex_max < line["uop_after"] <= complex_max + free_simple_dec:
+                free_complex_dec -= 1
+                free_simple_dec -= line["uop_after"]-complex_max
+                line["dec_type"] = "complex"
+                line["dec_cycle"] = current_cycle
+                redo = False
+            elif free_complex_dec > 0 and line["uop_after"] > complex_max + settings["arch_parameters"]["simple_decoders"]:
+                free_complex_dec = settings["arch_parameters"]["simple_decoders"]
+                free_simple_dec = settings["arch_parameters"]["complex_decoders"]
+                current_cycle += 1
+                line["dec_type"] = "ERROR"
+                line["dec_cycle"] = current_cycle
+                redo = False
+            else:
+                free_simple_dec = settings["arch_parameters"]["simple_decoders"]
+                free_complex_dec = settings["arch_parameters"]["complex_decoders"]
+                current_cycle += 1
+                redo = True
+
+
+def micro_table(code_table):
     with open('./decode.json') as f:
         decode_data = json.load(f)
     for line in code_table:
-        op_decode_1 = \
-            get_op_type(line["op1"]) + "," + get_op_type(line["op2"])
-        op_decode_2 = \
-            get_op_type(line["op1"]).rstrip('1234567890') + "," + get_op_type(line["op2"]).rstrip('1234567890')
+        if get_op_type(line["op2"]) != "":
+            op_decode_1 = \
+                get_op_type(line["op1"]) + "," + get_op_type(line["op2"])
+            op_decode_2 = \
+                get_op_type(line["op1"]).rstrip('1234567890') + "," + get_op_type(line["op2"]).rstrip('1234567890')
+        else:
+            op_decode_1 = \
+                get_op_type(line["op1"])
+            op_decode_2 = \
+                get_op_type(line["op1"]).rstrip('1234567890')
         if line["op"] in decode_data and op_decode_1 in decode_data[line["op"]]:
             line["uop_before"] = sum(decode_data[line["op"]][op_decode_1])
             line["uop_after"] = sum(decode_data[line["op"]][op_decode_1])
             line["uop_read"] = decode_data[line["op"]][op_decode_1][0]
             line["uop_modify"] = decode_data[line["op"]][op_decode_1][1]
             line["uop_address"] = decode_data[line["op"]][op_decode_1][2]
-            line["uop_write"] =decode_data[line["op"]][op_decode_1][3]
+            line["uop_write"] = decode_data[line["op"]][op_decode_1][3]
         elif line["op"] in decode_data and op_decode_2 in decode_data[line["op"]]:
             line["uop_before"] = sum(decode_data[line["op"]][op_decode_2])
             line["uop_after"] = sum(decode_data[line["op"]][op_decode_2])
             line["uop_read"] = decode_data[line["op"]][op_decode_2][0]
             line["uop_modify"] = decode_data[line["op"]][op_decode_2][1]
             line["uop_address"] = decode_data[line["op"]][op_decode_2][2]
-            line["uop_write"] =decode_data[line["op"]][op_decode_2][3]
+            line["uop_write"] = decode_data[line["op"]][op_decode_2][3]
+
+
+def micro_fusion(code_table):
+    for line in code_table:
         if settings["micro_parameters"]["combined_enabled"] and \
-            line["uop_read"] > 0 and \
-            line["uop_modify"] > 0 and \
-            line["uop_address"] > 0 and \
-            line["uop_write"] > 0:
+                line["uop_read"] > 0 and \
+                line["uop_modify"] > 0 and \
+                line["uop_address"] > 0 and \
+                line["uop_write"] > 0:
             line["uop_after"] -= 2
             line["uop_type"] = "combined"
         elif settings["micro_parameters"]["address_write"] and \
-            line["uop_address"] > 0 and \
-            line["uop_write"] > 0:
+                line["uop_address"] > 0 and \
+                line["uop_write"] > 0:
             line["uop_after"] -= 1
             line["uop_type"] = "address_write"
         elif settings["micro_parameters"]["read_modify"] and \
-            line["uop_read"] > 0 and \
-            line["uop_modify"] > 0:
+                line["uop_read"] > 0 and \
+                line["uop_modify"] > 0:
             line["uop_after"] -= 1
             line["uop_type"] = "read_modify"
+
 
 def LSD(code_table, mark_list):
     pass
 
+
 def zeroing_idioms(code_table):
     pass
+
 
 def ones_idioms(code_table):
     pass
 
+
 def get_op_type(op):
     g_intRegex = re.compile(r"^([+-]?[1-9]\d*|0)$")
-    if g_intRegex.match(str(op).strip()) is not None:
-        return("i")
+    if op == "":
+        return ("")
+    elif g_intRegex.match(str(op).strip()) is not None:
+        return ("i")
     elif op.upper() in ['RAX', 'RCX', 'RDX', 'RBX', 'RSP', 'RBP', 'RSI', 'RDI']:
-        return("r64")
+        return ("r64")
     elif op.upper() in ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']:
-        return("r32")
+        return ("r32")
     elif op.upper() in ['AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI']:
-        return("r16")
+        return ("r16")
     elif op.upper() in ['AH', 'BH', 'CH', 'DH']:
-        return("r8h")
+        return ("r8h")
     elif op.upper() in ['AL', 'BL', 'CL', 'DL', 'SPL', 'BPL', 'SIL', 'DIL']:
-        return("r8l")
+        return ("r8l")
     elif '[' in op and ']' in op:
-        return("m")
+        return ("m")
     else:
-        return("")
-    pass
+        return ("mark")
+
 
 def clear_tables():
     for row in document["micro_table"].select('tbody')[0].select('tr')[1:]:
@@ -346,6 +469,7 @@ def clear_tables():
     for row in document["macro_table_2"].select('tbody')[0].select('tr')[1:]:
         row.remove()
 
+
 def fill_tables(code_table):
     clear_tables()
     for i, line in enumerate(code_table):
@@ -354,7 +478,7 @@ def fill_tables(code_table):
         document["macro_table_2"].select('tbody')[0] <= html.TR()
 
         u_row = document["micro_table"].select('tbody')[0].select('tr')[i + 1]
-        u_row <= TD(f"{i+1}", Class="td")
+        u_row <= TD(f"{i + 1}", Class="td")
         u_row <= TD(line["op"], Class="td")
         u_row <= TD(line["op1"], Class="td")
         u_row <= TD(line["op2"], Class="td")
@@ -373,7 +497,7 @@ def fill_tables(code_table):
             u_row <= TD(line["uop_after"], Class="td")
 
         m_row = document["macro_table"].select('tbody')[0].select('tr')[i + 1]
-        m_row <= TD(f"{i+1}", Class="td")
+        m_row <= TD(f"{i + 1}", Class="td")
         m_row <= TD(line["op"], Class="td")
         m_row <= TD(line["op1"], Class="td")
         m_row <= TD(line["op2"], Class="td")
@@ -381,7 +505,7 @@ def fill_tables(code_table):
         m_row <= TD(line["dec_cycle"], Class="td")
 
         m2_row = document["macro_table_2"].select('tbody')[0].select('tr')[i + 1]
-        m2_row <= TD(f"{i+1}", Class="td")
+        m2_row <= TD(f"{i + 1}", Class="td")
         m2_row <= TD(line["op"], Class="td")
         m2_row <= TD(line["op1"], Class="td")
         m2_row <= TD(line["op2"], Class="td")
@@ -389,9 +513,10 @@ def fill_tables(code_table):
         m2_row <= TD(line["dec_cycle_2"], Class="td")
     pass
 
+
 @bind("input.counter", "change")
 def counter_validation(ev):
-    if (ev.target.value == ''):
+    if ev.target.value == '':
         alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
         if ev.target.value > ev.target.min:
             ev.target.value = ev.target.max
@@ -399,7 +524,7 @@ def counter_validation(ev):
             ev.target.value = ev.target.min
         macro_fusions_validation()
     else:
-        if (re.match('[0-9]*[.,][0-9]*|\\s', ev.target.value)):
+        if re.match('[0-9]*[.,][0-9]*|\\s', ev.target.value):
             alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
             if ev.target.value > ev.target.min:
                 ev.target.value = ev.target.max
@@ -407,7 +532,7 @@ def counter_validation(ev):
                 ev.target.value = ev.target.min
             macro_fusions_validation()
         else:
-            if (int(ev.target.value) < int(ev.target.min) or int(ev.target.value) > int(ev.target.max)):
+            if int(ev.target.value) < int(ev.target.min) or int(ev.target.value) > int(ev.target.max):
                 alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
                 if ev.target.value > ev.target.min:
                     ev.target.value = ev.target.max
@@ -420,14 +545,16 @@ def counter_validation(ev):
                 ev.target.value = dummy
                 macro_fusions_validation()
 
+
 def macro_fusions_validation():
-    if (int(document["input_fusions"].value) > int(document["input_decoders"].value)):
+    if int(document["input_fusions"].value) > int(document["input_decoders"].value):
         alert("Количество макро слияний в такт не может быть больше, чем количество простых декодеров")
         document["input_fusions"].value = document["input_decoders"].value
 
+
 @bind("input.micro-checkbox", "change")
 def micro_settings_validation(ev):
-    if (document["micro-checkbox-1"].checked == False or document["micro-checkbox-2"].checked == False):
+    if document["micro-checkbox-1"].checked == False or document["micro-checkbox-2"].checked == False:
         document["micro-checkbox-3"].checked = False
         document["micro-checkbox-3"].setAttribute('disabled', 'disabled')
     else:
