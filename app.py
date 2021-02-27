@@ -559,3 +559,17 @@ def micro_settings_validation(ev):
         document["micro-checkbox-3"].setAttribute('disabled', 'disabled')
     else:
         document["micro-checkbox-3"].removeAttribute('disabled')
+
+
+@bind("textarea", "keydown")
+def inputarea_tabulation(ev):
+    input_area = document["inputarea"]
+    if (ev.keyCode == 9):
+        document["result_tab_button"].focus()
+        value = input_area.value
+        start = input_area.selectionStart
+        end = input_area.selectionEnd
+
+        input_area.value = value[0:start] + '\t' + value[end:len(value)]
+
+        input_area.selectionStart = input_area.selectionEnd = start + 1
