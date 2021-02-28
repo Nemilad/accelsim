@@ -588,7 +588,7 @@ def fill_tables(code_table):
                                                line["uop_type"] == "read_modify" or
                                                line["uop_type"] == "address_write"):
             m2_row <= TD(line["dec_type_2"], Class="td", Style=cell_style["simple_dec_micro"])
-        elif line["dec_type"] == "complex":
+        elif line["dec_type_2"] == "complex":
             m2_row <= TD(line["dec_type_2"], Class="td", Style=cell_style["complex_dec"])
         else:
             m2_row <= TD(line["dec_type_2"], Class="td", Style=cell_style["simple_dec"])
