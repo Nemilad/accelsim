@@ -144,6 +144,9 @@ cell_style = {
     "zeroing_idiom": {"background-color": "#ff00ff"},
     "ones_idiom": {"background-color": "#ff007b"},
     "macro_fusion": {"background-color": "#ffff00"},
+    "simple_dec": {"background-color": "#7b7bff"},
+    "simple_dec_micro": {"background-color": "#ff7bff"},
+    "complex_dec": {"background-color": "#ff7b7b"},
     "read_modify": {"background-color": "#40ff00"},
     "address_write": {"background-color": "#0040ff"},
     "combined": {"background-color": "#00ffff"}
@@ -472,6 +475,8 @@ def clear_tables():
 
 def fill_tables(code_table):
     clear_tables()
+    merge = 0
+    merge2 = 0
     for i, line in enumerate(code_table):
         document["micro_table"].select('tbody')[0] <= html.TR()
         document["macro_table"].select('tbody')[0] <= html.TR()
@@ -501,17 +506,40 @@ def fill_tables(code_table):
         m_row <= TD(line["op"], Class="td")
         m_row <= TD(line["op1"], Class="td")
         m_row <= TD(line["op2"], Class="td")
-        m_row <= TD(line["dec_type"], Class="td")
-        m_row <= TD(line["dec_cycle"], Class="td")
+        if line["dec_type"] == "simple" and (line["uop_type"] == "combined" or
+                                             line["uop_type"] == "read_modify" or
+                                             line["uop_type"] == "address_write"):
+            m_row <= TD(line["dec_type"], Class="td", Style=cell_style["simple_dec_micro"])
+        elif line["dec_type"] == "complex":
+            m_row <= TD(line["dec_type"], Class="td", Style=cell_style["complex_dec"])
+        else:
+            m_row <= TD(line["dec_type"], Class="td", Style=cell_style["simple_dec"])
+        if merge == 0:
+            merge = sum(1 for test_line in code_table if test_line["dec_cycle"] == line["dec_cycle"])
+            m_row <= TD(line["dec_cycle"], Class="td", rowspan=merge)
+            merge -= 1
+        else:
+            merge -= 1
 
         m2_row = document["macro_table_2"].select('tbody')[0].select('tr')[i + 1]
         m2_row <= TD(f"{i + 1}", Class="td")
         m2_row <= TD(line["op"], Class="td")
         m2_row <= TD(line["op1"], Class="td")
         m2_row <= TD(line["op2"], Class="td")
-        m2_row <= TD(line["dec_type_2"], Class="td")
-        m2_row <= TD(line["dec_cycle_2"], Class="td")
-    pass
+        if line["dec_type_2"] == "simple" and (line["uop_type"] == "combined" or
+                                               line["uop_type"] == "read_modify" or
+                                               line["uop_type"] == "address_write"):
+            m2_row <= TD(line["dec_type_2"], Class="td", Style=cell_style["simple_dec_micro"])
+        elif line["dec_type"] == "complex":
+            m2_row <= TD(line["dec_type_2"], Class="td", Style=cell_style["complex_dec"])
+        else:
+            m2_row <= TD(line["dec_type_2"], Class="td", Style=cell_style["simple_dec"])
+        if merge2 == 0:
+            merge2 = sum(1 for test_line in code_table if test_line["dec_cycle_2"] == line["dec_cycle_2"])
+            m2_row <= TD(line["dec_cycle_2"], Class="td", rowspan=merge2)
+            merge2 -= 1
+        else:
+            merge2 -= 1
 
 
 @bind("input.counter", "change")
