@@ -248,7 +248,10 @@ def simulation(ev):
                 mark_list.append({'mark': line.split()[0][:-1], 'pos': num})
                 if len(line.split()) == 4:
                     template['op'] = line.split()[1]
-                    template['op1'] = line.split()[2]
+                    if line.split()[2][-1] == ",":
+                        template['op1'] = line.split()[2][:-1]
+                    else:
+                        template['op1'] = line.split()[2]
                     template['op2'] = line.split()[3]
                 elif len(line.split()) == 3:
                     template['op'] = line.split()[1]
@@ -258,7 +261,10 @@ def simulation(ev):
             else:
                 if len(line.split()) == 3:
                     template['op'] = line.split()[0]
-                    template['op1'] = line.split()[1]
+                    if line.split()[1][-1] == ",":
+                        template['op1'] = line.split()[1][:-1]
+                    else:
+                        template['op1'] = line.split()[1]
                     template['op2'] = line.split()[2]
                 elif len(line.split()) == 2:
                     template['op'] = line.split()[0]
@@ -283,6 +289,7 @@ def simulation(ev):
             macro_fusion(code_table)
         fill_tables(code_table)
         code_table.clear()
+        mark_list.clear()
     else:
         pass
 
