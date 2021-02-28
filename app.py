@@ -144,6 +144,7 @@ cell_style = {
     "zeroing_idiom": {"background-color": "#ff00ff"},
     "ones_idiom": {"background-color": "#ff007b"},
     "macro_fusion": {"background-color": "#ffff00"},
+    "macro_fusion_2": {"background-color": "#cccc00"},
     "simple_dec": {"background-color": "#7b7bff"},
     "simple_dec_micro": {"background-color": "#ff7bff"},
     "complex_dec": {"background-color": "#ff7b7b"},
@@ -281,7 +282,7 @@ def simulation(ev):
         if settings["block_enabled"]["macro_fusion"]:
             macro_fusion(code_table)
         fill_tables(code_table)
-
+        code_table.clear()
     else:
         pass
 
@@ -330,7 +331,6 @@ def macro_table(code_table):
                 free_complex_dec = settings["arch_parameters"]["complex_decoders"]
                 current_cycle += 1
                 redo = True
-    print(code_table)
 
 
 def macro_fusion(code_table):
@@ -346,12 +346,17 @@ def macro_fusion(code_table):
         while redo:
             if fusions_in_cycle != max_fusions and \
                     get_op_type(line["op1"]) != "m" and \
-                    line["op"] in settings["macro_parameters"]:
+                    line["op"].upper() in settings["macro_parameters"]:
                 checking = True
             elif fusions_in_cycle != max_fusions and \
-                    free_simple_dec > 0 and checking and \
+                    checking and \
                     line["op"].upper() in settings["macro_parameters"][code_table[line_num-1]["op"].upper()] and \
                     settings["macro_parameters"][code_table[line_num-1]["op"].upper()][line["op"].upper()]:
+                if free_simple_dec < 1:
+                    free_simple_dec = settings["arch_parameters"]["simple_decoders"]
+                    free_complex_dec = settings["arch_parameters"]["complex_decoders"]
+                    current_cycle += 1
+                    fusions_in_cycle = 0
                 checking = False
                 fusions_in_cycle += 1
                 line["dec_cycle"] = current_cycle
@@ -364,10 +369,11 @@ def macro_fusion(code_table):
                 if code_table[line_num - 1]["dec_type"] == "complex":
                     free_complex_dec += 1
                     free_simple_dec -= 1
+
             else:
                 checking = False
             if line["uop_type"] != "macro_fusion":
-                if checking and free_simple_dec < 1:
+                if settings["macro_parameters"]["transition"] and checking and free_simple_dec < 1:
                     free_simple_dec = settings["arch_parameters"]["simple_decoders"]
                     free_complex_dec = settings["arch_parameters"]["complex_decoders"]
                     current_cycle += 1
@@ -411,6 +417,8 @@ def macro_fusion(code_table):
                     current_cycle += 1
                     fusions_in_cycle = 0
                     redo = True
+            else:
+                redo = False
 
 
 def micro_table(code_table):
@@ -511,10 +519,14 @@ def fill_tables(code_table):
     clear_tables()
     merge = 0
     merge2 = 0
+    fusion_count = 0
     for i, line in enumerate(code_table):
         document["micro_table"].select('tbody')[0] <= html.TR()
         document["macro_table"].select('tbody')[0] <= html.TR()
         document["macro_table_2"].select('tbody')[0] <= html.TR()
+
+        if line["uop_type"] == "macro_fusion":
+            fusion_count += 1
 
         u_row = document["micro_table"].select('tbody')[0].select('tr')[i + 1]
         u_row <= TD(f"{i + 1}", Class="td")
@@ -532,6 +544,12 @@ def fill_tables(code_table):
             u_row <= TD(line["uop_after"], Class="td", Style=cell_style["address_write"])
         elif line["uop_type"] == "read_modify":
             u_row <= TD(line["uop_after"], Class="td", Style=cell_style["read_modify"])
+        elif line["uop_type"] == "macro_fusion":
+            if fusion_count % 2 != 0:
+                if fusion_count % 4 == 1:
+                    u_row <= TD(1, Class="td", Style=cell_style["macro_fusion"], rowspan=2)
+                else:
+                    u_row <= TD(1, Class="td", Style=cell_style["macro_fusion_2"], rowspan=2)
         else:
             u_row <= TD(line["uop_after"], Class="td")
 
@@ -540,7 +558,13 @@ def fill_tables(code_table):
         m_row <= TD(line["op"], Class="td")
         m_row <= TD(line["op1"], Class="td")
         m_row <= TD(line["op2"], Class="td")
-        if line["dec_type"] == "simple" and (line["uop_type"] == "combined" or
+        if line["uop_type"] == "macro_fusion":
+            if fusion_count % 2 != 0:
+                if fusion_count % 4 == 1:
+                    m_row <= TD(line["dec_type"], Class="td", Style=cell_style["macro_fusion"], rowspan=2)
+                else:
+                    m_row <= TD(line["dec_type"], Class="td", Style=cell_style["macro_fusion_2"], rowspan=2)
+        elif line["dec_type"] == "simple" and (line["uop_type"] == "combined" or
                                              line["uop_type"] == "read_modify" or
                                              line["uop_type"] == "address_write"):
             m_row <= TD(line["dec_type"], Class="td", Style=cell_style["simple_dec_micro"])
@@ -574,6 +598,7 @@ def fill_tables(code_table):
             merge2 -= 1
         else:
             merge2 -= 1
+    print(code_table)
 
 
 @bind("input.counter", "change")
