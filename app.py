@@ -338,45 +338,79 @@ def macro_fusion(code_table):
     free_simple_dec = settings["arch_parameters"]["simple_decoders"]
     free_complex_dec = settings["arch_parameters"]["complex_decoders"]
     complex_max = settings["arch_parameters"]["uop_complex"]
-    for line in code_table:
+    fusions_in_cycle = 0
+    max_fusions = settings["macro_parameters"]["max_fusions"]
+    checking = False
+    for line_num, line in enumerate(code_table):
         redo = True
         while redo:
-            if line["uop_after"] < 1:
+            if fusions_in_cycle != max_fusions and \
+                    get_op_type(line["op1"]) != "m" and \
+                    line["op"] in settings["macro_parameters"]:
+                checking = True
+            elif fusions_in_cycle != max_fusions and \
+                    free_simple_dec > 0 and checking and \
+                    line["op"].upper() in settings["macro_parameters"][code_table[line_num-1]["op"].upper()] and \
+                    settings["macro_parameters"][code_table[line_num-1]["op"].upper()][line["op"].upper()]:
+                checking = False
+                fusions_in_cycle += 1
                 line["dec_cycle"] = current_cycle
-                redo = False
-            elif free_simple_dec > 0 and line["uop_after"] == 1:
-                free_simple_dec -= 1
+                line["uop_after"] = 1
+                line["uop_type"] = "macro_fusion"
                 line["dec_type"] = "simple"
-                line["dec_cycle"] = current_cycle
-                redo = False
-            elif free_simple_dec == 0 and free_complex_dec > 0 and line["uop_after"] == 1:
-                free_complex_dec -= 1
-                line["dec_type"] = "complex"
-                line["dec_cycle"] = current_cycle
-                redo = False
-            elif free_complex_dec > 0 and 1 < line["uop_after"] <= complex_max:
-                free_complex_dec -= 1
-                line["dec_type"] = "complex"
-                line["dec_cycle"] = current_cycle
-                redo = False
-            elif free_complex_dec > 0 and complex_max < line["uop_after"] <= complex_max + free_simple_dec:
-                free_complex_dec -= 1
-                free_simple_dec -= line["uop_after"]-complex_max
-                line["dec_type"] = "complex"
-                line["dec_cycle"] = current_cycle
-                redo = False
-            elif free_complex_dec > 0 and line["uop_after"] > complex_max + settings["arch_parameters"]["simple_decoders"]:
-                free_complex_dec = settings["arch_parameters"]["simple_decoders"]
-                free_simple_dec = settings["arch_parameters"]["complex_decoders"]
-                current_cycle += 1
-                line["dec_type"] = "ERROR"
-                line["dec_cycle"] = current_cycle
-                redo = False
+                code_table[line_num - 1]["dec_cycle"] = current_cycle
+                code_table[line_num - 1]["uop_after"] = ""
+                code_table[line_num - 1]["uop_type"] = "macro_fusion"
+                if code_table[line_num - 1]["dec_type"] == "complex":
+                    free_complex_dec += 1
+                    free_simple_dec -= 1
             else:
-                free_simple_dec = settings["arch_parameters"]["simple_decoders"]
-                free_complex_dec = settings["arch_parameters"]["complex_decoders"]
-                current_cycle += 1
-                redo = True
+                checking = False
+            if line["uop_type"] != "macro_fusion":
+                if checking and free_simple_dec < 1:
+                    free_simple_dec = settings["arch_parameters"]["simple_decoders"]
+                    free_complex_dec = settings["arch_parameters"]["complex_decoders"]
+                    current_cycle += 1
+                    fusions_in_cycle = 0
+                    redo = True
+                elif line["uop_after"] < 1:
+                    line["dec_cycle"] = current_cycle
+                    redo = False
+                elif free_simple_dec > 0 and line["uop_after"] == 1:
+                    free_simple_dec -= 1
+                    line["dec_type"] = "simple"
+                    line["dec_cycle"] = current_cycle
+                    redo = False
+                elif free_simple_dec == 0 and free_complex_dec > 0 and line["uop_after"] == 1:
+                    free_complex_dec -= 1
+                    line["dec_type"] = "complex"
+                    line["dec_cycle"] = current_cycle
+                    redo = False
+                elif free_complex_dec > 0 and 1 < line["uop_after"] <= complex_max:
+                    free_complex_dec -= 1
+                    line["dec_type"] = "complex"
+                    line["dec_cycle"] = current_cycle
+                    redo = False
+                elif free_complex_dec > 0 and complex_max < line["uop_after"] <= complex_max + free_simple_dec:
+                    free_complex_dec -= 1
+                    free_simple_dec -= line["uop_after"]-complex_max
+                    line["dec_type"] = "complex"
+                    line["dec_cycle"] = current_cycle
+                    redo = False
+                elif free_complex_dec > 0 and line["uop_after"] > complex_max + settings["arch_parameters"]["simple_decoders"]:
+                    free_complex_dec = settings["arch_parameters"]["simple_decoders"]
+                    free_simple_dec = settings["arch_parameters"]["complex_decoders"]
+                    current_cycle += 1
+                    fusions_in_cycle = 0
+                    line["dec_type"] = "ERROR"
+                    line["dec_cycle"] = current_cycle
+                    redo = False
+                else:
+                    free_simple_dec = settings["arch_parameters"]["simple_decoders"]
+                    free_complex_dec = settings["arch_parameters"]["complex_decoders"]
+                    current_cycle += 1
+                    fusions_in_cycle = 0
+                    redo = True
 
 
 def micro_table(code_table):
