@@ -40,16 +40,10 @@
 							</div>
 						</div>
 						<div id="parameters_tab" class="tabcontent" style="display: none;">
-							<div class="macro-row-3">
-								<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-square" viewBox="0 0 16 16">
-		  							<path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-		  							<path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-								</svg>
-							</div>
 							<div class="macro-row-4">
 								<div class="parameters-column">
 									<div class="parameters-sub-row-1">
-										<p class="subtitle-1">Параметры архитектуры</p>
+										<p class="subtitle-6">Параметры архитектуры</p>
 										<div class="cpu-wrapper">
 											<div class="cpu-column-1"></div>
 											<div class="cpu-column-2">
@@ -109,7 +103,17 @@
 									</div>
 								</div>
 								<div class="parameters-column">
-									<p class="subtitle-2">Макро слияние</p>
+									<div>
+										<div style="width: 508px; float: left;">
+											<p class="subtitle-5">Макро слияние</p>
+										</div>
+										<div class="macro-row-3">
+											<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-square" viewBox="0 0 16 16">
+					  							<path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+					  							<path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+											</svg>
+										</div>
+									</div>
 									<div class="macro-align-wrapper">
 										<p class="subtitle-3">Сливаемые пары операций</p>
 										<div class="macro-operations-wrapper">
@@ -184,31 +188,31 @@
 							</div>
 							<div class="macro-row-2">
 								<div class="macro-column-1">
-									<p class="subtitle">С макро слиянием</p>
+									<p class="subtitle-4">С макро слиянием</p>
 									<div class="table-wrapper-1">
-										<table class="table" id="macro_table">
+										<table class="table-1" id="macro_table">
 											<tr>
-												<th class="th"></th>
+												<th class="th">№</th>
 												<th class="th">Инструкция</th>
 												<th class="th">Операнд 1</th>
 												<th class="th">Операнд 2</th>
 												<th class="th">Декодер</th>
-												<th class="th">Такт<br> декодирования</th>
+												<th class="th">Такт</th>
 											</tr>
 										</table>
 									</div>
 								</div>
 								<div class="macro-column-2">
-									<p class="subtitle">Без макро слияния</p>
+									<p class="subtitle-4">Без макро слияния</p>
 									<div class="table-wrapper-1">
-										<table class="table" id="macro_table_2">
+										<table class="table-1" id="macro_table_2">
 											<tr>
-												<th class="th"></th>
+												<th class="th">№</th>
 												<th class="th">Инструкция</th>
 												<th class="th">Операнд 1</th>
 												<th class="th">Операнд 2</th>
 												<th class="th">Декодер</th>
-												<th class="th">Такт<br> декодирования</th>
+												<th class="th">Такт</th>
 											</tr>
 											</tr>
 										</table>
@@ -224,11 +228,11 @@
 								</svg>
 							</div>
 							<div class="macro-row-2">
-								<p class="subtitle">Результат</p>
+								<p class="subtitle-4">Результат</p>
 								<div class="table-wrapper-1">
-									<table class="table" id="micro_table">
+									<table class="table-2" id="micro_table">
 										<tr>
-											<th class="th"></th>
+											<th class="th">№</th>
 											<th class="th">Инструкция</th>
 											<th class="th" style="white-space: nowrap;">Операнд 1</th>
 											<th class="th" style="white-space: nowrap;">Операнд 2</th>

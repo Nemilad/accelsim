@@ -48,7 +48,7 @@ html, body {
 	}
 
 	.table-wrapper-1 {
-		height: 433px;
+		height: 460px;
 	}
 
 	.macro-row-2 {
@@ -56,11 +56,11 @@ html, body {
 	}
 
 	.macro-row-4 {
-		height: 485px;
+		height: 528px;
 	}
 
 	.macro-align-wrapper {
-		height: 395px;
+		height: 420px;
 	}
 
 	.macro-operations-wrapper {
@@ -76,7 +76,7 @@ html, body {
 	}
 
 	.macro-checkbox-wrapper {
-		height: 148px;
+		height: 171px;
 	}
 
 	.cpu-wrapper {
@@ -138,7 +138,7 @@ html, body {
 	}
 
 	.table-wrapper-1 {
-		height: 573px;
+		height: 600px;
 	}
 
 	.macro-row-2 {
@@ -146,11 +146,11 @@ html, body {
 	}
 
 	.macro-row-4 {
-		height: 625px;
+		height: 668px;
 	}
 
 	.macro-align-wrapper {
-		height: 530px;
+		height: 555px;
 	}
 
 	.macro-operations-wrapper {
@@ -166,7 +166,7 @@ html, body {
 	}
 
 	.macro-checkbox-wrapper {
-		height: 160px;
+		height: 183px;
 	}
 
 	.cpu-wrapper {
@@ -228,7 +228,7 @@ html, body {
 	}
 
 	.table-wrapper-1 {
-		height: 753px;
+		height: 780px;
 	}
 
 	.macro-row-2 {
@@ -236,11 +236,11 @@ html, body {
 	}
 
 	.macro-row-4 {
-		height: 805px;
+		height: 848px;
 	}
 
 	.macro-align-wrapper {
-		height: 625px;
+		height: 650px;
 	}
 
 	.macro-operations-wrapper {
@@ -256,7 +256,7 @@ html, body {
 	}
 
 	.macro-checkbox-wrapper {
-		height: 225px;
+		height: 258px;
 	}
 
 	.cpu-wrapper {
@@ -577,7 +577,6 @@ input.panel-checkbox-last {
 	height: 100%;
 	width: 50%;
 	float: left;
-	border-top: 1px solid #ccc;
 	position: relative;
 }
 
@@ -640,7 +639,7 @@ input.panel-checkbox-last {
 }
 
 .macro-row-1 {
-	height: 37px;
+	height: 25px;
 	width: 100%;
 	text-align: right;
 }
@@ -651,8 +650,11 @@ input.panel-checkbox-last {
 
 .macro-row-3 {
 	height: 42px;
-	width: 100%;
+	width: 43px;
 	text-align: right;
+	float: left;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
 }
 
 .macro-row-4 {
@@ -691,6 +693,23 @@ input.panel-checkbox-last {
 
 .subtitle-3 {
 	text-align: center;
+	padding-bottom: 10px;
+}
+
+.subtitle-4 {
+	text-align: center;
+	padding-bottom: 15px;
+}
+
+.subtitle-5 {
+	padding-top: 15px;
+	padding-bottom: 10px;
+	padding-left: 222px;
+}
+
+.subtitle-6 {
+	text-align: center;
+	padding-top: 15px;
 	padding-bottom: 10px;
 }
 
@@ -737,20 +756,32 @@ input.panel-checkbox-last {
 }
 
 .table-wrapper-1 {
-	margin-left: 10px;
-	margin-right: 10px;
 	overflow-y: auto;
 }
 
-.table {
+.table-1 {
+	width: 520px;
 	border: 1px solid #ccc;
 	border-collapse: collapse;
 	background-color: rgb(255, 255, 255);
+	margin: auto;
+}
+
+.table-2 {
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	background-color: rgb(255, 255, 255);
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
 .th {
 	padding: 4px 4px;
 	border: 1px solid #ccc;
+	background-color: rgb(255, 255, 255);
+	position: sticky;
+	top: 0;
+	box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 }
 
 .tr {
@@ -825,7 +856,7 @@ input.panel-checkbox-last {
 }
 
 .vertical-align {
-	height: 100px;
+	height: 90px;
 	position: absolute;
 	top: 0;
 	right: 0;
