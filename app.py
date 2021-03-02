@@ -303,15 +303,15 @@ def macro_table(code_table):
     for line in code_table:
         redo = True
         while redo:
-            if line["uop_after"] < 1:
+            if line["uop_before"] < 1:
                 line["dec_cycle_2"] = current_cycle
                 redo = False
-            elif free_simple_dec > 0 and line["uop_after"] == 1:
+            elif free_simple_dec > 0 and line["uop_after"] <= 1:
                 free_simple_dec -= 1
                 line["dec_type_2"] = "simple"
                 line["dec_cycle_2"] = current_cycle
                 redo = False
-            elif free_simple_dec == 0 and free_complex_dec > 0 and line["uop_after"] == 1:
+            elif free_simple_dec == 0 and free_complex_dec > 0 and line["uop_after"] <= 1:
                 free_complex_dec -= 1
                 line["dec_type_2"] = "complex"
                 line["dec_cycle_2"] = current_cycle
@@ -327,7 +327,8 @@ def macro_table(code_table):
                 line["dec_type_2"] = "complex"
                 line["dec_cycle_2"] = current_cycle
                 redo = False
-            elif free_complex_dec > 0 and line["uop_after"] > complex_max + settings["arch_parameters"]["simple_decoders"]:
+            elif free_complex_dec > 0 and \
+                    line["uop_after"] > complex_max + settings["arch_parameters"]["simple_decoders"]:
                 free_complex_dec = settings["arch_parameters"]["simple_decoders"]
                 free_simple_dec = settings["arch_parameters"]["complex_decoders"]
                 current_cycle += 1
@@ -392,15 +393,15 @@ def macro_fusion(code_table):
                     current_cycle += 1
                     fusions_in_cycle = 0
                     redo = True
-                elif line["uop_after"] < 1:
+                elif line["uop_before"] < 1:
                     line["dec_cycle"] = current_cycle
                     redo = False
-                elif free_simple_dec > 0 and line["uop_after"] == 1:
+                elif free_simple_dec > 0 and line["uop_after"] <= 1:
                     free_simple_dec -= 1
                     line["dec_type"] = "simple"
                     line["dec_cycle"] = current_cycle
                     redo = False
-                elif free_simple_dec == 0 and free_complex_dec > 0 and line["uop_after"] == 1:
+                elif free_simple_dec == 0 and free_complex_dec > 0 and line["uop_after"] <= 1:
                     free_complex_dec -= 1
                     line["dec_type"] = "complex"
                     line["dec_cycle"] = current_cycle
@@ -416,7 +417,8 @@ def macro_fusion(code_table):
                     line["dec_type"] = "complex"
                     line["dec_cycle"] = current_cycle
                     redo = False
-                elif free_complex_dec > 0 and line["uop_after"] > complex_max + settings["arch_parameters"]["simple_decoders"]:
+                elif free_complex_dec > 0 and \
+                        line["uop_after"] > complex_max + settings["arch_parameters"]["simple_decoders"]:
                     free_complex_dec = settings["arch_parameters"]["simple_decoders"]
                     free_simple_dec = settings["arch_parameters"]["complex_decoders"]
                     current_cycle += 1
@@ -490,7 +492,14 @@ def LSD(code_table, mark_list):
 
 
 def zeroing_idioms(code_table):
-    pass
+    for line in code_table:
+        if line["op"].upper() in settings["zeroing_parameters"] and \
+                settings["zeroing_parameters"][line["op"].upper()] and \
+                line["op1"] == line["op2"] and \
+                (get_op_type(line["op1"]) + "," + get_op_type(line["op2"]) == "r32,r32" or
+                 get_op_type(line["op1"]) + "," + get_op_type(line["op2"]) == "r64,r64"):
+            line["uop_after"] = 0
+            line["uop_type"] = "zeroing_idiom"
 
 
 def ones_idioms(code_table):
@@ -500,23 +509,23 @@ def ones_idioms(code_table):
 def get_op_type(op):
     g_intRegex = re.compile(r"^([+-]?[1-9]\d*|0)$")
     if op == "":
-        return ("")
+        return ""
     elif g_intRegex.match(str(op).strip()) is not None:
-        return ("i")
+        return "i"
     elif op.upper() in ['RAX', 'RCX', 'RDX', 'RBX', 'RSP', 'RBP', 'RSI', 'RDI']:
-        return ("r64")
+        return "r64"
     elif op.upper() in ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']:
-        return ("r32")
+        return "r32"
     elif op.upper() in ['AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI']:
-        return ("r16")
+        return "r16"
     elif op.upper() in ['AH', 'BH', 'CH', 'DH']:
-        return ("r8h")
+        return "r8h"
     elif op.upper() in ['AL', 'BL', 'CL', 'DL', 'SPL', 'BPL', 'SIL', 'DIL']:
-        return ("r8l")
+        return "r8l"
     elif '[' in op and ']' in op:
-        return ("m")
+        return "m"
     else:
-        return ("mark")
+        return "mark"
 
 
 def clear_tables():
@@ -556,6 +565,8 @@ def fill_tables(code_table):
             u_row <= TD(line["uop_after"], Class="td", Style=cell_style["address_write"])
         elif line["uop_type"] == "read_modify":
             u_row <= TD(line["uop_after"], Class="td", Style=cell_style["read_modify"])
+        elif line["uop_type"] == "zeroing_idiom":
+            u_row <= TD(line["uop_after"], Class="td", Style=cell_style["zeroing_idiom"])
         elif line["uop_type"] == "macro_fusion":
             if fusion_count % 2 != 0:
                 if fusion_count % 4 == 1:
@@ -653,7 +664,7 @@ def macro_fusions_validation():
 
 @bind("input.micro-checkbox", "change")
 def micro_settings_validation(ev):
-    if document["micro-checkbox-1"].checked == False or document["micro-checkbox-2"].checked == False:
+    if not document["micro-checkbox-1"].checked or not document["micro-checkbox-2"].checked:
         document["micro-checkbox-3"].checked = False
         document["micro-checkbox-3"].setAttribute('disabled', 'disabled')
     else:
@@ -663,7 +674,7 @@ def micro_settings_validation(ev):
 @bind("textarea", "keydown")
 def inputarea_tabulation(ev):
     input_area = document["inputarea"]
-    if (ev.keyCode == 9):
+    if ev.keyCode == 9:
         document["result_tab_button"].focus()
         value = input_area.value
         start = input_area.selectionStart
