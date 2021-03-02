@@ -223,6 +223,7 @@ def update_settings():
 
 @bind("button.start", "click")
 def simulation(ev):
+    clear_tables()
     code_table = []
     mark_list = []
     code = document["inputarea"].value
@@ -359,24 +360,29 @@ def macro_fusion(code_table):
                     checking and \
                     line["op"].upper() in settings["macro_parameters"][code_table[line_num-1]["op"].upper()] and \
                     settings["macro_parameters"][code_table[line_num-1]["op"].upper()][line["op"].upper()]:
-                if free_simple_dec < 1:
+                if free_simple_dec < 1 and settings["macro_parameters"]["transition"]:
                     free_simple_dec = settings["arch_parameters"]["simple_decoders"]
                     free_complex_dec = settings["arch_parameters"]["complex_decoders"]
                     current_cycle += 1
                     fusions_in_cycle = 0
-                checking = False
-                fusions_in_cycle += 1
-                line["dec_cycle"] = current_cycle
-                line["uop_after"] = 1
-                line["uop_type"] = "macro_fusion"
-                line["dec_type"] = "simple"
-                code_table[line_num - 1]["dec_cycle"] = current_cycle
-                code_table[line_num - 1]["uop_after"] = ""
-                code_table[line_num - 1]["uop_type"] = "macro_fusion"
-                if code_table[line_num - 1]["dec_type"] == "complex":
-                    free_complex_dec += 1
-                    free_simple_dec -= 1
-
+                if free_simple_dec > 1:
+                    checking = False
+                    if code_table[line_num - 1]["dec_type"] == "complex" and \
+                            code_table[line_num - 1]["dec_cycle"] == current_cycle:
+                        free_complex_dec += 1
+                        free_simple_dec -= 1
+                    elif code_table[line_num - 1]["dec_cycle"] != current_cycle:
+                        free_simple_dec -= 1
+                    fusions_in_cycle += 1
+                    line["dec_cycle"] = current_cycle
+                    line["uop_after"] = 1
+                    line["uop_type"] = "macro_fusion"
+                    line["dec_type"] = "simple"
+                    code_table[line_num - 1]["dec_cycle"] = current_cycle
+                    code_table[line_num - 1]["uop_after"] = ""
+                    code_table[line_num - 1]["uop_type"] = "macro_fusion"
+                else:
+                    checking = False
             else:
                 checking = False
             if line["uop_type"] != "macro_fusion":
@@ -523,7 +529,6 @@ def clear_tables():
 
 
 def fill_tables(code_table):
-    clear_tables()
     merge = 0
     merge2 = 0
     fusion_count = 0
