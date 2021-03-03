@@ -3,6 +3,7 @@ from browser.html import TABLE, TR, TH, TD
 import re, json
 
 settings = {
+    'current_language': "Русский",
     'block_enabled': {
         'macro_fusion': True,
         'micro_fusion': True,
@@ -153,8 +154,33 @@ cell_style = {
     "combined": {"background-color": "#00ffff"}
 }
 
+russian_dict = {
+    "Input": "Входные данные",
+    "Options": "Параметры",
+    "Decode table": "Таблица декодирования",
+    "Micro operations table": "Таблица микро операций",
+    "Summary": "Сводка",
+    "Start simulation": "Запуск симуляции"
+}
+
 current_radio_button = "ADD"
 
+
+@bind("select.language", "change")
+def translate(ev):
+    clear_tables()
+    if settings["current_language"] == "English":
+        if ev.target.value == "Русский":
+            translation_dict = russian_dict
+    elif ev.target.value == "English":
+        if settings["current_language"] == "Русский":
+            translation_dict = {v: k for k, v in russian_dict.items()}
+    else:
+        translation_dict = {}
+    for element in document.select("div.tabs")[0].select("button"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+    settings["current_language"] = ev.target.value
 
 @bind("button.tab", "click")
 def switch_tab(ev):
