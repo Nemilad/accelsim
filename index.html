@@ -49,7 +49,7 @@
 											<div class="cpu-column-2">
 												<p style="line-height: 1.65;">Количество простых декодеров:</p>
 												<p class="label">Количество сложных декодеров:</p>
-												<p class="label">Максимальное число микро операций<br> для сложного декодера:</p>
+												<p class="label"><span>Максимальное число микро операций</span><br><span>для сложного декодера:</span></p>
 											</div>
 											<div class="cpu-column-3">
 												<p><input type="number" class="counter" min="1" max="8" value="4" id="input_decoders" style="margin-left: 10px; margin-top: 1px;">
@@ -69,7 +69,7 @@
 													<div class="micro-column-2">
 														<p style="line-height: 1.65;">read-modify</p>
 														<p class="label">address-write</p>
-														<p class="label">Два вида слияния<br> в одной инструкции</p>
+														<p class="label"><span>Два вида слияния</span><br><span>в одной инструкции</span></p>
 													</div>
 													<div class="micro-column-3">
 														<p><input type="checkbox" class="micro-checkbox" id="micro-checkbox-1" style="margin-top: 7px;" checked></p>
@@ -81,7 +81,7 @@
 											<div class="parameters-sub-row-4">
 												<p class="subtitle-1">LSD</p>
 												<div class="lsd-wrapper">
-													<p class="label-1">Размер буфера<br> микро операций:<input type="number" class="counter" min="2" max="32" value="16"></p>
+													<p class="label-1"><span>Размер буфера</span><br><span>микро операций:</span><input type="number" class="counter" min="2" max="32" value="16"></p>
 												</div>
 											</div>
 										</div>
@@ -105,7 +105,7 @@
 								<div class="parameters-column">
 									<div>
 										<div style="width: 508px; float: left;">
-											<p class="subtitle-5">Макро слияние</p>
+											<p class="subtitle-5-ru">Макро слияние</p>
 										</div>
 										<div class="macro-row-3">
 											<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-square" viewBox="0 0 16 16">
@@ -171,8 +171,8 @@
 										</div>
 									<div class="macro-checkbox-wrapper">
 										<div class="vertical-align">
-											<p class="center-align">Количество слияний в такт:<input type="number" class="counter" min="1" max="8" value="2" id="input_fusions"></p>
-											<p class="checkbox-2"><input type="checkbox" class="checkbox" checked>Перенос первой инструкции на следующий такт<br> при попадании на последний декодер</p>
+											<p class="center-align"><span>Количество слияний в такт:</span><input type="number" class="counter" min="1" max="8" value="2" id="input_fusions"></p>
+											<p class="checkbox-2"><input type="checkbox" class="checkbox" checked><span>Перенос первой инструкции на следующий такт</span><br><span>при попадании на последний декодер</span></p>
 										</div>
 									</div>
 									</div>
@@ -250,7 +250,7 @@
 					</div>
 				</div>
 				<div class="global-settings">
-					<p>Язык</p>
+					<p class="language-title">Язык</p>
 					<select class="language">
 						<option>Русский</option>
 						<option>English</option>
@@ -258,11 +258,11 @@
 					<div class="blocks-wrapper">
 						<p class="blocks-title">Блоки</p>
 						<div class="blocks">
-							<p class="checkbox"><input type="checkbox" class="checkbox" checked>Макро слияние</p>
-							<p class="checkbox"><input type="checkbox" class="checkbox" checked>Микро слияние</p>
-							<p class="checkbox"><input type="checkbox" class="checkbox" checked>Нуль идиомы</p>
-							<p class="checkbox"><input type="checkbox" class="checkbox" checked>Один идиомы</p>
-							<p class="checkbox"><input type="checkbox" class="checkbox" checked>LSD</p>
+							<p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Макро слияние</span></p>
+							<p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Микро слияние</span></p>
+							<p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Нуль идиомы</span></p>
+							<p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Один идиомы</span></p>
+							<p class="checkbox"><input type="checkbox" class="checkbox" checked><span>LSD</span></p>
 						</div>
 					</div>
 					<div class="start-wrapper">

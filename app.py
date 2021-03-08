@@ -160,7 +160,49 @@ russian_dict = {
     "Decode table": "Таблица декодирования",
     "Micro operations table": "Таблица микро операций",
     "Summary": "Сводка",
-    "Start simulation": "Запуск симуляции"
+    "Start simulation": "Запуск симуляции",
+    "Language": "Язык",
+    "Units": "Блоки",
+    "Macro fusion": "Макро слияние",
+    "Micro fusion": "Микро слияние",
+    "Zeroing idioms": "Нуль идиомы",
+    "One idioms": "Один идиомы",
+    "Source code": "Исходный код",
+    "Code examples": "Готовые примеры",
+    "Example 1": "Пример 1",
+    "Example 2": "Пример 2",
+    "Example 3": "Пример 3",
+    "Input from file": "Ввод из файла",
+    "Select file": "Выберите файл",
+    "Architecture parameters": "Параметры архитектуры",
+    "Number of simple decoders:": "Количество простых декодеров:",
+    "Number of complex decoders:": "Количество сложных декодеров:",
+    "Maximum number of micro operations": "Максимальное число микро операций",
+    "for a complex decoder:": "для сложного декодера:",
+    "Both types of fusions": "Два вида слияния",
+    "in one instruction": "в одной инструкции",
+    "Micro operation": "Размер буфера",
+    "buffer size:": "микро операций:",
+    "Operations pairs for fusion": "Сливаемые пары операций",
+    "First operation": "Первая операция",
+    "Second operation": "Вторая операция",
+    "Number of fusions per cycle:": "Количество слияний в такт:",
+    "Transfer the first instruction to the next cycle": "Перенос первой инструкции на следующий такт",
+    "when it reaches the last decoder": "при попадании на последний декодер",
+    "With macro fusion": "С макро слиянием",
+    "Without macro fusion": "Без макро слияния",
+    "Instruction": "Инструкция",
+    "Operand 1": "Операнд 1",
+    "Operand 2": "Операнд 2",
+    "Decoder": "Декодер",
+    "Cycle": "Такт",
+    "Result": "Результат",
+    "Operations READ": "Операции READ",
+    "Operations MODIFY": "Операции MODIFY",
+    "Operations ADDRESS": "Операции ADDRESS",
+    "Operations WRITE": "Операции WRITE",
+    "Operations before fusion": "Операции до слияния",
+    "Operations after fusion": "Операции после слияния"
 }
 
 current_radio_button = "ADD"
@@ -168,7 +210,6 @@ current_radio_button = "ADD"
 
 @bind("select.language", "change")
 def translate(ev):
-    clear_tables()
     if settings["current_language"] == "English":
         if ev.target.value == "Русский":
             translation_dict = russian_dict
@@ -177,10 +218,105 @@ def translate(ev):
             translation_dict = {v: k for k, v in russian_dict.items()}
     else:
         translation_dict = {}
+
     for element in document.select("div.tabs")[0].select("button"):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
+
+    for element in document.select("div.global-settings")[0].select("p.language-title"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document.select("p.blocks-title")[0]:
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document.select("div.blocks")[0].select("span"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document.select("div.global-settings")[0].select("button"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document.select("div.global-settings")[0].select("button"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["input_tab"].select("p.subtitle"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["input_tab"].select("p.code-samples-title"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["input_tab"].select("option"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["input_tab"].select("div.load-file-wrapper")[0].select("p"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["input_tab"].select("input.load-file"):
+        if element.value in translation_dict.keys():
+            element.value = translation_dict[element.value]
+
+    for element in document["parameters_tab"].select("p.subtitle-1"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["parameters_tab"].select("p.subtitle-6"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["parameters_tab"].select("div.cpu-column-2")[0].select("p"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["parameters_tab"].select("span"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    if ev.target.value == "English":
+        for element in document["parameters_tab"].select("p.subtitle-5-ru"):
+            if element.text in translation_dict.keys():
+                element.text = translation_dict[element.text]
+            element.class_name = "subtitle-5-en"
+
+    if ev.target.value == "Русский":
+        for element in document["parameters_tab"].select("p.subtitle-5-en"):
+            if element.text in translation_dict.keys():
+                element.text = translation_dict[element.text]
+            element.class_name = "subtitle-5-ru"
+
+    for element in document["parameters_tab"].select("p.subtitle-3"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["parameters_tab"].select("div.vertical-align"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["macro_tab"].select("p.subtitle-4"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["macro_tab"].select("th"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["micro_tab"].select("p.subtitle-4"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["micro_tab"].select("th"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
     settings["current_language"] = ev.target.value
+
 
 @bind("button.tab", "click")
 def switch_tab(ev):

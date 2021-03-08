@@ -701,10 +701,16 @@ input.panel-checkbox-last {
 	padding-bottom: 15px;
 }
 
-.subtitle-5 {
+.subtitle-5-ru {
 	padding-top: 15px;
 	padding-bottom: 10px;
 	padding-left: 222px;
+}
+
+.subtitle-5-en {
+	padding-top: 15px;
+	padding-bottom: 10px;
+	padding-left: 230px;
 }
 
 .subtitle-6 {
@@ -947,14 +953,14 @@ input.panel-checkbox-last {
 
 .micro-column-2 {
 	height: 100%;
-	width: 53%;
+	width: 54%;
 	float: left;
 	text-align: center;
 }
 
 .micro-column-3 {
 	height: 100%;
-	width: 29%;
+	width: 28%;
 	float: left;
 	text-align: left;
 }
