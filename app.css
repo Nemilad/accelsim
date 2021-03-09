@@ -652,7 +652,7 @@ input.panel-checkbox-last {
 	height: 42px;
 	width: 43px;
 	text-align: right;
-	float: left;
+	float: right;
 	border-left: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
 }
@@ -697,6 +697,7 @@ input.panel-checkbox-last {
 }
 
 .subtitle-4 {
+    padding-top: 15px;
 	text-align: center;
 	padding-bottom: 15px;
 }

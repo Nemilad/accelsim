@@ -1,275 +1,278 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Симулятор</title>
-		<link rel="stylesheet" type="text/css" href="app.css">
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.9.0/brython.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.9.0/brython_stdlib.min.js"></script>
-	</head>
-	<body onload="brython()">
-		<script type="text/python" src="app.py"></script>
-		<div class="wrapper">
-			<div class="container">
-				<div class="main-content">
-					<div class="tabs">
-						<button class="tab active" id="input_tab_button">Входные данные</button>
-						<button class="tab" id="parameters_tab_button">Параметры</button>
-						<button class="tab" id="macro_tab_button">Таблица декодирования</button>
-						<button class="tab" id="micro_tab_button">Таблица микро операций</button>
-						<button class="tab-last" id="result_tab_button">Сводка</button>
-					</div>
-					<div class="content">
-						<div id="input_tab" class="tabcontent" style="display: block;">
-							<div class="input-column-1">
-								<p class="subtitle">Исходный код</p>
-								<textarea class="textarea" wrap="off" id="inputarea"></textarea>
-							</div>
-							<div class="input-column-2">
-								<p class="code-samples-title">Готовые примеры</p>
-								<select class="code-samples">
-									<option>Пример 1</option>
-									<option>Пример 2</option>
-									<option>Пример 3</option>
-								</select>
-								<div class="load-file-wrapper">
-									<p>Ввод из файла</p>
-									<input type="button" class="load-file" value="Выберите файл" onclick="document.getElementById('file').click();">
-									<input type="file" id="file" class="file">
-								</div>
-							</div>
-						</div>
-						<div id="parameters_tab" class="tabcontent" style="display: none;">
-							<div class="macro-row-4">
-								<div class="parameters-column">
-									<div class="parameters-sub-row-1">
-										<p class="subtitle-6">Параметры архитектуры</p>
-										<div class="cpu-wrapper">
-											<div class="cpu-column-1"></div>
-											<div class="cpu-column-2">
-												<p style="line-height: 1.65;">Количество простых декодеров:</p>
-												<p class="label">Количество сложных декодеров:</p>
-												<p class="label"><span>Максимальное число микро операций</span><br><span>для сложного декодера:</span></p>
-											</div>
-											<div class="cpu-column-3">
-												<p><input type="number" class="counter" min="1" max="8" value="4" id="input_decoders" style="margin-left: 10px; margin-top: 1px;">
-												</p>
-												<p><input type="number" class="counter" min="1" max="8" value="1" style="margin-top: 18px; margin-left: 10px;">
-												</p>
-												<p><input type="number" class="counter" min="2" max="8" value="4" style="margin-top: 30px; margin-left: 10px;"></p>
-											</div>
-										</div>
-									</div>
-									<div class="parameters-sub-row-2">
-										<div class="parameters-sub-column">
-											<div class="parameters-sub-row-3">
-												<p class="subtitle-1">Микро слияние</p>
-												<div class="micro-wrapper">
-													<div class="micro-column-1"></div>
-													<div class="micro-column-2">
-														<p style="line-height: 1.65;">read-modify</p>
-														<p class="label">address-write</p>
-														<p class="label"><span>Два вида слияния</span><br><span>в одной инструкции</span></p>
-													</div>
-													<div class="micro-column-3">
-														<p><input type="checkbox" class="micro-checkbox" id="micro-checkbox-1" style="margin-top: 7px;" checked></p>
-														<p><input type="checkbox" class="micro-checkbox" id="micro-checkbox-2" style="margin-top: 24px;" checked></p>
-														<p><input type="checkbox" class="micro-checkbox" id="micro-checkbox-3" style="margin-top: 37px;" checked></p>
-													</div>
-												</div>
-											</div>
-											<div class="parameters-sub-row-4">
-												<p class="subtitle-1">LSD</p>
-												<div class="lsd-wrapper">
-													<p class="label-1"><span>Размер буфера</span><br><span>микро операций:</span><input type="number" class="counter" min="2" max="32" value="16"></p>
-												</div>
-											</div>
-										</div>
-										<div class="parameters-sub-column">
-											<div class="parameters-sub-row-3">
-												<p class="subtitle-1">Нуль идиомы</p>
-												<div class="idiom-0-wrapper">
-													<p>XOR<input type="checkbox" class="checkbox-1" checked></p>
-													<p class="label">SUB<input type="checkbox" class="checkbox-1" checked></p>
-												</div>
-											</div>
-											<div class="parameters-sub-row-4">
-												<p class="subtitle-1">Один идиомы</p>
-												<div class="idiom-1-wrapper">
-													<p>CMP<input type="checkbox" class="checkbox-1" checked></p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="parameters-column">
-									<div>
-										<div style="width: 508px; float: left;">
-											<p class="subtitle-5-ru">Макро слияние</p>
-										</div>
-										<div class="macro-row-3">
-											<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-square" viewBox="0 0 16 16">
-					  							<path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-					  							<path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-											</svg>
-										</div>
-									</div>
-									<div class="macro-align-wrapper">
-										<p class="subtitle-3">Сливаемые пары операций</p>
-										<div class="macro-operations-wrapper">
-											<p class="subtitle-3">Первая операция</p>
-											<div class="macro-first-operation">
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox" checked>ADD</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">SUB</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">ADC</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">SBB</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">INC</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">DEC</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">CMP</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">TEST</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">AND</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">OR</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">XOR</p>
-												<p class="checkbox"><input type="radio" name="operation-1" class="checkbox">NOT</p>
-												<p class="checkbox-last"><input type="radio" name="operation-1" class="checkbox">NEG</p>
-											</div>
-										</div>
-										<div class="macro-operations-wrapper">
-											<p class="subtitle-3">Вторая операция</p>
-											<div class="macro-second-operation">
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JA</p>
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JNA</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JAE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JNAE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JB</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JNB</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JBE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JNBE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JC</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JNC</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JNE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JG</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JNG</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JGE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JNGE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JL</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JNL</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JLE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JNLE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox">JS</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox">JNS</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox">JO</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox">JNO</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox">JP</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox">JNP</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox">JPO</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox">JPE</p> 
-												<p class="checkbox"><input type="checkbox" class="checkbox" checked>JZ</p> 
-												<p class="checkbox-last"><input type="checkbox" class="checkbox" checked>JNZ</p> 
-											</div>
-										</div>
-									<div class="macro-checkbox-wrapper">
-										<div class="vertical-align">
-											<p class="center-align"><span>Количество слияний в такт:</span><input type="number" class="counter" min="1" max="8" value="2" id="input_fusions"></p>
-											<p class="checkbox-2"><input type="checkbox" class="checkbox" checked><span>Перенос первой инструкции на следующий такт</span><br><span>при попадании на последний декодер</span></p>
-										</div>
-									</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div id="macro_tab" class="tabcontent" style="display: none;">
-							<div class="macro-row-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-square" viewBox="0 0 16 16">
-		  							<path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-		  							<path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-								</svg>
-							</div>
-							<div class="macro-row-2">
-								<div class="macro-column-1">
-									<p class="subtitle-4">С макро слиянием</p>
-									<div class="table-wrapper-1">
-										<table class="table-1" id="macro_table">
-											<tr>
-												<th class="th">№</th>
-												<th class="th">Инструкция</th>
-												<th class="th">Операнд 1</th>
-												<th class="th">Операнд 2</th>
-												<th class="th">Декодер</th>
-												<th class="th">Такт</th>
-											</tr>
-										</table>
-									</div>
-								</div>
-								<div class="macro-column-2">
-									<p class="subtitle-4">Без макро слияния</p>
-									<div class="table-wrapper-1">
-										<table class="table-1" id="macro_table_2">
-											<tr>
-												<th class="th">№</th>
-												<th class="th">Инструкция</th>
-												<th class="th">Операнд 1</th>
-												<th class="th">Операнд 2</th>
-												<th class="th">Декодер</th>
-												<th class="th">Такт</th>
-											</tr>
-											</tr>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div id="micro_tab" class="tabcontent" style="display: none;">
-							<div class="macro-row-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-square" viewBox="0 0 16 16">
-		  							<path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-		  							<path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-								</svg>
-							</div>
-							<div class="macro-row-2">
-								<p class="subtitle-4">Результат</p>
-								<div class="table-wrapper-1">
-									<table class="table-2" id="micro_table">
-										<tr>
-											<th class="th">№</th>
-											<th class="th">Инструкция</th>
-											<th class="th" style="white-space: nowrap;">Операнд 1</th>
-											<th class="th" style="white-space: nowrap;">Операнд 2</th>
-											<th class="th">Операции READ</th>
-											<th class="th">Операции MODIFY</th>
-											<th class="th">Операции ADDRESS</th>
-											<th class="th">Операции WRITE</th>
-											<th class="th">Операции до слияния</th>
-											<th class="th">Операции после слияния</th>
-										</tr>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="global-settings">
-					<p class="language-title">Язык</p>
-					<select class="language">
-						<option>Русский</option>
-						<option>English</option>
-					</select>
-					<div class="blocks-wrapper">
-						<p class="blocks-title">Блоки</p>
-						<div class="blocks">
-							<p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Макро слияние</span></p>
-							<p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Микро слияние</span></p>
-							<p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Нуль идиомы</span></p>
-							<p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Один идиомы</span></p>
-							<p class="checkbox"><input type="checkbox" class="checkbox" checked><span>LSD</span></p>
-						</div>
-					</div>
-					<div class="start-wrapper">
-						<button class="start">Запуск симуляции</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</body>
+
+<head>
+    <meta charset="utf-8">
+    <title>Симулятор</title>
+    <link rel="stylesheet" type="text/css" href="app.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.9.0/brython.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.9.0/brython_stdlib.min.js"></script>
+</head>
+
+<body onload="brython()">
+    <script type="text/python" src="app.py"></script>
+    <div class="wrapper">
+        <div class="container">
+            <div class="main-content">
+                <div class="tabs">
+                    <button class="tab active" id="input_tab_button">Входные данные</button>
+                    <button class="tab" id="parameters_tab_button">Параметры</button>
+                    <button class="tab" id="macro_tab_button">Таблица декодирования</button>
+                    <button class="tab" id="micro_tab_button">Таблица микро операций</button>
+                    <button class="tab-last" id="result_tab_button">Сводка</button>
+                </div>
+                <div class="content">
+                    <div id="input_tab" class="tabcontent" style="display: block;">
+                        <div class="input-column-1">
+                            <p class="subtitle">Исходный код</p>
+                            <textarea class="textarea" wrap="off" id="inputarea"></textarea>
+                        </div>
+                        <div class="input-column-2">
+                            <p class="code-samples-title">Готовые примеры</p>
+                            <select class="code-samples">
+                                <option>Пример 1</option>
+                                <option>Пример 2</option>
+                                <option>Пример 3</option>
+                            </select>
+                            <div class="load-file-wrapper">
+                                <p>Ввод из файла</p>
+                                <input type="button" class="load-file" value="Выберите файл" onclick="document.getElementById('file').click();">
+                                <input type="file" id="file" class="file">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="parameters_tab" class="tabcontent" style="display: none;">
+                        <div class="macro-row-4">
+                            <div class="parameters-column">
+                                <div class="parameters-sub-row-1">
+                                    <p class="subtitle-6">Параметры архитектуры</p>
+                                    <div class="cpu-wrapper">
+                                        <div class="cpu-column-1"></div>
+                                        <div class="cpu-column-2">
+                                            <p style="line-height: 1.65;">Количество простых декодеров:</p>
+                                            <p class="label">Количество сложных декодеров:</p>
+                                            <p class="label"><span>Максимальное число микро операций</span><br><span>для сложного декодера:</span></p>
+                                        </div>
+                                        <div class="cpu-column-3">
+                                            <p><input type="number" class="counter" min="1" max="8" value="4" id="input_decoders" style="margin-left: 10px; margin-top: 1px;">
+                                            </p>
+                                            <p><input type="number" class="counter" min="1" max="8" value="1" style="margin-top: 18px; margin-left: 10px;">
+                                            </p>
+                                            <p><input type="number" class="counter" min="2" max="8" value="4" style="margin-top: 30px; margin-left: 10px;"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="parameters-sub-row-2">
+                                    <div class="parameters-sub-column">
+                                        <div class="parameters-sub-row-3">
+                                            <p class="subtitle-1">Микро слияние</p>
+                                            <div class="micro-wrapper">
+                                                <div class="micro-column-1"></div>
+                                                <div class="micro-column-2">
+                                                    <p style="line-height: 1.65;">read-modify</p>
+                                                    <p class="label">address-write</p>
+                                                    <p class="label"><span>Два вида слияния</span><br><span>в одной инструкции</span></p>
+                                                </div>
+                                                <div class="micro-column-3">
+                                                    <p><input type="checkbox" class="micro-checkbox" id="micro-checkbox-1" style="margin-top: 7px;" checked></p>
+                                                    <p><input type="checkbox" class="micro-checkbox" id="micro-checkbox-2" style="margin-top: 24px;" checked></p>
+                                                    <p><input type="checkbox" class="micro-checkbox" id="micro-checkbox-3" style="margin-top: 37px;" checked></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="parameters-sub-row-4">
+                                            <p class="subtitle-1">LSD</p>
+                                            <div class="lsd-wrapper">
+                                                <p class="label-1"><span>Размер буфера</span><br><span>микро операций:</span><input type="number" class="counter" min="2" max="32" value="16"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="parameters-sub-column">
+                                        <div class="parameters-sub-row-3">
+                                            <p class="subtitle-1">Нуль идиомы</p>
+                                            <div class="idiom-0-wrapper">
+                                                <p>XOR<input type="checkbox" class="checkbox-1" checked></p>
+                                                <p class="label">SUB<input type="checkbox" class="checkbox-1" checked></p>
+                                            </div>
+                                        </div>
+                                        <div class="parameters-sub-row-4">
+                                            <p class="subtitle-1">Один идиомы</p>
+                                            <div class="idiom-1-wrapper">
+                                                <p>CMP<input type="checkbox" class="checkbox-1" checked></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="parameters-column">
+                                <div>
+                                    <div style="width: 508px; float: left;">
+                                        <p class="subtitle-5-ru">Макро слияние</p>
+                                    </div>
+                                    <div class="macro-row-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-square" viewBox="0 0 16 16">
+                                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="macro-align-wrapper">
+                                    <p class="subtitle-3">Сливаемые пары операций</p>
+                                    <div class="macro-operations-wrapper">
+                                        <p class="subtitle-3">Первая операция</p>
+                                        <div class="macro-first-operation">
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox" checked>ADD</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">SUB</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">ADC</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">SBB</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">INC</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">DEC</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">CMP</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">TEST</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">AND</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">OR</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">XOR</p>
+                                            <p class="checkbox"><input type="radio" name="operation-1" class="checkbox">NOT</p>
+                                            <p class="checkbox-last"><input type="radio" name="operation-1" class="checkbox">NEG</p>
+                                        </div>
+                                    </div>
+                                    <div class="macro-operations-wrapper">
+                                        <p class="subtitle-3">Вторая операция</p>
+                                        <div class="macro-second-operation">
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JA</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JNA</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JAE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JNAE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JB</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JNB</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JBE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JNBE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JC</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JNC</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JNE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JG</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JNG</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JGE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JNGE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JL</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JNL</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JLE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JNLE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox">JS</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox">JNS</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox">JO</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox">JNO</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox">JP</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox">JNP</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox">JPO</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox">JPE</p>
+                                            <p class="checkbox"><input type="checkbox" class="checkbox" checked>JZ</p>
+                                            <p class="checkbox-last"><input type="checkbox" class="checkbox" checked>JNZ</p>
+                                        </div>
+                                    </div>
+                                    <div class="macro-checkbox-wrapper">
+                                        <div class="vertical-align">
+                                            <p class="center-align"><span>Количество слияний в такт:</span><input type="number" class="counter" min="1" max="8" value="2" id="input_fusions"></p>
+                                            <p class="checkbox-2"><input type="checkbox" class="checkbox" checked><span>Перенос первой инструкции на следующий такт</span><br><span>при попадании на последний декодер</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="macro_tab" class="tabcontent" style="display: none;">
+                        <div class="macro-row-2">
+                            <div class="macro-column-1">
+                                <p class="subtitle-4">С макро слиянием</p>
+                                <div class="table-wrapper-1">
+                                    <table class="table-1" id="macro_table">
+                                        <tr>
+                                            <th class="th">№</th>
+                                            <th class="th">Инструкция</th>
+                                            <th class="th">Операнд 1</th>
+                                            <th class="th">Операнд 2</th>
+                                            <th class="th">Декодер</th>
+                                            <th class="th">Такт</th>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="macro-column-2">
+                                <div class="macro-row-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-square" viewBox="0 0 16 16">
+                                        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                        <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+                                    </svg>
+                                </div>
+                                <p class="subtitle-4">Без макро слияния</p>
+                                <div class="table-wrapper-1">
+                                    <table class="table-1" id="macro_table_2">
+                                        <tr>
+                                            <th class="th">№</th>
+                                            <th class="th">Инструкция</th>
+                                            <th class="th">Операнд 1</th>
+                                            <th class="th">Операнд 2</th>
+                                            <th class="th">Декодер</th>
+                                            <th class="th">Такт</th>
+                                        </tr>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="micro_tab" class="tabcontent" style="display: none;">
+                        <div class="macro-row-2">
+                            <div class="macro-row-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-square" viewBox="0 0 16 16">
+                                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+                                </svg>
+                            </div>
+                            <p class="subtitle-4">Результат</p>
+                            <div class="table-wrapper-1">
+                                <table class="table-2" id="micro_table">
+                                    <tr>
+                                        <th class="th">№</th>
+                                        <th class="th">Инструкция</th>
+                                        <th class="th" style="white-space: nowrap;">Операнд 1</th>
+                                        <th class="th" style="white-space: nowrap;">Операнд 2</th>
+                                        <th class="th">Операции READ</th>
+                                        <th class="th">Операции MODIFY</th>
+                                        <th class="th">Операции ADDRESS</th>
+                                        <th class="th">Операции WRITE</th>
+                                        <th class="th">Операции до слияния</th>
+                                        <th class="th">Операции после слияния</th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="global-settings">
+                <p class="language-title">Язык</p>
+                <select class="language">
+                    <option>Русский</option>
+                    <option>English</option>
+                </select>
+                <div class="blocks-wrapper">
+                    <p class="blocks-title">Блоки</p>
+                    <div class="blocks">
+                        <p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Макро слияние</span></p>
+                        <p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Микро слияние</span></p>
+                        <p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Нуль идиомы</span></p>
+                        <p class="checkbox"><input type="checkbox" class="checkbox" checked><span>Один идиомы</span></p>
+                        <p class="checkbox"><input type="checkbox" class="checkbox" checked><span>LSD</span></p>
+                    </div>
+                </div>
+                <div class="start-wrapper">
+                    <button class="start">Запуск симуляции</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>
