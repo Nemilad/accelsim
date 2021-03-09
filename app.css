@@ -224,7 +224,7 @@ html, body {
 	}
 
 	.textarea {
-		height: 750px;
+		height: 680px;
 	}
 
 	.table-wrapper-1 {
@@ -619,16 +619,16 @@ input.panel-checkbox-last {
 }
 
 .input-column-1 {
-	height: 100%;
-	width: 883px;
+	height: 750px;
+	width: 1105px;
 	float: left;
 }
 
 .input-column-2 {
-	height: 100%;
-	width: 222px;
+	height: 98px;
+	width: 100%;
 	float: left;
-	text-align: center;
+	text-align: left;
 	position: relative;
 }
 
@@ -721,7 +721,7 @@ input.panel-checkbox-last {
 }
 
 .textarea {
-	width: 797px;
+	width: 1018px;
 	margin-left: 32px;
 	margin-right: 32px;
 	padding: 10px;
@@ -732,10 +732,13 @@ input.panel-checkbox-last {
 
 .load-file-wrapper {
 	height: 87px;
-	position: absolute;
+    float: right;
+    text-align: left;
 	right: 0;
 	bottom: 0;
 	left: 0;
+    padding-top: 15px;
+    padding-right: 45px;
 	margin: auto;
 }
 
@@ -752,13 +755,16 @@ input.panel-checkbox-last {
 }
 
 .code-samples-title {
-	padding-top: 48px;
+    text-align: left;
+	padding-top: 15px;
+    padding-left: 45px;
 	padding-bottom: 10px;
 }
 
 .code-samples {
 	height: 30px;
 	width: 150px;
+    margin-left: 45px;
 	border: 1px solid #ccc;
 }
 
