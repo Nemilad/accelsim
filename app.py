@@ -159,7 +159,6 @@ russian_dict = {
     "Options": "Параметры",
     "Decode table": "Таблица декодирования",
     "Micro operations table": "Таблица микро операций",
-    "Summary": "Сводка",
     "Start simulation": "Запуск симуляции",
     "Language": "Язык",
     "Units": "Блоки",
@@ -168,11 +167,11 @@ russian_dict = {
     "Zeroing idioms": "Нуль идиомы",
     "One idioms": "Один идиомы",
     "Source code": "Исходный код",
-    "Code examples": "Готовые примеры",
+    "Code examples:": "Готовые примеры:",
     "Example 1": "Пример 1",
     "Example 2": "Пример 2",
     "Example 3": "Пример 3",
-    "Input from file": "Ввод из файла",
+    "Input from file:": "Ввод из файла:",
     "Select file": "Выберите файл",
     "Architecture parameters": "Параметры архитектуры",
     "Number of simple decoders:": "Количество простых декодеров:",
@@ -223,9 +222,21 @@ def translate(ev):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
 
-    for element in document.select("div.global-settings")[0].select("p.language-title"):
-        if element.text in translation_dict.keys():
-            element.text = translation_dict[element.text]
+    if ev.target.value == "English":
+        for element in document.select("div.global-settings")[0].select("span.language-span-ru"):
+            if element.text in translation_dict.keys():
+                element.text = translation_dict[element.text]
+        element.class_name = "language-span-en"
+        for element in document.select("div.global-settings")[0].select("div.globe-ru"):
+            element.class_name = "globe-en"
+
+    if ev.target.value == "Русский":
+        for element in document.select("div.global-settings")[0].select("span.language-span-en"):
+            if element.text in translation_dict.keys():
+                element.text = translation_dict[element.text]
+        element.class_name = "language-span-ru"
+        for element in document.select("div.global-settings")[0].select("div.globe-en"):
+            element.class_name = "globe-ru"
 
     for element in document.select("p.blocks-title")[0]:
         if element.text in translation_dict.keys():
@@ -255,9 +266,17 @@ def translate(ev):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
 
-    for element in document["input_tab"].select("div.load-file-wrapper")[0].select("p"):
+    for element in document["input_tab"].select("span"):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
+
+    if ev.target.value == "English":
+        for element in document["input_tab"].select("span.file-input-ru"):
+              element.class_name = "file-input-en"
+
+    if ev.target.value == "Русский":
+        for element in document["input_tab"].select("span.file-input-en"):
+              element.class_name = "file-input-ru"
 
     for element in document["input_tab"].select("input.load-file"):
         if element.value in translation_dict.keys():
@@ -303,11 +322,15 @@ def translate(ev):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
 
+    for element in document["macro_tab"].select("p.subtitle-4-2"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
     for element in document["macro_tab"].select("th"):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
 
-    for element in document["micro_tab"].select("p.subtitle-4"):
+    for element in document["micro_tab"].select("p.subtitle-4-2"):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
 

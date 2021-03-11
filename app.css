@@ -44,7 +44,7 @@ html, body {
 	}
 
 	.textarea {
-		height: 430px;
+		height: 387px;
 	}
 
 	.table-wrapper-1 {
@@ -134,7 +134,7 @@ html, body {
 	}
 
 	.textarea {
-		height: 570px;
+		height: 527px;
 	}
 
 	.table-wrapper-1 {
@@ -224,7 +224,7 @@ html, body {
 	}
 
 	.textarea {
-		height: 680px;
+		height: 707px;
 	}
 
 	.table-wrapper-1 {
@@ -318,20 +318,7 @@ html, body {
 }
 
 .tab {
-	width: 20%;
-	height: 52px;
-    background-color: inherit;
-    float: left;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    outline: none;
-    cursor: pointer;
-    padding: 8px 10px;
-    transition: 0.3s;
-}
-
-.tab-last {
-	width: 20%;
+	width: 25%;
 	height: 52px;
     background-color: inherit;
     float: left;
@@ -435,6 +422,32 @@ input.panel-checkbox-last {
 
 .global-settings > p {
 	padding: 18.5px 0px;
+}
+
+.globe-ru {
+	padding-top: 18.5px;
+	padding-bottom: 18.5px;
+	padding-left: 65px;
+	float: left;
+}
+
+.globe-en {
+	padding-top: 18.5px;
+	padding-bottom: 18.5px;
+	padding-left: 50px;
+	float: left;
+}
+
+.language-title {
+	padding: 18.5px 0px;
+}
+
+.language-span-ru {
+	padding-right: 60px;
+}
+
+.language-span-en {
+	padding-right: 45px;
 }
 
 .language {
@@ -618,14 +631,12 @@ input.panel-checkbox-last {
 	float: left;
 }
 
-.input-column-1 {
-	height: 750px;
+.input-row-1 {
 	width: 1105px;
 	float: left;
 }
 
-.input-column-2 {
-	height: 98px;
+.input-row-2 {
 	width: 100%;
 	float: left;
 	text-align: left;
@@ -702,6 +713,13 @@ input.panel-checkbox-last {
 	padding-bottom: 15px;
 }
 
+.subtitle-4-2 {
+    padding-top: 15px;
+    padding-left: 44px;
+	padding-bottom: 15px;
+	text-align: center;
+}
+
 .subtitle-5-ru {
 	padding-top: 15px;
 	padding-bottom: 10px;
@@ -746,7 +764,7 @@ input.panel-checkbox-last {
 	height: 30px;
 	width: 150px;
 	font-size: 16px;
-	margin-top: 10px;
+	margin-left: 5px;
 	cursor: pointer;
 }
 
@@ -754,18 +772,24 @@ input.panel-checkbox-last {
 	display: none;
 }
 
-.code-samples-title {
-    text-align: left;
-	padding-top: 15px;
-    padding-left: 45px;
-	padding-bottom: 10px;
-}
-
 .code-samples {
 	height: 30px;
 	width: 150px;
-    margin-left: 45px;
+    margin-left: 5px;
 	border: 1px solid #ccc;
+}
+
+.input-elements {
+	padding-top: 20px;
+	padding-left: 45px;
+}
+
+.file-input-ru {
+	padding-left: 435px;
+}
+
+.file-input-en {
+	padding-left: 470px;
 }
 
 .table-wrapper-1 {
