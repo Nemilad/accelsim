@@ -1,4 +1,4 @@
-from browser import document, bind, console, alert, html
+from browser import document, bind, console, alert, html, window
 from browser.html import TABLE, TR, TH, TD
 import re, json
 
@@ -868,3 +868,16 @@ def inputarea_tabulation(ev):
         input_area.value = value[0:start] + '\t' + value[end:len(value)]
 
         input_area.selectionStart = input_area.selectionEnd = start + 1
+
+@bind("input.file", "change")
+def load_file(ev):
+    def onload(event):
+        print(event.target.result)
+
+    # Get the selected file as a DOM File object
+    file = document["file"].files[0]
+    # Create a new DOM FileReader instance
+    reader = window.FileReader.new()
+    # Read the file content as text
+    reader.readAsText(file)
+    reader.bind("load", onload)
