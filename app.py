@@ -872,7 +872,7 @@ def inputarea_tabulation(ev):
 @bind("input.file", "change")
 def load_file(ev):
     def onload(event):
-        print(event.target.result)
+        document["inputarea"].value = event.target.result
 
     # Get the selected file as a DOM File object
     file = document["file"].files[0]
