@@ -995,3 +995,71 @@ input.panel-checkbox-last {
 	float: left;
 	text-align: left;
 }
+
+:root {
+    --brython-dialog-font-family: Arial;
+    --brython-dialog-font-size: 100%;
+    --brython-dialog-bgcolor: #fff;
+    --brython-dialog-border-color: #000;
+    --brython-dialog-title-bgcolor: CadetBlue;
+    --brython-dialog-title-color: #fff;
+    --brython-dialog-close-bgcolor: #fff;
+    --brython-dialog-close-color: #000;
+}
+
+.brython-dialog-main {
+    font-family: var(--brython-dialog-font-family);
+    font-size: var(--brython-dialog-font-size);
+    background-color: var(--brython-dialog-bgcolor);
+    left: 10px;
+    top: 10px;
+    border-style: solid;
+    border-color: var(--brython-dialog-border-color);
+    border-width: 1px;
+    z-index: 10;
+}
+
+.brython-dialog-title {
+	text-align: center;
+    background-color: var(--brython-dialog-title-bgcolor);
+    color: var(--brython-dialog-title-color);
+    border-style: solid;
+    border-color: var(--brython-dialog-border-color);
+    border-width: 0px 0px 1px 0px;
+    padding: 0.4em;
+    cursor: default;
+}
+
+.brython-dialog-close {
+    float: right;
+    background-color: var(--brython-dialog-close-bgcolor);
+    color: var(--brython-dialog-close-color);
+    cursor: default;
+    padding: 0.1em;
+}
+
+.brython-dialog-panel {
+    padding: 0.6em;
+}
+
+.brython-dialog-message {
+    padding-right: 0.6em;
+}
+
+.brython-dialog-button {
+    margin-top: 12px;
+    padding: 4px 18px;
+    border-style: solid;
+    border-color: var(--brython-dialog-border-color);
+    border-width: 1px;
+}
+
+.overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    height: 100%; 
+    width: 100%; 
+    background-color: #333;
+    opacity: 0.2; 
+}

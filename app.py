@@ -1,5 +1,6 @@
 from browser import document, bind, console, alert, html, window
-from browser.html import TABLE, TR, TH, TD
+from browser.html import TABLE, TR, TH, TD, DIV
+from browser.widgets.dialog import InfoDialog
 import re, json
 
 settings = {
@@ -811,8 +812,12 @@ def fill_tables(code_table):
 
 @bind("input.counter", "change")
 def counter_validation(ev):
+    client_width = document.documentElement.clientWidth
+    client_height = document.documentElement.clientHeight
+    minimum = ev.target.min
+    maximum = ev.target.max
     if ev.target.value == '':
-        alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
+        popup(minimum, maximum, client_width, client_height)
         if ev.target.value > ev.target.min:
             ev.target.value = ev.target.max
         else:
@@ -820,7 +825,7 @@ def counter_validation(ev):
         macro_fusions_validation()
     else:
         if re.match('[0-9]*[.,][0-9]*|\\s', ev.target.value):
-            alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
+            popup(minimum, maximum, client_width, client_height)
             if ev.target.value > ev.target.min:
                 ev.target.value = ev.target.max
             else:
@@ -828,7 +833,7 @@ def counter_validation(ev):
             macro_fusions_validation()
         else:
             if int(ev.target.value) < int(ev.target.min) or int(ev.target.value) > int(ev.target.max):
-                alert("Введите целое значение в диапазоне от " + ev.target.min + " до " + ev.target.max)
+                popup(minimum, maximum, client_width, client_height)
                 if ev.target.value > ev.target.min:
                     ev.target.value = ev.target.max
                 else:
@@ -840,6 +845,20 @@ def counter_validation(ev):
                 ev.target.value = dummy
                 macro_fusions_validation()
 
+
+def popup(minimum, maximum, client_width, client_height):
+    top = int(client_height / 2) - 58
+    left = int(client_width / 2) - 192
+    popup = InfoDialog("Ошибка", "Введите целое значение в диапазоне от " + minimum + " до " + maximum, top=top, left=left, default_css=False, ok="Ок")
+    close_button = document.select("span.brython-dialog-close")[0]
+    close_button.remove()
+    document <= DIV(Class="overlay")
+    ok_button = document.select("button.brython-dialog-button")[0]
+    ok_button.bind("click", delete_overlay)
+
+def delete_overlay(ev):
+    div = document.select("div.overlay")[0]
+    div.remove()
 
 def macro_fusions_validation():
     if int(document["input_fusions"].value) > int(document["input_decoders"].value):
