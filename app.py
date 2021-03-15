@@ -684,10 +684,6 @@ def loop_finder(code_table, mark_list):
                 loop_count += 1
                 for i in range(line_num, mark_list[line["op1"]] - 1, -1):
                     code_table[i]["loop_num"] = loop_count
-            elif line_num < mark_list[line["op1"]]:
-                loop_count += 1
-                for i in range(mark_list[line["op1"]], line_num - 1, -1):
-                    code_table[i]["loop_num"] = loop_count
 
 
 def lsd(code_table, mark_list):
