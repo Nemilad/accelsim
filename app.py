@@ -157,7 +157,7 @@ cell_style = {
     "address_write": {"background-color": "#0040ff"},
     "combined": {"background-color": "#00ffff"},
     "lsd": {"background-color": "#ff7b00"},
-    "lsd_2": {"background-color": "#ffa000"}
+    "lsd_2": {"background-color": "#ffc800"}
 }
 
 russian_dict = {
@@ -683,7 +683,8 @@ def loop_finder(code_table, mark_list):
             if line_num > mark_list[line["op1"]]:
                 loop_count += 1
                 for i in range(line_num, mark_list[line["op1"]] - 1, -1):
-                    code_table[i]["loop_num"] = loop_count
+                    if code_table[i]["loop_num"] == '':
+                        code_table[i]["loop_num"] = loop_count
 
 
 def lsd(code_table, mark_list):
