@@ -10,7 +10,7 @@ settings = {
         'micro_fusion': True,
         'LSD': True,
         'zeroing_idioms': True,
-        'ones_idioms': True
+        'move_elimination': True
     },
     'arch_parameters': {
         'simple_decoders': 4,
@@ -137,14 +137,17 @@ settings = {
         'XOR': True,
         'SUB': True
     },
-    'ones_parameters': {
-        'CMP': True
+    'move_parameters': {
+        'MOV': True,
+        'r64': True,
+        'r32': True,
+        'self_move': False
     },
 }
 
 cell_style = {
     "zeroing_idiom": {"background-color": "#ff00ff"},
-    "ones_idiom": {"background-color": "#ff007b"},
+    "move_elimination": {"background-color": "#ff007b"},
     "macro_fusion": {"background-color": "#ffff00"},
     "macro_fusion_2": {"background-color": "#cccc00"},
     "simple_dec": {"background-color": "#7b7bff"},
@@ -375,10 +378,6 @@ def load_example():
     pass
 
 
-def load_file():
-    pass
-
-
 def code_check(code):
     return True
 
@@ -388,7 +387,7 @@ def update_settings():
     settings["block_enabled"]["macro_fusion"] = input_value[0].checked
     settings["block_enabled"]["micro_fusion"] = input_value[1].checked
     settings["block_enabled"]["zeroing_idioms"] = input_value[2].checked
-    settings["block_enabled"]["ones_idioms"] = input_value[3].checked
+    settings["block_enabled"]["move_elimination"] = input_value[3].checked
     settings["block_enabled"]["LSD"] = input_value[4].checked
     input_value = document.select("div.cpu-column-3")[0].select(".counter")
     settings["arch_parameters"]["simple_decoders"] = int(input_value[0].value)
@@ -467,8 +466,8 @@ def simulation(ev):
             micro_fusion(code_table)
         if settings["block_enabled"]["zeroing_idioms"]:
             zeroing_idioms(code_table)
-        if settings["block_enabled"]["ones_idioms"]:
-            ones_idioms(code_table)
+        if settings["block_enabled"]["move_elimination"]:
+            move_elimination(code_table)
         if settings["block_enabled"]["LSD"]:
             LSD(code_table, mark_list)
         macro_table(code_table)
@@ -688,8 +687,17 @@ def zeroing_idioms(code_table):
             line["uop_type"] = "zeroing_idiom"
 
 
-def ones_idioms(code_table):
-    pass
+def move_elimination(code_table):
+    for line in code_table:
+        if line["op"].upper() in settings["move_parameters"] and \
+                settings["move_parameters"][line["op"].upper()] and \
+                get_op_type(line["op1"]) in settings["move_parameters"] and \
+                settings["move_parameters"][get_op_type(line["op1"])] and \
+                get_op_type(line["op1"]) == get_op_type(line["op2"]) and \
+                (settings["move_parameters"]['self_move'] and line["op1"] == line["op2"] or
+                 not(settings["move_parameters"]['self_move']) and line["op1"] != line["op2"]):
+            line["uop_after"] = 0
+            line["uop_type"] = "move_elimination"
 
 
 def get_op_type(op):
@@ -753,6 +761,8 @@ def fill_tables(code_table):
             u_row <= TD(line["uop_after"], Class="td", Style=cell_style["read_modify"])
         elif line["uop_type"] == "zeroing_idiom":
             u_row <= TD(line["uop_after"], Class="td", Style=cell_style["zeroing_idiom"])
+        elif line["uop_type"] == "move_elimination":
+            u_row <= TD(line["uop_after"], Class="td", Style=cell_style["move_elimination"])
         elif line["uop_type"] == "macro_fusion":
             if fusion_count % 2 != 0:
                 if fusion_count % 4 == 1:
@@ -807,7 +817,6 @@ def fill_tables(code_table):
             merge2 -= 1
         else:
             merge2 -= 1
-    print(code_table)
 
 
 @bind("input.counter", "change")
