@@ -428,7 +428,8 @@ def simulation(ev):
                 'uop_write': '',
                 'uop_before': '',
                 'uop_after': '',
-                'uop_type': ''
+                'uop_type': '',
+                'loop_num': ''
             }
             if line.split()[0][-1] == ':':
                 mark_list.append({'mark': line.split()[0][:-1], 'pos': num})
@@ -468,8 +469,9 @@ def simulation(ev):
             zeroing_idioms(code_table)
         if settings["block_enabled"]["move_elimination"]:
             move_elimination(code_table)
+        loop_finder(code_table, mark_list)
         if settings["block_enabled"]["LSD"]:
-            LSD(code_table, mark_list)
+            lsd(code_table, mark_list)
         macro_table(code_table)
         if settings["block_enabled"]["macro_fusion"]:
             macro_fusion(code_table)
@@ -672,7 +674,11 @@ def micro_fusion(code_table):
             line["uop_type"] = "read_modify"
 
 
-def LSD(code_table, mark_list):
+def loop_finder(code_table, mark_list):
+    print(mark_list)
+
+
+def lsd(code_table, mark_list):
     pass
 
 
