@@ -87,16 +87,16 @@ html, body {
 		height: 100px;
 	}
 
-	.idiom-0-wrapper {
-		height: 55px;
+	.me-wrapper {
+		height: 100px;
 	}
 
 	.lsd-wrapper {
 		height: 30px;
 	}
 
-	.idiom-1-wrapper {
-		height: 5px;
+	.idiom-0-wrapper {
+		height: 30px;
 	}
 }
 
@@ -177,16 +177,16 @@ html, body {
 		height: 105px;
 	}
 
-	.idiom-0-wrapper {
-		height: 55px;
+	.me-wrapper {
+		height: 105px;
 	}
 
 	.lsd-wrapper {
 		height: 40px;
 	}
 
-	.idiom-1-wrapper {
-		height: 10px;
+	.idiom-0-wrapper {
+		height: 40px;
 	}
 }
 
@@ -267,16 +267,16 @@ html, body {
 		height: 128px;
 	}
 
-	.idiom-0-wrapper {
-		height: 61px;
+	.me-wrapper {
+		height: 128px;
 	}
 
 	.lsd-wrapper {
 		height: 52px;
 	}
 
-	.idiom-1-wrapper {
-		height: 20px;
+	.idiom-0-wrapper {
+		height: 50px;
 	}
 }
 
@@ -467,7 +467,7 @@ input.panel-checkbox-last {
 }
 
 .blocks {
-	padding: 0px 25px;
+	padding: 0px 24px;
 }
 
 .blocks > .checkbox {
@@ -929,7 +929,7 @@ input.panel-checkbox-last {
 	margin: auto;
 }
 
-.idiom-0-wrapper {
+.me-wrapper {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -947,7 +947,7 @@ input.panel-checkbox-last {
 	margin: auto;
 }
 
-.idiom-1-wrapper {
+.idiom-0-wrapper {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -996,12 +996,32 @@ input.panel-checkbox-last {
 	text-align: left;
 }
 
+.me-column-1 {
+	height: 100%;
+	width: 18%;
+	float: left;
+}
+
+.me-column-2 {
+	height: 100%;
+	width: 54%;
+	float: left;
+	text-align: center;
+}
+
+.me-column-3 {
+	height: 100%;
+	width: 28%;
+	float: left;
+	text-align: left;
+}
+
 :root {
-    --brython-dialog-font-family: Arial;
+    --brython-dialog-font-family: "Assistant", sans-serif;
     --brython-dialog-font-size: 100%;
     --brython-dialog-bgcolor: #fff;
     --brython-dialog-border-color: #000;
-    --brython-dialog-title-bgcolor: CadetBlue;
+    --brython-dialog-title-bgcolor: rgba(176, 0, 0, 0.7);
     --brython-dialog-title-color: #fff;
     --brython-dialog-close-bgcolor: #fff;
     --brython-dialog-close-color: #000;

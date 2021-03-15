@@ -1,5 +1,5 @@
 from browser import document, bind, console, alert, html, window
-from browser.html import TABLE, TR, TH, TD, DIV
+from browser.html import TABLE, TR, TH, TD, DIV, P
 from browser.widgets.dialog import InfoDialog
 import re, json
 
@@ -171,7 +171,6 @@ russian_dict = {
     "Macro fusion": "Макро слияние",
     "Micro fusion": "Микро слияние",
     "Zeroing idioms": "Нуль идиомы",
-    "One idioms": "Один идиомы",
     "Source code": "Исходный код",
     "Code examples:": "Готовые примеры:",
     "Example 1": "Пример 1",
@@ -186,6 +185,10 @@ russian_dict = {
     "for a complex decoder:": "для сложного декодера:",
     "Both types of fusions": "Два вида слияния",
     "in one instruction": "в одной инструкции",
+    "Registers 64 bit": "Регистры 64 бит",
+    "Registers 32 bit": "Регистры 32 бит",
+    "Moving": "Перемещение",
+    "register into itself": "регистра в себя",
     "Micro operation": "Размер буфера",
     "buffer size:": "микро операций:",
     "Operations pairs for fusion": "Сливаемые пары операций",
@@ -260,7 +263,7 @@ def translate(ev):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
 
-    for element in document["input_tab"].select("p.subtitle"):
+    for element in document["input_tab"].select("p.subtitle-4-2"):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
 
@@ -297,6 +300,10 @@ def translate(ev):
             element.text = translation_dict[element.text]
 
     for element in document["parameters_tab"].select("div.cpu-column-2")[0].select("p"):
+        if element.text in translation_dict.keys():
+            element.text = translation_dict[element.text]
+
+    for element in document["parameters_tab"].select("div.me-column-2")[0].select("p"):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
 
@@ -885,7 +892,7 @@ def counter_validation(ev):
                 dummy = ev.target.value
                 ev.target.value = ''
                 ev.target.value = dummy
-                macro_fusions_validation()
+                macro_fusions_validation_with_popup(client_width, client_height)
 
 
 def popup(minimum, maximum, client_width, client_height):
@@ -898,14 +905,28 @@ def popup(minimum, maximum, client_width, client_height):
     ok_button = document.select("button.brython-dialog-button")[0]
     ok_button.bind("click", delete_overlay)
 
+
 def delete_overlay(ev):
     div = document.select("div.overlay")[0]
     div.remove()
 
+
 def macro_fusions_validation():
     if int(document["input_fusions"].value) > int(document["input_decoders"].value):
-        alert("Количество макро слияний в такт не может быть больше, чем количество простых декодеров")
         document["input_fusions"].value = document["input_decoders"].value
+
+
+def macro_fusions_validation_with_popup(client_width, client_height):
+    if int(document["input_fusions"].value) > int(document["input_decoders"].value):
+        document["input_fusions"].value = document["input_decoders"].value
+        top = int(client_height / 2) - 58
+        left = int(client_width / 2) - 374
+        popup = InfoDialog("Ошибка", "Количество макро слияний в такт не может быть больше, чем количество простых декодеров", top=top, left=left, default_css=False, ok="Ок")
+        close_button = document.select("span.brython-dialog-close")[0]
+        close_button.remove()
+        document <= DIV(Class="overlay")
+        ok_button = document.select("button.brython-dialog-button")[0]
+        ok_button.bind("click", delete_overlay)
 
 
 @bind("input.micro-checkbox", "change")
@@ -921,7 +942,7 @@ def micro_settings_validation(ev):
 def inputarea_tabulation(ev):
     input_area = document["inputarea"]
     if ev.keyCode == 9:
-        document["result_tab_button"].focus()
+        document["micro_tab_button"].focus()
         value = input_area.value
         start = input_area.selectionStart
         end = input_area.selectionEnd
@@ -929,6 +950,7 @@ def inputarea_tabulation(ev):
         input_area.value = value[0:start] + '\t' + value[end:len(value)]
 
         input_area.selectionStart = input_area.selectionEnd = start + 1
+
 
 @bind("input.file", "change")
 def load_file(ev):
@@ -942,3 +964,44 @@ def load_file(ev):
     # Read the file content as text
     reader.readAsText(file)
     reader.bind("load", onload)
+
+
+@bind("svg.bi-question-square", "click")
+def show_info(ev):
+    tab = document.select("button.active")[0]
+    if (tab.id == "input_tab_button"):
+        popup = InfoDialog("Справочная информация", "", default_css=False, ok="Ок")
+        close_button = document.select("span.brython-dialog-close")[0]
+        close_button.remove()
+        document <= DIV(Class="overlay")
+        ok_button = document.select("button.brython-dialog-button")[0]
+        ok_button.bind("click", delete_overlay)
+
+        element = document.select("div.brython-dialog-panel")[0].childNodes[0]
+        element <= P(Id="1")
+        document["1"].innerHTML = "1"
+    
+    elif (tab.id == "parameters_tab_button"):
+        popup = InfoDialog("Справочная информация", "2", default_css=False, ok="Ок")
+        close_button = document.select("span.brython-dialog-close")[0]
+        close_button.remove()
+        document <= DIV(Class="overlay")
+        ok_button = document.select("button.brython-dialog-button")[0]
+        ok_button.bind("click", delete_overlay)
+    
+    elif (tab.id == "macro_tab_button"):
+        popup = InfoDialog("Справочная информация", "3", default_css=False, ok="Ок")
+        close_button = document.select("span.brython-dialog-close")[0]
+        close_button.remove()
+        document <= DIV(Class="overlay")
+        ok_button = document.select("button.brython-dialog-button")[0]
+        ok_button.bind("click", delete_overlay)
+    
+    elif (tab.id == "micro_tab_button"):
+        popup = InfoDialog("Справочная информация", "4", default_css=False, ok="Ок")
+        close_button = document.select("span.brython-dialog-close")[0]
+        close_button.remove()
+        document <= DIV(Class="overlay")
+        ok_button = document.select("button.brython-dialog-button")[0]
+        ok_button.bind("click", delete_overlay)
+   
