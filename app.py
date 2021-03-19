@@ -131,7 +131,7 @@ settings = {
         'combined_enabled': True
     },
     'lsd_parameters': {
-        'buffer size': 16
+        'buffer_size': 64
     },
     'zeroing_parameters': {
         'XOR': True,
@@ -413,7 +413,12 @@ def update_settings():
     input_value = document.select("div.idiom-0-wrapper")[0].select(".checkbox-1")
     settings["zeroing_parameters"]["XOR"] = input_value[0].checked
     settings["zeroing_parameters"]["SUB"] = input_value[1].checked
-
+    input_value = document.select("div.me-wrapper")[0].select(".checkbox-1")
+    settings["move_parameters"]["r64"] = input_value[0].checked
+    settings["move_parameters"]["r32"] = input_value[1].checked
+    settings["move_parameters"]["self_move"] = input_value[2].checked
+    input_value = document.select("div.me-wrapper")[0].select(".counter")
+    settings["lsd_parameters"]["buffer_size"] = input_value[0].value
 
 @bind("button.start", "click")
 def simulation(ev):
