@@ -157,7 +157,7 @@ cell_style = {
     "address_write": {"background-color": "#0040ff"},
     "combined": {"background-color": "#00ffff"},
     "lsd": {"background-color": "#ffc800"},
-    "lsd_2": {"background-color": "#ff7b00"}
+    "lsd_2": {"background-color": "#ff7b00"},
     "lsd_3": {"background-color": "#008000"},
     "lsd_4": {"background-color": "#00a000"}
 }
@@ -420,7 +420,7 @@ def update_settings():
     settings["move_parameters"]["r32"] = input_value[1].checked
     settings["move_parameters"]["self_move"] = input_value[2].checked
     input_value = document.select("div.lsd-wrapper")[0].select(".counter")
-    settings["lsd_parameters"]["buffer_size"] = input_value[0].value
+    settings["lsd_parameters"]["buffer_size"] = int(input_value[0].value)
 
 @bind("button.start", "click")
 def simulation(ev):
@@ -487,7 +487,7 @@ def simulation(ev):
             move_elimination(code_table)
         loop_finder(code_table, mark_list)
         if settings["block_enabled"]["LSD"]:
-            lsd(code_table, mark_list)
+            lsd(code_table)
         macro_table(code_table)
         if settings["block_enabled"]["macro_fusion"]:
             macro_fusion(code_table)
@@ -700,8 +700,23 @@ def loop_finder(code_table, mark_list):
                     code_table[i]["loop_num"].append(loop_count)
 
 
-def lsd(code_table, mark_list):
-    pass
+def lsd(code_table):
+    loops_count = {}
+    for line_num, line in enumerate(code_table):
+        if line["loop_num"]:
+            for x in line["loop_num"]:
+                if x not in loops_count and (line["op"].upper() != "LOOP" or x != line["loop_num"][0]):
+                    loops_count[x] = line["uop_after"]
+                elif x in loops_count and (line["op"].upper() != "LOOP" or x != line["loop_num"][0]):
+                    loops_count[x] += line["uop_after"]
+            if line["op"].upper() == "LOOP" and \
+                    settings['lsd_parameters']['buffer_size'] >= loops_count[line["loop_num"][0]]:
+                loop_num = line["loop_num"][0]
+                for test_line in code_table[line_num::-1]:
+                    if loop_num in test_line["loop_num"]:
+                        test_line["loop_num"][test_line["loop_num"].index(loop_num)] = -loop_num
+                    else:
+                        break
 
 
 def zeroing_idioms(code_table):
@@ -760,24 +775,36 @@ def clear_tables():
 
 
 def fill_tables(code_table):
+    current_line = 0
     merge = 0
     merge2 = 0
     fusion_count = 0
-    loops = {}
+    loops_count = {}
+    print(code_table)
     for i, line in enumerate(code_table):
         document["micro_table"].select('tbody')[0] <= html.TR()
         document["macro_table"].select('tbody')[0] <= html.TR()
         document["macro_table_2"].select('tbody')[0] <= html.TR()
-
+        current_line += 1
         if line["uop_type"] == "macro_fusion":
             fusion_count += 1
 
         u_row = document["micro_table"].select('tbody')[0].select('tr')[i + 1]
         if line["loop_num"]:
-            if line["loop_num"][0] % 2 != 0:
+            for x in line["loop_num"]:
+                if x not in loops_count and line["op"].upper() != "LOOP":
+                    loops_count[x] = []
+                    loops_count[x].append(line)
+                elif x in loops_count and line["op"].upper() != "LOOP":
+                    loops_count[x].append(line)
+            if line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) < 2:
                 u_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd"])
-            else:
+            elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) < 2:
                 u_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_2"])
+            elif line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) > 1:
+                u_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_3"])
+            elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) > 1:
+                u_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_4"])
         else:
             u_row <= TD(f"{i + 1}", Class="td")
         u_row <= TD(line["op"], Class="td")
@@ -807,12 +834,16 @@ def fill_tables(code_table):
         else:
             u_row <= TD(line["uop_after"], Class="td")
 
-        m_row = document["macro_table"].select('tbody')[0].select('tr')[i + 1]
+        m_row = document["macro_table"].select('tbody')[0].select('tr')[current_line]
         if line["loop_num"]:
-            if line["loop_num"][0] % 2 != 0:
+            if line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) < 2:
                 m_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd"])
-            else:
+            elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) < 2:
                 m_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_2"])
+            elif line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) > 1:
+                m_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_3"])
+            elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) > 1:
+                m_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_4"])
         else:
             m_row <= TD(f"{i + 1}", Class="td")
         m_row <= TD(line["op"], Class="td")
@@ -833,18 +864,32 @@ def fill_tables(code_table):
         else:
             m_row <= TD(line["dec_type"], Class="td", Style=cell_style["simple_dec"])
         if merge == 0:
-            merge = sum(1 for test_line in code_table if test_line["dec_cycle"] == line["dec_cycle"])
-            m_row <= TD(line["dec_cycle"], Class="td", rowspan=merge)
-            merge -= 1
+            for test_line in code_table[i:]:
+                if test_line["dec_cycle"] == line["dec_cycle"] and test_line["op"].upper() != "LOOP":
+                    merge += 1
+                elif test_line["dec_cycle"] == line["dec_cycle"] and test_line["op"].upper() == "LOOP":
+                    merge += 1
+                    break
+                elif test_line["dec_cycle"] != line["dec_cycle"] or test_line["op"].upper() == "LOOP":
+                    break
+            if merge > 0:
+                m_row <= TD(line["dec_cycle"], Class="td", rowspan=merge)
+                merge -= 1
+            else:
+                m_row <= TD(line["dec_cycle"], Class="td")
         else:
             merge -= 1
 
-        m2_row = document["macro_table_2"].select('tbody')[0].select('tr')[i + 1]
+        m2_row = document["macro_table_2"].select('tbody')[0].select('tr')[current_line]
         if line["loop_num"]:
-            if line["loop_num"][0] % 2 != 0:
+            if line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) < 2:
                 m2_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd"])
-            else:
+            elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) < 2:
                 m2_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_2"])
+            elif line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) > 1:
+                m2_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_3"])
+            elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) > 1:
+                m2_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_4"])
         else:
             m2_row <= TD(f"{i + 1}", Class="td")
         m2_row <= TD(line["op"], Class="td")
@@ -859,11 +904,65 @@ def fill_tables(code_table):
         else:
             m2_row <= TD(line["dec_type_2"], Class="td", Style=cell_style["simple_dec"])
         if merge2 == 0:
-            merge2 = sum(1 for test_line in code_table if test_line["dec_cycle_2"] == line["dec_cycle_2"])
-            m2_row <= TD(line["dec_cycle_2"], Class="td", rowspan=merge2)
-            merge2 -= 1
+            for test_line in code_table[i:]:
+                if test_line["dec_cycle_2"] == line["dec_cycle_2"] and test_line["op"].upper() != "LOOP":
+                    merge2 += 1
+                elif test_line["dec_cycle_2"] == line["dec_cycle_2"] and test_line["op"].upper() == "LOOP":
+                    merge2 += 1
+                    break
+                elif test_line["dec_cycle_2"] != line["dec_cycle_2"] or test_line["op"].upper() == "LOOP":
+                    break
+            if merge2 > 0:
+                m2_row <= TD(line["dec_cycle_2"], Class="td", rowspan=merge2)
+                merge2 -= 1
+            else:
+                m2_row <= TD(line["dec_cycle_2"], Class="td")
         else:
             merge2 -= 1
+
+        if line["loop_num"] and line["op"].upper() == "LOOP" and line["loop_num"][0] > 0:
+            if line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) < 2:
+                color = cell_style["lsd"]
+            elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) < 2:
+                color = cell_style["lsd_2"]
+            elif line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) > 1:
+                color = cell_style["lsd_3"]
+            elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) > 1:
+                color = cell_style["lsd_4"]
+            for copy_line in loops_count[line["loop_num"][0]]:
+                document["macro_table"].select('tbody')[0] <= html.TR()
+                document["macro_table_2"].select('tbody')[0] <= html.TR()
+                current_line += 1
+                m_row = document["macro_table"].select('tbody')[0].select('tr')[current_line]
+                m2_row = document["macro_table_2"].select('tbody')[0].select('tr')[current_line]
+                m_row <= TD("", Class="td", Style=color)
+                m_row <= TD(copy_line["op"], Class="td", Style=color)
+                m_row <= TD(copy_line["op1"], Class="td", Style=color)
+                m_row <= TD(copy_line["op2"], Class="td", Style=color)
+                m_row <= TD("", Class="td", Style=color)
+                m_row <= TD("", Class="td", Style=color)
+                m2_row <= TD("", Class="td", Style=color)
+                m2_row <= TD(copy_line["op"], Class="td", Style=color)
+                m2_row <= TD(copy_line["op1"], Class="td", Style=color)
+                m2_row <= TD(copy_line["op2"], Class="td", Style=color)
+                m2_row <= TD("", Class="td", Style=color)
+                m2_row <= TD("", Class="td", Style=color)
+        elif line["loop_num"] and line["op"].upper() == "LOOP" and line["loop_num"][0] < 0:
+            if line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) < 2:
+                color = cell_style["lsd"]
+            elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) < 2:
+                color = cell_style["lsd_2"]
+            elif line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) > 1:
+                color = cell_style["lsd_3"]
+            elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) > 1:
+                color = cell_style["lsd_4"]
+            document["macro_table"].select('tbody')[0] <= html.TR()
+            document["macro_table_2"].select('tbody')[0] <= html.TR()
+            current_line += 1
+            m_row = document["macro_table"].select('tbody')[0].select('tr')[current_line]
+            m2_row = document["macro_table_2"].select('tbody')[0].select('tr')[current_line]
+            m_row <= TD("Frontend sleep", Class="td", Style=color, colspan=6)
+            m2_row <= TD("Frontend sleep", Class="td", Style=color, colspan=6)
 
 
 @bind("input.counter", "change")
