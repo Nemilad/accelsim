@@ -156,8 +156,10 @@ cell_style = {
     "read_modify": {"background-color": "#40ff00"},
     "address_write": {"background-color": "#0040ff"},
     "combined": {"background-color": "#00ffff"},
-    "lsd": {"background-color": "#ff7b00"},
-    "lsd_2": {"background-color": "#ffc800"}
+    "lsd": {"background-color": "#ffc800"},
+    "lsd_2": {"background-color": "#ff7b00"}
+    "lsd_3": {"background-color": "#008000"},
+    "lsd_4": {"background-color": "#00a000"}
 }
 
 russian_dict = {
@@ -417,7 +419,7 @@ def update_settings():
     settings["move_parameters"]["r64"] = input_value[0].checked
     settings["move_parameters"]["r32"] = input_value[1].checked
     settings["move_parameters"]["self_move"] = input_value[2].checked
-    input_value = document.select("div.me-wrapper")[0].select(".counter")
+    input_value = document.select("div.lsd-wrapper")[0].select(".counter")
     settings["lsd_parameters"]["buffer_size"] = input_value[0].value
 
 @bind("button.start", "click")
@@ -443,7 +445,7 @@ def simulation(ev):
                 'uop_before': '',
                 'uop_after': '',
                 'uop_type': '',
-                'loop_num': ''
+                'loop_num': []
             }
             if line.split()[0][-1] == ':':
                 mark_list[line.split()[0][:-1]] = num
@@ -695,8 +697,7 @@ def loop_finder(code_table, mark_list):
             if line_num > mark_list[line["op1"]]:
                 loop_count += 1
                 for i in range(line_num, mark_list[line["op1"]] - 1, -1):
-                    if code_table[i]["loop_num"] == '':
-                        code_table[i]["loop_num"] = loop_count
+                    code_table[i]["loop_num"].append(loop_count)
 
 
 def lsd(code_table, mark_list):
@@ -762,6 +763,7 @@ def fill_tables(code_table):
     merge = 0
     merge2 = 0
     fusion_count = 0
+    loops = {}
     for i, line in enumerate(code_table):
         document["micro_table"].select('tbody')[0] <= html.TR()
         document["macro_table"].select('tbody')[0] <= html.TR()
@@ -771,8 +773,8 @@ def fill_tables(code_table):
             fusion_count += 1
 
         u_row = document["micro_table"].select('tbody')[0].select('tr')[i + 1]
-        if line["loop_num"] != '':
-            if line["loop_num"] % 2 != 0:
+        if line["loop_num"]:
+            if line["loop_num"][0] % 2 != 0:
                 u_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd"])
             else:
                 u_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_2"])
@@ -806,8 +808,8 @@ def fill_tables(code_table):
             u_row <= TD(line["uop_after"], Class="td")
 
         m_row = document["macro_table"].select('tbody')[0].select('tr')[i + 1]
-        if line["loop_num"] != '':
-            if line["loop_num"] % 2 != 0:
+        if line["loop_num"]:
+            if line["loop_num"][0] % 2 != 0:
                 m_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd"])
             else:
                 m_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_2"])
@@ -838,8 +840,8 @@ def fill_tables(code_table):
             merge -= 1
 
         m2_row = document["macro_table_2"].select('tbody')[0].select('tr')[i + 1]
-        if line["loop_num"] != '':
-            if line["loop_num"] % 2 != 0:
+        if line["loop_num"]:
+            if line["loop_num"][0] % 2 != 0:
                 m2_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd"])
             else:
                 m2_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_2"])
