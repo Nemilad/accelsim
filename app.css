@@ -1048,6 +1048,17 @@ input.panel-checkbox-last {
     border-width: 0px 0px 1px 0px;
     padding: 0.4em;
     cursor: default;
+    pointer-events: none;
+}
+
+.brython-dialog-title-1 {
+	text-align: center;
+    background-color: #F0F050;
+    border-style: solid;
+    border-color: var(--brython-dialog-border-color);
+    border-width: 0px 0px 1px 0px;
+    padding: 0.4em;
+    cursor: default;
 }
 
 .brython-dialog-close {
@@ -1082,4 +1093,53 @@ input.panel-checkbox-last {
     width: 100%; 
     background-color: #333;
     opacity: 0.2; 
+}
+
+#info-input-tab-1 {
+	width: 590px;
+	line-height: 1.35;
+}
+
+#info-input-tab-2 {
+	width: 590px;
+	line-height: 1.35;
+	padding-top: 6px;
+}
+
+#info-input-tab-3 {
+	width: 590px;
+	padding-top: 10px;
+}
+
+.info-parameters-tab-1 {
+	width: 1000px;
+	line-height: 1.35;
+}
+
+.info-parameters-tab-2 {
+	width: 1000px;
+	line-height: 1.35;
+	padding-top: 8px;
+}
+
+.info-macro-tab-1 {
+	width: 450px;
+	line-height: 1.35;
+}
+
+.info-macro-tab-2 {
+	width: 450px;
+	line-height: 1.35;
+	padding-top: 8px;
+}
+
+.info-micro-tab-1 {
+	width: 800px;
+	line-height: 1.35;
+}
+
+.info-micro-tab-2 {
+	width: 800px;
+	line-height: 1.35;
+	padding-top: 8px;
 }
