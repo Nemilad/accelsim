@@ -1,5 +1,5 @@
 from browser import document, bind, console, alert, html, window
-from browser.html import TABLE, TR, TH, TD, DIV, P
+from browser.html import TABLE, TR, TH, TD, DIV, P, IMG
 from browser.widgets.dialog import InfoDialog
 import re, json
 
@@ -1132,18 +1132,23 @@ def show_info(ev):
         element = document.select("div.brython-dialog-panel")[0].childNodes[0]
         element <= P(Id="info-macro-tab-1", Class="info-macro-tab-1", align="justify")
         element <= P(Id="info-macro-tab-2", Class="info-macro-tab-2", align="justify")
-        element <= P(Id="info-macro-tab-3", Class="info-macro-tab-2", align="justify")
-        element <= P(Id="info-macro-tab-4", Class="info-macro-tab-2", align="justify")
-        element <= P(Id="info-macro-tab-5", Class="info-macro-tab-2", align="justify")
-        element <= P(Id="info-macro-tab-6", Class="info-macro-tab-2", align="justify")
+        element <= IMG(Id="img-macro-1", src="static/blue.png", Class="img")
+        element <= P(Id="info-macro-tab-3", Class="info-macro-tab-3", align="justify")
+        element <= IMG(Id="img-macro-2", src="static/pale red.png", Class="img")
+        element <= P(Id="info-macro-tab-4", Class="info-macro-tab-3", align="justify")
+        element <= IMG(Id="img-macro-3", src="static/purple.png", Class="img")
+        element <= P(Id="info-macro-tab-5", Class="info-macro-tab-3", align="justify")
+        element <= IMG(Id="img-macro-4", src="static/yellow.png", Class="img")
+        element <= IMG(Id="img-macro-5", src="static/dark yellow.png", Class="img-2")
+        element <= P(Id="info-macro-tab-6", Class="info-macro-tab-4", align="justify")
         element <= P(Id="info-macro-tab-7", Class="info-macro-tab-2", align="justify")
         element <= P(Id="info-macro-tab-8", Class="info-macro-tab-2", align="justify")
         document["info-macro-tab-1"].innerHTML = "Данная вкладка предназначена для отображения результата работы блоков 'Макро слияние' и 'LSD' модели процессора."
         document["info-macro-tab-2"].innerHTML = "В таблицах отображается сразу два варианта симуляции процесса декодирования ассемблерного кода с включенным и выключенным макро слиянием."
-        document["info-macro-tab-3"].innerHTML = "Синим цветом в таблице выделяются простые декодеры."
-        document["info-macro-tab-4"].innerHTML = "Красным цветом в таблице выделяются сложные декодеры."
-        document["info-macro-tab-5"].innerHTML = "Фиолетовым цветом в таблице выделяются инструкции, которые попали в простой декодер балгодаря включенному блоку 'Микро слияние'."
-        document["info-macro-tab-6"].innerHTML = "Двумя оттенками желтого цвета в таблице выделяются инструкции, которые подверглись макро слиянию."
+        document["info-macro-tab-3"].innerHTML = "- данным цветом в таблице выделяются простые декодеры."
+        document["info-macro-tab-4"].innerHTML = "- данным цветом в таблице выделяются сложные декодеры."
+        document["info-macro-tab-5"].innerHTML = "- данным цветом в таблице выделяются инструкции, которые попали в простой декодер балгодаря включенному блоку 'Микро слияние'."
+        document["info-macro-tab-6"].innerHTML = "- данными цветами в таблице выделяются инструкции, которые подверглись макро слиянию."
         document["info-macro-tab-7"].innerHTML = "Оранжевым цветом выделяются циклы, которые попали в блок 'LSD'."
         document["info-macro-tab-8"].innerHTML = "Зелёным цветом выделяются вложенные циклы, которые попали в блок 'LSD'."
 
@@ -1160,18 +1165,25 @@ def show_info(ev):
         element = document.select("div.brython-dialog-panel")[0].childNodes[0]
         element <= P(Id="info-micro-tab-1", Class="info-micro-tab-1", align="justify")
         element <= P(Id="info-micro-tab-2", Class="info-micro-tab-2", align="justify")
-        element <= P(Id="info-micro-tab-3", Class="info-micro-tab-2", align="justify")
-        element <= P(Id="info-micro-tab-4", Class="info-micro-tab-2", align="justify")
-        element <= P(Id="info-micro-tab-5", Class="info-micro-tab-2", align="justify")
-        element <= P(Id="info-micro-tab-6", Class="info-micro-tab-2", align="justify")
-        element <= P(Id="info-micro-tab-7", Class="info-micro-tab-2", align="justify")
-        element <= P(Id="info-micro-tab-8", Class="info-micro-tab-2", align="justify")
+        element <= IMG(Id="img-micro-1", src="static/yellow.png", Class="img")
+        element <= IMG(Id="img-micro-2", src="static/dark yellow.png", Class="img-2")
+        element <= P(Id="info-micro-tab-3", Class="info-micro-tab-4", align="justify")
+        element <= IMG(Id="img-micro-3", src="static/green.png", Class="img")
+        element <= P(Id="info-micro-tab-4", Class="info-micro-tab-3", align="justify")
+        element <= IMG(Id="img-micro-4", src="static/navy.png", Class="img")
+        element <= P(Id="info-micro-tab-5", Class="info-micro-tab-3", align="justify")
+        element <= IMG(Id="img-micro-5", src="static/turquoise.png", Class="img")
+        element <= P(Id="info-micro-tab-6", Class="info-micro-tab-3", align="justify")
+        element <= IMG(Id="img-micro-6", src="static/dark purple.png", Class="img")
+        element <= P(Id="info-micro-tab-7", Class="info-micro-tab-3", align="justify")
+        element <= IMG(Id="img-micro-7", src="static/red.png", Class="img")
+        element <= P(Id="info-micro-tab-8", Class="info-micro-tab-3", align="justify")
         document["info-micro-tab-1"].innerHTML = "Данная вкладка предназначена для отображения результата работы всех блоков модели процессора."
         document["info-micro-tab-2"].innerHTML = "В таблице отображаются список инструкций и результат их декодирования в виде количества декодированных микро операций каждого типа и общего числа микро операций с включенным и выключенным микро слиянием."
-        document["info-micro-tab-3"].innerHTML = "Двумя оттенками желтого цвета в таблице выделяются инструкции, которые подверглись макро слиянию."
-        document["info-micro-tab-4"].innerHTML = "Зеленым цветом выделяются инструкции, для которых было выполнено микро слияние типа 'read-modify'."
-        document["info-micro-tab-5"].innerHTML = "Синим цветом выделяются инструкции, для которых было выполнено микро слияния типа 'address-write'."
-        document["info-micro-tab-6"].innerHTML = "Бирюзовым цветом выделяются инструкции, для которых было выполнено оба типа микро слияния."
-        document["info-micro-tab-7"].innerHTML = "Фиолетовым цветом выделяются нуль идиомы, распознанные моделью процессора."
-        document["info-micro-tab-8"].innerHTML = "Красным цветом выделяются инструкции 'mov', которые подверглись работе блока 'Move elimination'."
+        document["info-micro-tab-3"].innerHTML = "- данными цветами в таблице выделяются инструкции, которые подверглись макро слиянию."
+        document["info-micro-tab-4"].innerHTML = "- данным цветом выделяются инструкции, для которых было выполнено микро слияние типа 'read-modify'."
+        document["info-micro-tab-5"].innerHTML = "- данным цветом выделяются инструкции, для которых было выполнено микро слияния типа 'address-write'."
+        document["info-micro-tab-6"].innerHTML = "- данным цветом выделяются инструкции, для которых было выполнено оба типа микро слияния."
+        document["info-micro-tab-7"].innerHTML = "- данным цветом выделяются нуль идиомы, распознанные моделью процессора."
+        document["info-micro-tab-8"].innerHTML = "- данным цветом выделяются инструкции 'mov', которые подверглись работе блока 'Move elimination'."
         

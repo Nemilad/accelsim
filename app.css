@@ -1133,6 +1133,20 @@ input.panel-checkbox-last {
 	padding-top: 8px;
 }
 
+.info-macro-tab-3 {
+	width: 450px;
+	line-height: 1.35;
+	padding-top: 5px;
+	margin-left: 22px;
+}
+
+.info-macro-tab-4 {
+	width: 450px;
+	line-height: 1.35;
+	padding-top: 5px;
+	margin-left: 45px;
+}
+
 .info-micro-tab-1 {
 	width: 800px;
 	line-height: 1.35;
@@ -1142,4 +1156,29 @@ input.panel-checkbox-last {
 	width: 800px;
 	line-height: 1.35;
 	padding-top: 8px;
+}
+
+.info-micro-tab-3 {
+	width: 800px;
+	line-height: 1.35;
+	padding-top: 5px;
+	margin-left: 22px;
+}
+
+.info-micro-tab-4 {
+	width: 800px;
+	line-height: 1.35;
+	padding-top: 5px;
+	margin-left: 45px;
+}
+
+.img {
+	float: left;
+	padding-top: 8px;
+}
+
+.img-2 {
+	float: left;
+	padding-top: 8px;
+	margin-left: 8px;
 }
