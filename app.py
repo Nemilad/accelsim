@@ -429,7 +429,8 @@ def simulation(ev):
     mark_list = {}
     code = document["inputarea"].value
     if code_check(code):
-        for num, line in enumerate(code.splitlines()):
+        line_num = -1
+        for line in code.splitlines():
             template = {
                 'op': '',
                 'op1': '',
@@ -447,34 +448,36 @@ def simulation(ev):
                 'uop_type': '',
                 'loop_num': []
             }
-            if line.split()[0][-1] == ':':
-                mark_list[line.split()[0][:-1]] = num
-                if len(line.split()) == 4:
-                    template['op'] = line.split()[1]
-                    if line.split()[2][-1] == ",":
-                        template['op1'] = line.split()[2][:-1]
-                    else:
+            if line != "":
+                line_num += 1
+                if line.split()[0][-1] == ':':
+                    mark_list[line.split()[0][:-1]] = line_num
+                    if len(line.split()) == 4:
+                        template['op'] = line.split()[1]
+                        if line.split()[2][-1] == ",":
+                            template['op1'] = line.split()[2][:-1]
+                        else:
+                            template['op1'] = line.split()[2]
+                        template['op2'] = line.split()[3]
+                    elif len(line.split()) == 3:
+                        template['op'] = line.split()[1]
                         template['op1'] = line.split()[2]
-                    template['op2'] = line.split()[3]
-                elif len(line.split()) == 3:
-                    template['op'] = line.split()[1]
-                    template['op1'] = line.split()[2]
-                elif len(line.split()) == 2:
-                    template['op'] = line.split()[1]
-            else:
-                if len(line.split()) == 3:
-                    template['op'] = line.split()[0]
-                    if line.split()[1][-1] == ",":
-                        template['op1'] = line.split()[1][:-1]
-                    else:
-                        template['op1'] = line.split()[1]
-                    template['op2'] = line.split()[2]
-                elif len(line.split()) == 2:
-                    template['op'] = line.split()[0]
-                    template['op1'] = line.split()[1]
+                    elif len(line.split()) == 2:
+                        template['op'] = line.split()[1]
                 else:
-                    template['op'] = line.split()[0]
-            code_table.append(template.copy())
+                    if len(line.split()) == 3:
+                        template['op'] = line.split()[0]
+                        if line.split()[1][-1] == ",":
+                            template['op1'] = line.split()[1][:-1]
+                        else:
+                            template['op1'] = line.split()[1]
+                        template['op2'] = line.split()[2]
+                    elif len(line.split()) == 2:
+                        template['op'] = line.split()[0]
+                        template['op1'] = line.split()[1]
+                    else:
+                        template['op'] = line.split()[0]
+                code_table.append(template.copy())
             template.clear()
 
         update_settings()
