@@ -98,9 +98,14 @@ html, body {
 	.idiom-0-wrapper {
 		height: 30px;
 	}
+
+	.info-parameters-wrapper {
+		height: 440px;
+		width: 1050px;
+	}
 }
 
-@media screen and (min-device-height: 810px) {
+@media screen and (min-device-height: 810px) and (max-device-height: 920px) {
 	.container {
 		height: 720px;
 	}
@@ -187,6 +192,11 @@ html, body {
 
 	.idiom-0-wrapper {
 		height: 40px;
+	}
+
+	.info-parameters-wrapper {
+		height: 540px;
+		width: 1050px;
 	}
 }
 
@@ -1059,6 +1069,7 @@ input.panel-checkbox-last {
     border-width: 0px 0px 1px 0px;
     padding: 0.4em;
     cursor: default;
+    pointer-events: none;
 }
 
 .brython-dialog-close {
@@ -1111,6 +1122,10 @@ input.panel-checkbox-last {
 	padding-top: 10px;
 }
 
+.info-parameters-wrapper {
+	overflow-y: auto;
+}
+
 .info-parameters-tab-1 {
 	width: 1000px;
 	line-height: 1.35;
@@ -1122,26 +1137,40 @@ input.panel-checkbox-last {
 	padding-top: 8px;
 }
 
+.info-parameters-tab-3 {
+	width: 1000px;
+	line-height: 1.35;
+	padding-top: 8px;
+	margin-left: 20px;
+}
+
+.info-parameters-tab-4 {
+	width: 1000px;
+	line-height: 1.35;
+	padding-top: 8px;
+	font-weight: 700;
+}
+
 .info-macro-tab-1 {
-	width: 450px;
+	width: 460px;
 	line-height: 1.35;
 }
 
 .info-macro-tab-2 {
-	width: 450px;
+	width: 460px;
 	line-height: 1.35;
 	padding-top: 8px;
 }
 
 .info-macro-tab-3 {
-	width: 450px;
+	width: 460px;
 	line-height: 1.35;
 	padding-top: 5px;
 	margin-left: 22px;
 }
 
 .info-macro-tab-4 {
-	width: 450px;
+	width: 435px;
 	line-height: 1.35;
 	padding-top: 5px;
 	margin-left: 45px;
