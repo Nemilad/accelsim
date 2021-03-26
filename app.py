@@ -740,8 +740,7 @@ def move_elimination(code_table):
                 get_op_type(line["op1"]) in settings["move_parameters"] and \
                 settings["move_parameters"][get_op_type(line["op1"])] and \
                 get_op_type(line["op1"]) == get_op_type(line["op2"]) and \
-                (settings["move_parameters"]['self_move'] and line["op1"] == line["op2"] or
-                 not(settings["move_parameters"]['self_move']) and line["op1"] != line["op2"]):
+                (settings["move_parameters"]['self_move'] or line["op1"] != line["op2"]):
             line["uop_after"] = 0
             line["uop_type"] = "move_elimination"
 
