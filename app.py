@@ -1082,7 +1082,10 @@ def show_info(ev):
     if (tab.id == "input_tab_button"):
         top = int(client_height / 2) - 140
         left = int(client_width / 2) - 374
-        popup = InfoDialog("Справочная информация", "", top=top, left=left, default_css=False, ok="Ок")
+        if settings["current_language"] == "Русский":
+            popup = InfoDialog("Справочная информация", "", top=top, left=left, default_css=False, ok="Ок")
+        else:
+            popup = InfoDialog("Reference information", "", top=top, left=left, default_css=False, ok="Ok")
         close_button = document.select("span.brython-dialog-close")[0]
         close_button.remove()
         document <= DIV(Class="overlay")
@@ -1095,9 +1098,14 @@ def show_info(ev):
         element <= P(Id="info-input-tab-1", align="justify")
         element <= P(Id="info-input-tab-2", align="justify")
         element <= P(Id="info-input-tab-3", align="justify")
-        document["info-input-tab-1"].innerHTML = "Данная вкладка предназначена для ввода исходного кода, который будет использован для симуляции программой."
-        document["info-input-tab-2"].innerHTML = "Ввод исходного кода можно осуществить напрямую в текстовое поле или произвести выгрузку исходного кода из выбранного текстового файла."
-        document["info-input-tab-3"].innerHTML = "Также имеется возможность выбрать готовые примеры кода."
+        if settings["current_language"] == "Русский":
+            document["info-input-tab-1"].innerHTML = "Данная вкладка предназначена для ввода исходного кода, который будет использован для симуляции программой."
+            document["info-input-tab-2"].innerHTML = "Ввод исходного кода можно осуществить напрямую в текстовое поле или произвести выгрузку исходного кода из выбранного текстового файла."
+            document["info-input-tab-3"].innerHTML = "Также имеется возможность выбрать готовые примеры кода."
+        else:
+            document["info-input-tab-1"].innerHTML = "This tab is for entering the source code that will be used for simulation by the program."
+            document["info-input-tab-2"].innerHTML = "The source code can be entered directly into the text field, or the source code can be unloaded from the selected text file."
+            document["info-input-tab-3"].innerHTML = "There is also a possibility to choose the ready code examples."
 
     elif (tab.id == "parameters_tab_button"):
         if (client_height >= 920):
@@ -1109,7 +1117,10 @@ def show_info(ev):
         elif (client_height < 810):
             top = int(client_height / 2) - 270
             left = int(client_width / 2) - 540
-        popup = InfoDialog("Справочная информация", "", top=top, left=left, default_css=False, ok="Ок")
+        if settings["current_language"] == "Русский":
+            popup = InfoDialog("Справочная информация", "", top=top, left=left, default_css=False, ok="Ок")
+        else:
+            popup = InfoDialog("Reference information", "", top=top, left=left, default_css=False, ok="Ok")
         close_button = document.select("span.brython-dialog-close")[0]
         close_button.remove()
         document <= DIV(Class="overlay")
@@ -1139,29 +1150,52 @@ def show_info(ev):
         wrapper <= P(Id="info-parameters-tab-16", Class="info-parameters-tab-3", align="justify")
         wrapper <= P(Id="info-parameters-tab-17", Class="info-parameters-tab-3", align="justify")
         wrapper <= P(Id="info-parameters-tab-18", Class="info-parameters-tab-3", align="justify")
-        document["info-parameters-tab-1"].innerHTML = "Данная вкладка предназначена для настройки параметров симуляции."
-        document["info-parameters-tab-2"].innerHTML = "Раздел 'Параметры архитектуры':"
-        document["info-parameters-tab-3"].innerHTML = "- определение количества простых и сложных декодеров симулируемого процессора;"
-        document["info-parameters-tab-4"].innerHTML = "- определение максимального количества микро операций для сложного декодера, которое он сможет декодировать за 1 такт работы процессора (если данного количества микро операций не хватит для декодирования инструкции, то для декодирования каждой дополнительной микро операции будет использоваться простой декодер)."
-        document["info-parameters-tab-5"].innerHTML = "Раздел 'Микро слияние':"
-        document["info-parameters-tab-6"].innerHTML = "- выбор типов пар микро операций, которые будут подвержены микро слиянию;"
-        document["info-parameters-tab-7"].innerHTML = "- регулирование возможности процессора совершать микро слияния нескольких типов пар микро операций в одной инструкции."
-        document["info-parameters-tab-8"].innerHTML = "Раздел 'Move elimination':"
-        document["info-parameters-tab-9"].innerHTML = "- определение разрядности регистров, для которых будет работать блок 'Move elimination';"
-        document["info-parameters-tab-10"].innerHTML = "- регулирование возможности работы блока 'Move elimination' для случая перемещения данных из регистра в этот же самый регистр."
-        document["info-parameters-tab-11"].innerHTML = "Раздел 'LSD':"
-        document["info-parameters-tab-12"].innerHTML = "- определение размера буфера микро операций (инструкции, микро операции которых попадут в буфер LSD, не будут декодироваться повторно в процессе декодирования циклов)."
-        document["info-parameters-tab-13"].innerHTML = "Раздел 'Нуль идиомы':"
-        document["info-parameters-tab-14"].innerHTML = "- выбор инструкций, которые будут учитываться при определении нуль идиом."
-        document["info-parameters-tab-15"].innerHTML = "Раздел 'Макро слияние':"
-        document["info-parameters-tab-16"].innerHTML = "- выбор пар операций, которые будут подвержены макро слиянию (для каждой первой инструкции можно создать набор инструкций, с которыми будет происходить макро слияние при условии последовательного расположения первой и второй инструкции в программном коде.);"
-        document["info-parameters-tab-17"].innerHTML = "- определение максимального числа макро слияний за 1 такт работы модели процессора;"
-        document["info-parameters-tab-18"].innerHTML = "- регулирование функции переноса инструкции на следующий такт, которая потенциально может участвовать в макро слиянии и попала на последний простой декодер, с целью проверки возможности её слияния с последующей инструкцией."
+        if settings["current_language"] == "Русский":
+            document["info-parameters-tab-1"].innerHTML = "Данная вкладка предназначена для настройки параметров симуляции."
+            document["info-parameters-tab-2"].innerHTML = "Раздел 'Параметры архитектуры':"
+            document["info-parameters-tab-3"].innerHTML = "- определение количества простых и сложных декодеров симулируемого процессора;"
+            document["info-parameters-tab-4"].innerHTML = "- определение максимального количества микро операций для сложного декодера, которое он сможет декодировать за 1 такт работы процессора (если данного количества микро операций не хватит для декодирования инструкции, то для декодирования каждой дополнительной микро операции будет использоваться простой декодер)."
+            document["info-parameters-tab-5"].innerHTML = "Раздел 'Микро слияние':"
+            document["info-parameters-tab-6"].innerHTML = "- выбор типов пар микро операций, которые будут подвержены микро слиянию;"
+            document["info-parameters-tab-7"].innerHTML = "- регулирование возможности процессора совершать микро слияния нескольких типов пар микро операций в одной инструкции."
+            document["info-parameters-tab-8"].innerHTML = "Раздел 'Move elimination':"
+            document["info-parameters-tab-9"].innerHTML = "- определение разрядности регистров, для которых будет работать блок 'Move elimination';"
+            document["info-parameters-tab-10"].innerHTML = "- регулирование возможности работы блока 'Move elimination' для случая перемещения данных из регистра в этот же самый регистр."
+            document["info-parameters-tab-11"].innerHTML = "Раздел 'LSD':"
+            document["info-parameters-tab-12"].innerHTML = "- определение размера буфера микро операций (инструкции, микро операции которых попадут в буфер LSD, не будут декодироваться повторно в процессе декодирования циклов)."
+            document["info-parameters-tab-13"].innerHTML = "Раздел 'Нуль идиомы':"
+            document["info-parameters-tab-14"].innerHTML = "- выбор инструкций, которые будут учитываться при определении нуль идиом."
+            document["info-parameters-tab-15"].innerHTML = "Раздел 'Макро слияние':"
+            document["info-parameters-tab-16"].innerHTML = "- выбор пар операций, которые будут подвержены макро слиянию (для каждой первой инструкции можно создать набор инструкций, с которыми будет происходить макро слияние при условии последовательного расположения первой и второй инструкции в программном коде.);"
+            document["info-parameters-tab-17"].innerHTML = "- определение максимального числа макро слияний за 1 такт работы процессора;"
+            document["info-parameters-tab-18"].innerHTML = "- регулирование функции переноса инструкции на следующий такт, которая потенциально может участвовать в макро слиянии и попала на последний простой декодер, с целью проверки возможности её слияния с последующей инструкцией."
+        else:
+            document["info-parameters-tab-1"].innerHTML = "This tab is for setting the simulation parameters."
+            document["info-parameters-tab-2"].innerHTML = "Section 'Architecture parameters':"
+            document["info-parameters-tab-3"].innerHTML = "- determining the number of simple and complex decoders of the simulated processor;"
+            document["info-parameters-tab-4"].innerHTML = "- determining of the maximum number of micro operations for a complex decoder that it can decode in 1 cycle of the processor (if this number of micro operations is not enough to decode the instruction, then a simple decoder will be used to decode each additional micro operation)."
+            document["info-parameters-tab-5"].innerHTML = "Section 'Micro fusion':"
+            document["info-parameters-tab-6"].innerHTML = "- selection of the types of pairs of micro operations that will be subject to micro fusion;"
+            document["info-parameters-tab-7"].innerHTML = "- regulation of the processor's ability to micro fusion several types of pairs of micro operations in one instruction."
+            document["info-parameters-tab-8"].innerHTML = "Section 'Move elimination':"
+            document["info-parameters-tab-9"].innerHTML = "- determining the bit width of the registers for which the 'Move elimination' block will work;"
+            document["info-parameters-tab-10"].innerHTML = "- regulation of the ability of the 'Move elimination' block to work in the case of moving data from a register to the same register."
+            document["info-parameters-tab-11"].innerHTML = "Section 'LSD':"
+            document["info-parameters-tab-12"].innerHTML = "- determining the size of the buffer of micro operations (instructions whose micro-operations will get into the LSD buffer will not be decoded again during the loop decoding)."
+            document["info-parameters-tab-13"].innerHTML = "Section 'Zeroing idioms':"
+            document["info-parameters-tab-14"].innerHTML = "- selection of instructions that will be taken into account when defining zeroing idioms."
+            document["info-parameters-tab-15"].innerHTML = "Section 'Macro fusion':"
+            document["info-parameters-tab-16"].innerHTML = "- selection of pairs of operations that will be subject to macro fusion (for each first instruction, you can create a set of instructions with which a macro fusion will take place, provided that the first and second instructions are sequentially located in the program code.);"
+            document["info-parameters-tab-17"].innerHTML = "- determining of the maximum number of macro fusions for 1 cycle of the processor;"
+            document["info-parameters-tab-18"].innerHTML = "- regulation of the function of transferring an instruction to the next cycle, which can potentially participate in a macro merge and got to the last simple decoder, in order to check the possibility of its merging with a subsequent instruction."
 
     elif (tab.id == "macro_tab_button"):
         top = int(client_height / 2) - 230
         left = int(client_width / 2) - 300
-        popup = InfoDialog("Справочная информация", "", top=top, left=left, default_css=False, ok="Ок")
+        if settings["current_language"] == "Русский":
+            popup = InfoDialog("Справочная информация", "", top=top, left=left, default_css=False, ok="Ок")
+        else:
+            popup = InfoDialog("Reference information", "", top=top, left=left, default_css=False, ok="Ok")
         close_button = document.select("span.brython-dialog-close")[0]
         close_button.remove()
         document <= DIV(Class="overlay")
@@ -1184,19 +1218,32 @@ def show_info(ev):
         element <= P(Id="info-macro-tab-6", Class="info-macro-tab-4", align="justify")
         element <= P(Id="info-macro-tab-7", Class="info-macro-tab-2", align="justify")
         element <= P(Id="info-macro-tab-8", Class="info-macro-tab-2", align="justify")
-        document["info-macro-tab-1"].innerHTML = "Данная вкладка предназначена для отображения этапа декодирования инструкций процессором."
-        document["info-macro-tab-2"].innerHTML = "В таблицах отображается два варианта симуляции процесса декодирования инструкций с включенным и выключенным макро слиянием."
-        document["info-macro-tab-3"].innerHTML = "- данным цветом в таблице выделяются простые декодеры."
-        document["info-macro-tab-4"].innerHTML = "- данным цветом в таблице выделяются сложные декодеры."
-        document["info-macro-tab-5"].innerHTML = "- данным цветом в таблице выделяются инструкции, которые попали в простой декодер благодаря включенному блоку 'Микро слияние'."
-        document["info-macro-tab-6"].innerHTML = "- данными цветами в таблице выделяются инструкции, которые подверглись макро слиянию."
-        document["info-macro-tab-7"].innerHTML = "Оранжевым цветом выделяются циклы, которые попали в блок 'LSD'."
-        document["info-macro-tab-8"].innerHTML = "Зелёным цветом выделяются вложенные циклы, которые попали в блок 'LSD'."
+        if settings["current_language"] == "Русский":
+            document["info-macro-tab-1"].innerHTML = "Данная вкладка предназначена для отображения этапа декодирования инструкций процессором."
+            document["info-macro-tab-2"].innerHTML = "В таблицах отображается два варианта симуляции процесса декодирования инструкций с включенным и выключенным макро слиянием."
+            document["info-macro-tab-3"].innerHTML = "- данным цветом в таблице выделяются простые декодеры."
+            document["info-macro-tab-4"].innerHTML = "- данным цветом в таблице выделяются сложные декодеры."
+            document["info-macro-tab-5"].innerHTML = "- данным цветом в таблице выделяются инструкции, которые попали в простой декодер благодаря включенному блоку 'Микро слияние'."
+            document["info-macro-tab-6"].innerHTML = "- данными цветами в таблице выделяются инструкции, которые подверглись макро слиянию."
+            document["info-macro-tab-7"].innerHTML = "Оранжевым цветом выделяются циклы, которые попали в блок 'LSD'."
+            document["info-macro-tab-8"].innerHTML = "Зелёным цветом выделяются вложенные циклы, которые попали в блок 'LSD'."
+        else:
+            document["info-macro-tab-1"].innerHTML = "This tab is for displaying the stage of decoding instructions by the processor."
+            document["info-macro-tab-2"].innerHTML = "The tables display two options for simulating the process of decoding instructions with enabled and disabled macro fusion."
+            document["info-macro-tab-3"].innerHTML = "- this color in the table highlights simple decoders."
+            document["info-macro-tab-4"].innerHTML = "- this color in the table highlights complex decoders."
+            document["info-macro-tab-5"].innerHTML = "- this color in the table highlights instructions that got into a simple decoder because of the 'Micro fusion' block is on."
+            document["info-macro-tab-6"].innerHTML = "- these colors in the table highlight instructions that were undergone a macro fusion."
+            document["info-macro-tab-7"].innerHTML = "The cycles that are in the 'LSD' block are highlighted in orange."
+            document["info-macro-tab-8"].innerHTML = "Nested loops that are in the 'LSD' block are highlighted in green."
 
     elif (tab.id == "micro_tab_button"):
         top = int(client_height / 2) - 180
         left = int(client_width / 2) - 480
-        popup = InfoDialog("Справочная информация", "", top=top, left=left, default_css=False, ok="Ок")
+        if settings["current_language"] == "Русский":
+            popup = InfoDialog("Справочная информация", "", top=top, left=left, default_css=False, ok="Ок")
+        else:
+            popup = InfoDialog("Reference information", "", top=top, left=left, default_css=False, ok="Ok")
         close_button = document.select("span.brython-dialog-close")[0]
         close_button.remove()
         document <= DIV(Class="overlay")
@@ -1221,12 +1268,22 @@ def show_info(ev):
         element <= P(Id="info-micro-tab-7", Class="info-micro-tab-3", align="justify")
         element <= IMG(Id="img-micro-7", src="static/red.png", Class="img")
         element <= P(Id="info-micro-tab-8", Class="info-micro-tab-3", align="justify")
-        document["info-micro-tab-1"].innerHTML = "Данная вкладка предназначена для отображения результата работы блоков процессора на микро уровне."
-        document["info-micro-tab-2"].innerHTML = "В таблице отображаются список инструкций и результат их декодирования в виде количества полученных микро операций каждого типа и суммарного числа микро операций."
-        document["info-micro-tab-3"].innerHTML = "- данными цветами в таблице выделяются инструкции, которые подверглись макро слиянию."
-        document["info-micro-tab-4"].innerHTML = "- данным цветом выделяются инструкции, для которых было выполнено микро слияние типа 'read-modify'."
-        document["info-micro-tab-5"].innerHTML = "- данным цветом выделяются инструкции, для которых было выполнено микро слияния типа 'address-write'."
-        document["info-micro-tab-6"].innerHTML = "- данным цветом выделяются инструкции, для которых было выполнено оба типа микро слияния."
-        document["info-micro-tab-7"].innerHTML = "- данным цветом выделяются нуль идиомы, распознанные процессором."
-        document["info-micro-tab-8"].innerHTML = "- данным цветом выделяются инструкции, которые подверглись работе блока 'Move elimination'."
+        if settings["current_language"] == "Русский":
+            document["info-micro-tab-1"].innerHTML = "Данная вкладка предназначена для отображения результата работы блоков процессора на микро уровне."
+            document["info-micro-tab-2"].innerHTML = "В таблице отображаются список инструкций и результат их декодирования в виде количества полученных микро операций каждого типа и суммарного числа микро операций."
+            document["info-micro-tab-3"].innerHTML = "- данными цветами в таблице выделяются инструкции, которые подверглись макро слиянию."
+            document["info-micro-tab-4"].innerHTML = "- данным цветом выделяются инструкции, для которых было выполнено микро слияние типа 'read-modify'."
+            document["info-micro-tab-5"].innerHTML = "- данным цветом выделяются инструкции, для которых было выполнено микро слияния типа 'address-write'."
+            document["info-micro-tab-6"].innerHTML = "- данным цветом выделяются инструкции, для которых было выполнено оба типа микро слияния."
+            document["info-micro-tab-7"].innerHTML = "- данным цветом выделяются нуль идиомы, распознанные процессором."
+            document["info-micro-tab-8"].innerHTML = "- данным цветом выделяются инструкции, которые подверглись работе блока 'Move elimination'."
+        else:
+            document["info-micro-tab-1"].innerHTML = "This tab is for displaying the result of the work of the processor blocks at the micro level."
+            document["info-micro-tab-2"].innerHTML = "The table displays a list of instructions and the result of their decoding in the form of the number of received micro operations of each type and the total number of micro operations."
+            document["info-micro-tab-3"].innerHTML = "- these colors in the table highlight instructions that were undergone a macro fusion."
+            document["info-micro-tab-4"].innerHTML = "- this color highlights instructions for which a micro fusion of the 'read-modify' type was performed."
+            document["info-micro-tab-5"].innerHTML = "- this color highlights instructions for which a micro fusion of the 'address-write' type was performed."
+            document["info-micro-tab-6"].innerHTML = "- this color highlights instructions for which both types of micro fusion were performed."
+            document["info-micro-tab-7"].innerHTML = "- this color highlights zeroing idioms identified by the processor."
+            document["info-micro-tab-8"].innerHTML = "- this color highlights instructions that were undergone the 'Move elimination' block."
         
