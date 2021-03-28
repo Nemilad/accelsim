@@ -1106,20 +1106,26 @@ input.panel-checkbox-last {
     opacity: 0.2; 
 }
 
-#info-input-tab-1 {
+.info-input-tab-1 {
 	width: 590px;
 	line-height: 1.35;
 }
 
-#info-input-tab-2 {
+.info-input-tab-2 {
 	width: 590px;
 	line-height: 1.35;
 	padding-top: 6px;
 }
 
-#info-input-tab-3 {
-	width: 590px;
-	padding-top: 10px;
+.info-input-tab-1-en {
+	width: 615px;
+	line-height: 1.35;
+}
+
+.info-input-tab-2-en {
+	width: 615px;
+	line-height: 1.35;
+	padding-top: 6px;
 }
 
 .info-parameters-wrapper {
@@ -1152,50 +1158,100 @@ input.panel-checkbox-last {
 }
 
 .info-macro-tab-1 {
-	width: 460px;
+	width: 475px;
 	line-height: 1.35;
 }
 
 .info-macro-tab-2 {
-	width: 460px;
+	width: 475px;
 	line-height: 1.35;
 	padding-top: 8px;
 }
 
 .info-macro-tab-3 {
-	width: 460px;
+	width: 475px;
 	line-height: 1.35;
 	padding-top: 5px;
 	margin-left: 22px;
 }
 
 .info-macro-tab-4 {
-	width: 435px;
+	width: 450px;
+	line-height: 1.35;
+	padding-top: 5px;
+	margin-left: 45px;
+}
+
+.info-macro-tab-1-en {
+	width: 545px;
+	line-height: 1.35;
+}
+
+.info-macro-tab-2-en {
+	width: 545px;
+	line-height: 1.35;
+	padding-top: 8px;
+}
+
+.info-macro-tab-3-en {
+	width: 520px;
+	line-height: 1.35;
+	padding-top: 5px;
+	margin-left: 22px;
+}
+
+.info-macro-tab-4-en {
+	width: 490px;
 	line-height: 1.35;
 	padding-top: 5px;
 	margin-left: 45px;
 }
 
 .info-micro-tab-1 {
-	width: 800px;
+	width: 805px;
 	line-height: 1.35;
 }
 
 .info-micro-tab-2 {
-	width: 800px;
+	width: 805px;
 	line-height: 1.35;
 	padding-top: 8px;
 }
 
 .info-micro-tab-3 {
-	width: 800px;
+	width: 805px;
 	line-height: 1.35;
 	padding-top: 5px;
 	margin-left: 22px;
 }
 
 .info-micro-tab-4 {
-	width: 800px;
+	width: 770px;
+	line-height: 1.35;
+	padding-top: 5px;
+	margin-left: 45px;
+}
+
+.info-micro-tab-1-en {
+	width: 735px;
+	line-height: 1.35;
+}
+
+.info-micro-tab-2-en {
+	width: 735px;
+	line-height: 1.35;
+	padding-top: 8px;
+}
+
+.info-micro-tab-3-en {
+	width: 710px;
+	line-height: 1.35;
+	padding-top: 5px;
+	margin-left: 22px;
+}
+
+.info-micro-tab-4-en {
+	width: 680px;
 	line-height: 1.35;
 	padding-top: 5px;
 	margin-left: 45px;
