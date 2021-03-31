@@ -797,7 +797,7 @@ def fill_tables(code_table):
                 if x not in loops_count and line["op"].upper() != "LOOP":
                     loops_count[x] = []
                     loops_count[x].append(line)
-                elif x in loops_count and line["op"].upper() != "LOOP":
+                elif x in loops_count:
                     loops_count[x].append(line)
             if line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) < 2:
                 u_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd"])
@@ -931,7 +931,7 @@ def fill_tables(code_table):
                 color = cell_style["lsd_3"]
             elif line["loop_num"][0] % 2 == 0 and len(line["loop_num"]) > 1:
                 color = cell_style["lsd_4"]
-            for copy_line in loops_count[line["loop_num"][0]]:
+            for copy_line in loops_count[line["loop_num"][0]][:-1]:
                 document["macro_table"].select('tbody')[0] <= html.TR()
                 document["macro_table_2"].select('tbody')[0] <= html.TR()
                 current_line += 1
