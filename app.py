@@ -1,7 +1,9 @@
-from browser import document, bind, console, alert, html, window
-from browser.html import TABLE, TR, TH, TD, DIV, P, IMG
+import json
+import re
+
+from browser import document, bind, html, window
+from browser.html import TD, DIV, P, IMG
 from browser.widgets.dialog import InfoDialog
-import re, json
 
 settings = {
     'current_language': "Русский",
@@ -175,9 +177,6 @@ russian_dict = {
     "Zeroing idioms": "Нуль идиомы",
     "Source code": "Исходный код",
     "Code examples:": "Готовые примеры:",
-    "Example 1": "Пример 1",
-    "Example 2": "Пример 2",
-    "Example 3": "Пример 3",
     "Input from file:": "Ввод из файла:",
     "Select file": "Выберите файл",
     "Architecture parameters": "Параметры архитектуры",
@@ -216,6 +215,7 @@ russian_dict = {
 }
 
 current_radio_button = "ADD"
+examples = {}
 
 
 @bind("select.language", "change")
@@ -266,10 +266,6 @@ def translate(ev):
             element.text = translation_dict[element.text]
 
     for element in document["input_tab"].select("p.subtitle-4-2"):
-        if element.text in translation_dict.keys():
-            element.text = translation_dict[element.text]
-
-    for element in document["input_tab"].select("p.code-samples-title"):
         if element.text in translation_dict.keys():
             element.text = translation_dict[element.text]
 
@@ -354,6 +350,7 @@ def translate(ev):
             element.text = translation_dict[element.text]
 
     settings["current_language"] = ev.target.value
+    load_examples()
 
 
 @bind("button.tab", "click")
@@ -385,8 +382,36 @@ def macro_update(ev):
         settings["macro_parameters"][current_radio_button][ev.target.parent.text] = False
 
 
-def load_example():
-    pass
+def load_examples():
+    global examples
+    for element in document.select('select.code-samples')[0]:
+        element.remove()
+    examples.clear()
+    if settings["current_language"] == "English":
+        with open('./examples_en.json') as f:
+            examples = json.load(f)
+    elif settings["current_language"] == "Русский":
+        with open('./examples_ru.json') as f:
+            examples = json.load(f)
+    option = document.createElement("option")
+    option.text = ""
+    document.select('select.code-samples')[0].add(option)
+    for example in examples.keys():
+        option = document.createElement("option")
+        option.text = example
+        document.select('select.code-samples')[0].add(option)
+
+
+@bind("select.code-samples", "change")
+def load_example(ev):
+    global examples
+    if ev.target.value != "":
+        document["inputarea"].value = examples[ev.target.value]
+
+
+@bind("textarea", "click")
+def reset_example(ev):
+    document.select('select.code-samples')[0].selectedIndex = 0
 
 
 def code_check(code):
@@ -1324,4 +1349,10 @@ def show_info(ev):
             document["info-micro-tab-8"].class_name = "info-micro-tab-4-en"
             document["info-micro-tab-9"].class_name = "info-micro-tab-4-en"
             document["info-micro-tab-10"].class_name = "info-micro-tab-4-en"
-        
+
+
+def init():
+    load_examples()
+
+
+document.onload = init()
