@@ -1,5 +1,5 @@
 {
-  "micro fusion": "test",
+  "micro fusion": "; example of micro fusion\n\tinc\t\t[addr1]\t\t\t; read-modify micro fusion\n\tpush\t\teax\t\t\t; address-write micro fusion\n\tor\t\t[addr2], 1\t\t; two types of micro fusion",
   "macro fusion": "",
   "LSD": "",
   "zeroing idioms": "",

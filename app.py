@@ -434,7 +434,7 @@ def update_settings():
     settings["micro_parameters"]["address_write"] = input_value[1].checked
     settings["micro_parameters"]["combined_enabled"] = input_value[2].checked
     input_value = document.select("div.macro-checkbox-wrapper")[0].select(".counter")
-    settings["macro_parameters"]["max_fusions"] = input_value[0].value
+    settings["macro_parameters"]["max_fusions"] = int(input_value[0].value)
     input_value = document.select("div.macro-checkbox-wrapper")[0].select(".checkbox")
     settings["macro_parameters"]["transition"] = input_value[0].checked
     input_value = document.select("div.idiom-0-wrapper")[0].select(".checkbox-1")
@@ -473,7 +473,7 @@ def simulation(ev):
                 'uop_type': '',
                 'loop_num': []
             }
-            if line != "":
+            if line != "" and line[0] != ";":
                 line_num += 1
                 for word_num, word in enumerate(line.split()):
                     mark = mark_list != {} and line_num in mark_list.values()
@@ -579,32 +579,33 @@ def macro_fusion(code_table):
     for line_num, line in enumerate(code_table):
         redo = True
         while redo:
-            if fusions_in_cycle != max_fusions and \
-                    get_op_type(line["op1"]) != "m" and \
+            if get_op_type(line["op1"]) != "m" and \
                     line["op"].upper() in settings["macro_parameters"]:
                 checking = True
-            elif fusions_in_cycle != max_fusions and \
+            elif fusions_in_cycle < max_fusions and \
                     checking and \
                     line["op"].upper() in settings["macro_parameters"][code_table[line_num-1]["op"].upper()] and \
                     settings["macro_parameters"][code_table[line_num-1]["op"].upper()][line["op"].upper()]:
-                if free_simple_dec < 1 and settings["macro_parameters"]["transition"]:
+                if free_simple_dec + free_complex_dec < 1 and settings["macro_parameters"]["transition"]:
                     free_simple_dec = settings["arch_parameters"]["simple_decoders"]
                     free_complex_dec = settings["arch_parameters"]["complex_decoders"]
                     current_cycle += 1
                     fusions_in_cycle = 0
-                if free_simple_dec > 1:
+                if free_simple_dec + free_complex_dec >= 1:
                     checking = False
                     if code_table[line_num - 1]["dec_type"] == "complex" and \
                             code_table[line_num - 1]["dec_cycle"] == current_cycle:
-                        free_complex_dec += 1
-                        free_simple_dec -= 1
+                        line["dec_type"] = "complex"
+                    elif code_table[line_num - 1]["dec_type"] == "simple" and \
+                            code_table[line_num - 1]["dec_cycle"] == current_cycle:
+                        line["dec_type"] = "simple"
                     elif code_table[line_num - 1]["dec_cycle"] != current_cycle:
                         free_simple_dec -= 1
+                        line["dec_type"] = "simple"
                     fusions_in_cycle += 1
                     line["dec_cycle"] = current_cycle
                     line["uop_after"] = 1
                     line["uop_type"] = "macro_fusion"
-                    line["dec_type"] = "simple"
                     code_table[line_num - 1]["dec_cycle"] = current_cycle
                     code_table[line_num - 1]["uop_after"] = ""
                     code_table[line_num - 1]["uop_type"] = "macro_fusion"
@@ -613,7 +614,7 @@ def macro_fusion(code_table):
             else:
                 checking = False
             if line["uop_type"] != "macro_fusion":
-                if settings["macro_parameters"]["transition"] and checking and free_simple_dec < 1:
+                if settings["macro_parameters"]["transition"] and checking and free_simple_dec + free_complex_dec <= 1:
                     free_simple_dec = settings["arch_parameters"]["simple_decoders"]
                     free_complex_dec = settings["arch_parameters"]["complex_decoders"]
                     current_cycle += 1
