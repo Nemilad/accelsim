@@ -475,33 +475,28 @@ def simulation(ev):
             }
             if line != "":
                 line_num += 1
-                if line.split()[0][-1] == ':':
-                    mark_list[line.split()[0][:-1]] = line_num
-                    if len(line.split()) == 4:
-                        template['op'] = line.split()[1]
-                        if line.split()[2][-1] == ",":
-                            template['op1'] = line.split()[2][:-1]
-                        else:
-                            template['op1'] = line.split()[2]
-                        template['op2'] = line.split()[3]
-                    elif len(line.split()) == 3:
-                        template['op'] = line.split()[1]
-                        template['op1'] = line.split()[2]
-                    elif len(line.split()) == 2:
-                        template['op'] = line.split()[1]
-                else:
-                    if len(line.split()) == 3:
-                        template['op'] = line.split()[0]
-                        if line.split()[1][-1] == ",":
-                            template['op1'] = line.split()[1][:-1]
-                        else:
-                            template['op1'] = line.split()[1]
-                        template['op2'] = line.split()[2]
-                    elif len(line.split()) == 2:
-                        template['op'] = line.split()[0]
-                        template['op1'] = line.split()[1]
-                    else:
-                        template['op'] = line.split()[0]
+                for word_num, word in enumerate(line.split()):
+                    mark = mark_list != {} and line_num in mark_list.values()
+                    if word == ";":
+                        break
+                    if word_num == 0 and word[-1] == ':':
+                        mark_list[word[:-1]] = line_num
+                    elif word_num == 0:
+                        template['op'] = word
+                    elif word_num == 1 and mark:
+                        template['op'] = word
+                    elif word_num == 1 and word[-1] == ",":
+                        template['op1'] = word[:-1]
+                    elif word_num == 1:
+                        template['op1'] = word
+                    elif word_num == 2 and word[-1] == "," and mark:
+                        template['op1'] = word[:-1]
+                    elif word_num == 2 and mark:
+                        template['op1'] = word
+                    elif word_num == 2:
+                        template['op2'] = word
+                    elif word_num == 3 and mark:
+                        template['op2'] = word
                 code_table.append(template.copy())
             template.clear()
 
