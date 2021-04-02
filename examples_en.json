@@ -1,7 +1,7 @@
 {
   "micro fusion": "; example of micro fusion\n\tinc\t\t[addr1]\t\t\t; read-modify micro fusion\n\tpush\t\teax\t\t\t; address-write micro fusion\n\tor\t\t[addr2], 1\t\t; two types of micro fusion",
-  "macro fusion": "",
-  "LSD": "",
-  "zeroing idioms": "",
-  "move elimination": ""
+  "macro fusion": "; example of macro fusion\nm1:\tinc\t\teax\t\t\t\n\tjz\t\tm1\t\t\t; macro fusion\n\tadd\t\tebx, 5\n\tjne\t\tm1\t\t\t; second macro fusion\n\tsub\t\tebx, 2\n\tjc\t\tm1\t\t\t; trird macro fusion\n\tpush\t\t[addr1]\n\tand\t\t[addr2], ebx\n\tjnp\t\tm1\t\t\t; macro fusion with memory operand\n\tand\t\teax, ebx\n\tjnp\t\tm1\t\t\t; macro fusion without memory operand\n\tinc\t\tebx\n\tinc\t\tebx\t\t\t; instruction that can be fused get to the last decoder",
+  "LSD": "; example of Loop Stream Detecton\nm1:\txor\t\teax, eax\n\tadd\t\teax, 5\nm2:\tdec\t\tebx\n\tpush\t\teax\n\tloop\t\tm2\t\t; folded cycle\n\tpush\t\t[addr1]\t\n\tloop\t\tm1\t\t; main cycle",
+  "zeroing idioms": "; example of zeroing idioms\n\txor\t\teax, eax\t\t; zeroing with xor\n\tsub\t\trax, rax\t\t; zeroing with sub",
+  "move elimination": "; example of move elimination\n\tmov\t\teax, ebx\t\t; move elimination with 32bit registers\n\tmov\t\trax, rbx\t\t; move elimination with 64bit registers\n\tmov\t\teax, eax\t\t; move elimination with registor move to itself"
 }

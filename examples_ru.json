@@ -1,7 +1,7 @@
 {
-  "micro fusion": "",
-  "macro fusion": "",
-  "LSD": "",
-  "zeroing idioms": "",
-  "move elimination": ""
+  "микро слияние": "; пример работы микро слияния\n\tinc\t\t[addr1]\t\t\t; микро слияние read-modify \n\tpush\t\teax\t\t\t; микро слияние address-write\n\tor\t\t[addr2], 1\t\t; микро слияние двух типов одновременно",
+  "макро слияние": "; пример работы макро слияния\nm1:\tinc\t\teax\t\t\t\n\tjz\t\tm1\t\t\t; макро слияние\n\tadd\t\tebx, 5\n\tjne\t\tm1\t\t\t; второе макро слияние\n\tsub\t\tebx, 2\n\tjc\t\tm1\t\t\t; третье макро слияние\n\tpush\t\t[addr1]\n\tand\t\t[addr2], ebx\n\tjnp\t\tm1\t\t\t; потенциальное макро слияние с операндом памяти\n\tand\t\teax, ebx\n\tjnp\t\tm1\t\t\t; потенциальное макро слияние без операнда памяти\n\tinc\t\tebx\n\tinc\t\tebx\t\t\t; инструкция которая может быть использована в слиянии попадает на последний декодер",
+  "LSD": "; пример работы Loop Stream Detecton\nm1:\txor\t\teax, eax\n\tadd\t\teax, 5\nm2:\tdec\t\tebx\n\tpush\t\teax\n\tloop\t\tm2\t\t; вложенный цикл\n\tpush\t\t[addr1]\t\n\tloop\t\tm1\t\t; основной цикл",
+  "нуль идиомы": "; пример работы нуль идиом\n\txor\t\teax, eax\t\t; нуль идиома с инструкцией xor\n\tsub\t\trax, rax\t\t; нуль идиома с инструкцией sub",
+  "move elimination": "; пример работы move elimination\n\tmov\t\teax, ebx\t\t; move elimination c регистром 32бит\n\tmov\t\trax, rbx\t\t; move elimination c регистром 64бит\n\tmov\t\teax, eax\t\t; move elimination с перемещением регистра в себя"
 }
