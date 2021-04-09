@@ -798,10 +798,7 @@ def clear_tables():
 
 
 def fill_tables(code_table):
-    current_line = 0
-    merge = 0
-    merge2 = 0
-    fusion_count = 0
+    current_line, merge, merge2, fusion_count, before_count, after_count = 0, 0, 0, 0, 0, 0
     loops_count = {}
     print(code_table)
     for i, line in enumerate(code_table):
@@ -811,7 +808,7 @@ def fill_tables(code_table):
         current_line += 1
         if line["uop_type"] == "macro_fusion":
             fusion_count += 1
-
+# micro table output
         u_row = document["micro_table"].select('tbody')[0].select('tr')[i + 1]
         if line["loop_num"]:
             for x in line["loop_num"]:
@@ -830,7 +827,24 @@ def fill_tables(code_table):
                 u_row <= TD(f"{i + 1}", Class="td", Style=cell_style["lsd_4"])
         else:
             u_row <= TD(f"{i + 1}", Class="td")
-        u_row <= TD(line["op"], Class="td")
+        if line["uop_type"] == "combined":
+            u_row <= TD(line["op"], Class="td", Style=cell_style["combined"])
+        elif line["uop_type"] == "address_write":
+            u_row <= TD(line["op"], Class="td", Style=cell_style["address_write"])
+        elif line["uop_type"] == "read_modify":
+            u_row <= TD(line["op"], Class="td", Style=cell_style["read_modify"])
+        elif line["uop_type"] == "zeroing_idiom":
+            u_row <= TD(line["op"], Class="td", Style=cell_style["zeroing_idiom"])
+        elif line["uop_type"] == "move_elimination":
+            u_row <= TD(line["op"], Class="td", Style=cell_style["move_elimination"])
+        elif line["uop_type"] == "macro_fusion":
+            if fusion_count % 2 != 0:
+                if fusion_count % 4 == 1:
+                    u_row <= TD(line["op"], Class="td", Style=cell_style["macro_fusion"], rowspan=2)
+                else:
+                    u_row <= TD(line["op"], Class="td", Style=cell_style["macro_fusion_2"], rowspan=2)
+        else:
+            u_row <= TD(line["op"], Class="td")
         u_row <= TD(line["op1"], Class="td")
         u_row <= TD(line["op2"], Class="td")
         u_row <= TD(line["uop_read"], Class="td")
@@ -856,7 +870,11 @@ def fill_tables(code_table):
                     u_row <= TD(1, Class="td", Style=cell_style["macro_fusion_2"], rowspan=2)
         else:
             u_row <= TD(line["uop_after"], Class="td")
-
+        if line["uop_before"] != "":
+            before_count += line["uop_before"]
+        if line["uop_after"] != "":
+            after_count += line["uop_after"]
+# first macro table output
         m_row = document["macro_table"].select('tbody')[0].select('tr')[current_line]
         if line["loop_num"]:
             if line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) < 2:
@@ -902,7 +920,7 @@ def fill_tables(code_table):
                 m_row <= TD(line["dec_cycle"], Class="td")
         else:
             merge -= 1
-
+# second macro table output
         m2_row = document["macro_table_2"].select('tbody')[0].select('tr')[current_line]
         if line["loop_num"]:
             if line["loop_num"][0] % 2 != 0 and len(line["loop_num"]) < 2:
@@ -986,6 +1004,12 @@ def fill_tables(code_table):
             m2_row = document["macro_table_2"].select('tbody')[0].select('tr')[current_line]
             m_row <= TD("Frontend sleep", Class="td", Style=color, colspan=6)
             m2_row <= TD("Frontend sleep", Class="td", Style=color, colspan=6)
+# last line addition
+    document["micro_table"].select('tbody')[0] <= html.TR()
+    u_row = document["micro_table"].select('tbody')[0].select('tr')[len(code_table)+1]
+    u_row <= TD("Total", Class="td", colspan=8)
+    u_row <= TD(before_count, Class="td")
+    u_row <= TD(after_count, Class="td")
 
 
 @bind("input.counter", "change")
