@@ -838,11 +838,10 @@ def fill_tables(code_table):
         elif line["uop_type"] == "move_elimination":
             u_row <= TD(line["op"], Class="td", Style=cell_style["move_elimination"])
         elif line["uop_type"] == "macro_fusion":
-            if fusion_count % 2 != 0:
-                if fusion_count % 4 == 1:
-                    u_row <= TD(line["op"], Class="td", Style=cell_style["macro_fusion"], rowspan=2)
-                else:
-                    u_row <= TD(line["op"], Class="td", Style=cell_style["macro_fusion_2"], rowspan=2)
+            if fusion_count % 4 == 1 or fusion_count % 4 == 2:
+                u_row <= TD(line["op"], Class="td", Style=cell_style["macro_fusion"])
+            else:
+                u_row <= TD(line["op"], Class="td", Style=cell_style["macro_fusion_2"])
         else:
             u_row <= TD(line["op"], Class="td")
         u_row <= TD(line["op1"], Class="td")
