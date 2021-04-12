@@ -210,8 +210,8 @@ russian_dict = {
     "Operations MODIFY": "Операции MODIFY",
     "Operations ADDRESS": "Операции ADDRESS",
     "Operations WRITE": "Операции WRITE",
-    "Operations before fusion": "Операции до слияния",
-    "Operations after fusion": "Операции после слияния"
+    "Operations before": "Операций до",
+    "Operations after": "Операций после"
 }
 
 current_radio_button = "ADD"
