@@ -803,12 +803,9 @@ def fill_tables(code_table):
     print(code_table)
     for i, line in enumerate(code_table):
         document["micro_table"].select('tbody')[0] <= html.TR()
-        document["macro_table"].select('tbody')[0] <= html.TR()
-        document["macro_table_2"].select('tbody')[0] <= html.TR()
-        current_line += 1
+        # micro table output
         if line["uop_type"] == "macro_fusion":
             fusion_count += 1
-# micro table output
         u_row = document["micro_table"].select('tbody')[0].select('tr')[i + 1]
         if line["loop_num"]:
             for x in line["loop_num"]:
@@ -873,6 +870,16 @@ def fill_tables(code_table):
             before_count += line["uop_before"]
         if line["uop_after"] != "":
             after_count += line["uop_after"]
+    if not settings["block_enabled"]["macro_fusion"]:
+        macro_fusion(code_table)
+    fusion_count = 0
+    for i, line in enumerate(code_table):
+        #document["micro_table"].select('tbody')[0] <= html.TR()
+        document["macro_table"].select('tbody')[0] <= html.TR()
+        document["macro_table_2"].select('tbody')[0] <= html.TR()
+        current_line += 1
+        if line["uop_type"] == "macro_fusion":
+            fusion_count += 1
 # first macro table output
         m_row = document["macro_table"].select('tbody')[0].select('tr')[current_line]
         if line["loop_num"]:
