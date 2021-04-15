@@ -422,8 +422,8 @@ def update_settings():
     input_value = document.select("div.blocks")[0].select("input.checkbox")
     settings["block_enabled"]["macro_fusion"] = input_value[0].checked
     settings["block_enabled"]["micro_fusion"] = input_value[1].checked
-    settings["block_enabled"]["zeroing_idioms"] = input_value[2].checked
-    settings["block_enabled"]["move_elimination"] = input_value[3].checked
+    settings["block_enabled"]["move_elimination"] = input_value[2].checked
+    settings["block_enabled"]["zeroing_idioms"] = input_value[3].checked
     settings["block_enabled"]["LSD"] = input_value[4].checked
     input_value = document.select("div.cpu-column-3")[0].select(".counter")
     settings["arch_parameters"]["simple_decoders"] = int(input_value[0].value)
@@ -473,11 +473,11 @@ def simulation(ev):
                 'uop_type': '',
                 'loop_num': []
             }
-            if line != "" and line[0] != ";":
+            if line != "" and line[0] != ";" and line[0][0] != ";":
                 line_num += 1
                 for word_num, word in enumerate(line.split()):
                     mark = mark_list != {} and line_num in mark_list.values()
-                    if word == ";":
+                    if word == ";" or word[0] == ";":
                         break
                     if word_num == 0 and word[-1] == ':':
                         mark_list[word[:-1]] = line_num
@@ -497,7 +497,10 @@ def simulation(ev):
                         template['op2'] = word
                     elif word_num == 3 and mark:
                         template['op2'] = word
-                code_table.append(template.copy())
+                if template['op'] != "":
+                    code_table.append(template.copy())
+                else:
+                    line_num -= 1
             template.clear()
 
         update_settings()
@@ -800,7 +803,6 @@ def clear_tables():
 def fill_tables(code_table):
     current_line, merge, merge2, fusion_count, before_count, after_count = 0, 0, 0, 0, 0, 0
     loops_count = {}
-    print(code_table)
     for i, line in enumerate(code_table):
         document["micro_table"].select('tbody')[0] <= html.TR()
         # micro table output
