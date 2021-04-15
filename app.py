@@ -475,12 +475,13 @@ def simulation(ev):
             }
             if line != "" and line[0] != ";" and line[0][0] != ";":
                 line_num += 1
+                mark = False
                 for word_num, word in enumerate(line.split()):
-                    mark = mark_list != {} and line_num in mark_list.values()
                     if word == ";" or word[0] == ";":
                         break
                     if word_num == 0 and word[-1] == ':':
                         mark_list[word[:-1]] = line_num
+                        mark = True
                     elif word_num == 0:
                         template['op'] = word
                     elif word_num == 1 and mark:
