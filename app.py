@@ -486,10 +486,16 @@ def simulation(ev):
                         template['op'] = word
                     elif word_num == 1 and mark:
                         template['op'] = word
+                    elif word_num == 1 and word[-1] != "," and "," in word:
+                        template['op1'] = word.split(",")[0]
+                        template['op2'] = word.split(",")[1]
                     elif word_num == 1 and word[-1] == ",":
                         template['op1'] = word[:-1]
                     elif word_num == 1:
                         template['op1'] = word
+                    elif word_num == 2 and word[-1] != "," and mark and "," in word:
+                        template['op1'] = word.split(",")[0]
+                        template['op2'] = word.split(",")[1]
                     elif word_num == 2 and word[-1] == "," and mark:
                         template['op1'] = word[:-1]
                     elif word_num == 2 and mark:
@@ -584,7 +590,8 @@ def macro_fusion(code_table):
         redo = True
         while redo:
             if get_op_type(line["op1"]) != "m" and \
-                    line["op"].upper() in settings["macro_parameters"]:
+                    line["op"].upper() in settings["macro_parameters"] and \
+                    True in settings["macro_parameters"][line["op"].upper()].values():
                 checking = True
             elif fusions_in_cycle < max_fusions and \
                     checking and \
@@ -695,6 +702,8 @@ def micro_table(code_table):
             line["uop_modify"] = decode_data[line["op"]][op_decode_2][1]
             line["uop_address"] = decode_data[line["op"]][op_decode_2][2]
             line["uop_write"] = decode_data[line["op"]][op_decode_2][3]
+        else:
+            print(line["op"] + " " + line["op1"] + " " + line["op2"] + " not supported")
 
 
 def micro_fusion(code_table):
