@@ -508,6 +508,14 @@ input.panel-checkbox-last {
 	background:  rgba(176, 0, 0, 1);
 }
 
+.start:active {
+	box-shadow: inset 1px 1px 10px -1px;
+}
+
+.start:focus {
+	outline: none;
+}
+
 .start-wrapper {
 	height: 70px;
 	position: absolute;
@@ -1049,6 +1057,15 @@ input.panel-checkbox-last {
     z-index: 10;
 }
 
+.brython-dialog-main-1 {
+    font-family: var(--brython-dialog-font-family);
+    font-size: var(--brython-dialog-font-size);
+    background-color: var(--brython-dialog-bgcolor);
+    left: 10px;
+    top: 10px;
+    z-index: 10;
+}
+
 .brython-dialog-title {
 	text-align: center;
     background-color: var(--brython-dialog-title-bgcolor);
@@ -1084,6 +1101,22 @@ input.panel-checkbox-last {
     padding: 0.6em;
 }
 
+.brython-dialog-panel-1 {
+	height: 45px;
+	width: 190px;
+	text-align: center;
+	background-color: #96EB40;
+	border-radius: 8px;
+}
+
+.brython-dialog-panel-1:focus {
+	outline: none;
+}
+
+.custom-dialog-message {
+	padding-top: 13px;
+}
+
 .brython-dialog-message {
     padding-right: 0.6em;
 }
@@ -1107,23 +1140,23 @@ input.panel-checkbox-last {
 }
 
 .info-input-tab-1 {
-	width: 590px;
+	width: 550px;
 	line-height: 1.35;
 }
 
 .info-input-tab-2 {
-	width: 590px;
+	width: 550px;
 	line-height: 1.35;
 	padding-top: 6px;
 }
 
 .info-input-tab-1-en {
-	width: 615px;
+	width: 450px;
 	line-height: 1.35;
 }
 
 .info-input-tab-2-en {
-	width: 615px;
+	width: 450px;
 	line-height: 1.35;
 	padding-top: 6px;
 }
@@ -1183,25 +1216,25 @@ input.panel-checkbox-last {
 }
 
 .info-macro-tab-1-en {
-	width: 545px;
+	width: 390px;
 	line-height: 1.35;
 }
 
 .info-macro-tab-2-en {
-	width: 545px;
+	width: 390px;
 	line-height: 1.35;
 	padding-top: 8px;
 }
 
 .info-macro-tab-3-en {
-	width: 520px;
+	width: 370px;
 	line-height: 1.35;
 	padding-top: 5px;
 	margin-left: 22px;
 }
 
 .info-macro-tab-4-en {
-	width: 490px;
+	width: 350px;
 	line-height: 1.35;
 	padding-top: 5px;
 	margin-left: 45px;

@@ -1,7 +1,7 @@
 import json
 import re
 
-from browser import document, bind, html, window
+from browser import document, bind, html, window, timer
 from browser.html import TD, DIV, P, IMG
 from browser.widgets.dialog import InfoDialog
 
@@ -527,9 +527,40 @@ def simulation(ev):
         fill_tables(code_table)
         code_table.clear()
         mark_list.clear()
+        end_of_simulation_popup()
     else:
         pass
 
+
+def end_of_simulation_popup():
+    client_width = document.documentElement.clientWidth
+    client_height = document.documentElement.clientHeight
+    if (client_height >= 920):
+        top = int(client_height / 2) + 310
+        left = int(client_width / 2) + 458
+    elif (client_height >= 810 and client_height < 920):
+        top = int(client_height / 2) + 220
+        left = int(client_width / 2) + 458
+    elif (client_height < 810):
+        top = int(client_height / 2) + 150
+        left = int(client_width / 2) + 458
+
+    if settings["current_language"] == "Русский":
+        popup = InfoDialog("", "Симуляция завершена", top=top, left=left, default_css=False)
+    else:
+        popup = InfoDialog("", "Simulation completed", top=top, left=left, default_css=False)
+    popup_title = document.select("div.brython-dialog-title")[0]
+    popup_title.remove()
+    main_popup = document.select("div.brython-dialog-main")[0]
+    main_popup.class_name = "brython-dialog-main-1"
+    body_popup = document.select("div.brython-dialog-panel")[0]
+    body_popup.class_name = "brython-dialog-panel-1"
+    inner_div = body_popup.childNodes[0]
+    inner_div.class_name = "custom-dialog-message"
+    timer.set_timeout(hide_popup, 3000)
+
+def hide_popup():
+    document.select("div.brython-dialog-main-1")[0].remove()
 
 def macro_table(code_table):
     current_cycle = 1
@@ -1143,11 +1174,13 @@ def show_info(ev):
     client_height = document.documentElement.clientHeight
     tab = document.select("button.active")[0]
     if (tab.id == "input_tab_button"):
-        top = int(client_height / 2) - 140
-        left = int(client_width / 2) - 374
         if settings["current_language"] == "Русский":
+            top = int(client_height / 2) - 170
+            left = int(client_width / 2) - 378
             popup = InfoDialog("Справочная информация", "", top=top, left=left, default_css=False, ok="Ок")
         else:
+            top = int(client_height / 2) - 170
+            left = int(client_width / 2) - 330
             popup = InfoDialog("Reference information", "", top=top, left=left, default_css=False, ok="Ok")
         close_button = document.select("span.brython-dialog-close")[0]
         close_button.remove()
@@ -1161,17 +1194,21 @@ def show_info(ev):
         element <= P(Id="info-input-tab-1", Class="info-input-tab-1", align="justify")
         element <= P(Id="info-input-tab-2", Class="info-input-tab-2",  align="justify")
         element <= P(Id="info-input-tab-3", Class="info-input-tab-2", align="justify")
+        element <= P(Id="info-input-tab-4", Class="info-input-tab-2", align="justify")
         if settings["current_language"] == "Русский":
             document["info-input-tab-1"].innerHTML = "Данная вкладка предназначена для ввода исходного кода, который будет использован для симуляции программой."
             document["info-input-tab-2"].innerHTML = "Ввод исходного кода можно осуществить напрямую в текстовое поле или произвести выгрузку исходного кода из выбранного текстового файла."
             document["info-input-tab-3"].innerHTML = "Также имеется возможность выбрать готовые примеры кода."
+            document["info-input-tab-4"].innerHTML = "При использовании памяти в качестве операндов инструкций переменные памяти нужно заключать в квадратные скобки для их правильного распознавания программой (например, [addr1])."
         else:
             document["info-input-tab-1"].innerHTML = "This tab is for entering the source code that will be used for simulation by the program."
             document["info-input-tab-2"].innerHTML = "The source code can be entered directly into the text field, or the source code can be unloaded from the selected text file."
             document["info-input-tab-3"].innerHTML = "There is also a possibility to choose the ready code examples."
+            document["info-input-tab-4"].innerHTML = "When using memory as operands of instructions, the memory variables must be enclosed in square brackets for the program to recognize them correctly. (for example, [addr1])."
             document["info-input-tab-1"].class_name = "info-input-tab-1-en"
             document["info-input-tab-2"].class_name = "info-input-tab-2-en"
             document["info-input-tab-3"].class_name = "info-input-tab-2-en"
+            document["info-input-tab-4"].class_name = "info-input-tab-2-en"
 
     elif (tab.id == "parameters_tab_button"):
         if (client_height >= 920):
@@ -1256,13 +1293,13 @@ def show_info(ev):
             document["info-parameters-tab-18"].innerHTML = "- regulation of the function of transferring an instruction to the next cycle, which can potentially participate in a macro merge and got to the last simple decoder, in order to check the possibility of its merging with a subsequent instruction."
 
     elif (tab.id == "macro_tab_button"):
-        top = int(client_height / 2) - 230
-        left = int(client_width / 2) - 300
         if settings["current_language"] == "Русский":
+            top = int(client_height / 2) - 230
+            left = int(client_width / 2) - 340
             popup = InfoDialog("Справочная информация", "", top=top, left=left, default_css=False, ok="Ок")
         else:
-            top = top + 40
-            left = left - 40
+            top = int(client_height / 2) - 230
+            left = int(client_width / 2) - 290
             popup = InfoDialog("Reference information", "", top=top, left=left, default_css=False, ok="Ok")
         close_button = document.select("span.brython-dialog-close")[0]
         close_button.remove()
@@ -1297,8 +1334,8 @@ def show_info(ev):
             document["info-macro-tab-4"].innerHTML = "- данным цветом в таблице выделяются сложные декодеры."
             document["info-macro-tab-5"].innerHTML = "- данным цветом в таблице выделяются инструкции, которые попали в простой декодер благодаря включенному блоку 'Микро слияние'."
             document["info-macro-tab-6"].innerHTML = "- данными цветами в таблице выделяются инструкции, которые подверглись макро слиянию."
-            document["info-macro-tab-7"].innerHTML = "- данными цветами выделяются циклы, которые попали в блок 'LSD'."
-            document["info-macro-tab-8"].innerHTML = "- данными цветами выделяются вложенные циклы, которые попали в блок 'LSD'."
+            document["info-macro-tab-7"].innerHTML = "- данными цветами выделяются циклы."
+            document["info-macro-tab-8"].innerHTML = "- данными цветами выделяются вложенные циклы."
         else:
             document["info-macro-tab-1"].innerHTML = "This tab is for displaying the stage of decoding instructions by the processor."
             document["info-macro-tab-2"].innerHTML = "The tables display two options for simulating the process of decoding instructions with enabled and disabled macro fusion."
@@ -1306,8 +1343,8 @@ def show_info(ev):
             document["info-macro-tab-4"].innerHTML = "- this color in the table highlights complex decoders."
             document["info-macro-tab-5"].innerHTML = "- this color in the table highlights instructions that got into a simple decoder because of the 'Micro fusion' block is on."
             document["info-macro-tab-6"].innerHTML = "- these colors in the table highlight instructions that were undergone a macro fusion."
-            document["info-macro-tab-7"].innerHTML = "- these colors highlight the loops that are in the 'LSD' block."
-            document["info-macro-tab-8"].innerHTML = "- these colors highlight the nested loops that are in the 'LSD' block."
+            document["info-macro-tab-7"].innerHTML = "- these colors highlight loops."
+            document["info-macro-tab-8"].innerHTML = "- these colors highlight nested loops."
             document["info-macro-tab-1"].class_name = "info-macro-tab-1-en"
             document["info-macro-tab-2"].class_name = "info-macro-tab-2-en"
             document["info-macro-tab-3"].class_name = "info-macro-tab-3-en"
@@ -1364,8 +1401,8 @@ def show_info(ev):
             document["info-micro-tab-6"].innerHTML = "- данным цветом выделяются нуль идиомы, распознанные процессором."
             document["info-micro-tab-7"].innerHTML = "- данным цветом выделяются инструкции, которые подверглись работе блока 'Move elimination'."
             document["info-micro-tab-8"].innerHTML = "- данными цветами в таблице выделяются инструкции, которые подверглись макро слиянию."
-            document["info-micro-tab-9"].innerHTML = "- данными цветами выделяются циклы, которые попали в блок 'LSD'."
-            document["info-micro-tab-10"].innerHTML = "- данными цветами выделяются вложенные циклы, которые попали в блок 'LSD'."
+            document["info-micro-tab-9"].innerHTML = "- данными цветами выделяются циклы."
+            document["info-micro-tab-10"].innerHTML = "- данными цветами выделяются вложенные циклы."
         else:
             document["info-micro-tab-1"].innerHTML = "This tab is for displaying the result of the work of the processor blocks at the micro level."
             document["info-micro-tab-2"].innerHTML = "The table displays a list of instructions and the result of their decoding in the form of the number of received micro operations of each type and the total number of micro operations."
@@ -1375,8 +1412,8 @@ def show_info(ev):
             document["info-micro-tab-6"].innerHTML = "- this color highlights zeroing idioms identified by the processor."
             document["info-micro-tab-7"].innerHTML = "- this color highlights instructions that were undergone the 'Move elimination' block."
             document["info-micro-tab-8"].innerHTML = "- these colors in the table highlight instructions that were undergone a macro fusion."
-            document["info-micro-tab-9"].innerHTML = "- these colors highlight the loops that are in the 'LSD' block."
-            document["info-micro-tab-10"].innerHTML = "- these colors highlight the nested loops that are in the 'LSD' block."
+            document["info-micro-tab-9"].innerHTML = "- these colors highlight loops."
+            document["info-micro-tab-10"].innerHTML = "- these colors highlight nested loops."
             document["info-micro-tab-1"].class_name = "info-micro-tab-1-en"
             document["info-micro-tab-2"].class_name = "info-micro-tab-2-en"
             document["info-micro-tab-3"].class_name = "info-micro-tab-3-en"
