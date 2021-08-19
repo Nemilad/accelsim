@@ -4,6 +4,7 @@ import re
 from browser import document, bind, html, window, timer
 from browser.html import TD, DIV, P, IMG
 from browser.widgets.dialog import InfoDialog
+from _collections import deque
 
 settings = {
     'current_language': "Русский",
@@ -415,6 +416,436 @@ def reset_example(ev):
 
 
 def code_check(code):
+    #######################
+    # CONST
+    #######################
+
+    tt_newline = 'newline'
+    tt_inst = 'instruction'
+    tt_reg = 'register'
+    tt_imm = 'immediate_operand'
+    tt_mem = 'memory'
+    tt_mark = 'marker'
+    tt_mark_op = 'marker_operand'
+    tt_comma = 'comma'
+    tt_eof = 'eof'
+    tt_undefined = 'undefined'
+
+    with open('./decode.json') as f:
+        json_data = json.load(f)
+
+    instructions = list(json_data.keys()) + [i.upper() for i in json_data.keys()]
+    registers = ('RAX', 'RCX', 'RDX', 'RBX', 'RSP', 'RBP', 'RSI', 'RDI',
+                 'EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI',
+                 'AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI',
+                 'AH', 'BH', 'CH', 'DH',
+                 'AL', 'BL', 'CL', 'DL', 'SPL', 'BPL', 'SIL', 'DIL')
+    registers += tuple([i.lower() for i in registers])
+    registers_64 = ('RAX', 'RCX', 'RDX', 'RBX', 'RSP', 'RBP', 'RSI', 'RDI')
+    registers_64 += tuple([i.lower() for i in registers_64])
+    registers_32 = ('EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI')
+    registers_32 += tuple([i.lower() for i in registers_32])
+    registers_16 = ('AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI')
+    registers_16 += tuple([i.lower() for i in registers_16])
+    registers_8h = ('AH', 'BH', 'CH', 'DH')
+    registers_8h += tuple([i.lower() for i in registers_8h])
+    registers_8l = ('AL', 'BL', 'CL', 'DL', 'SPL', 'BPL', 'SIL', 'DIL')
+    registers_8l += tuple([i.lower() for i in registers_8l])
+
+    #######################
+    # TOKEN
+    #######################
+
+    class Token:
+        def __init__(self, t_type, t_value=None, pos_start=None, pos_end=None):
+            self.t_type = t_type
+            self.t_value = t_value
+            self.pos_start = pos_start
+            self.pos_end = pos_end
+
+        def __repr__(self):
+            if self.t_value and self.pos_start:
+                return f'{self.t_type}:"{self.t_value}" {self.pos_start} {self.pos_end}'
+            elif self.t_value:
+                return f'{self.t_type}:"{self.t_value}"'
+            return f'{self.t_type}'
+
+    #######################
+    # GRAMMAR
+    #######################
+
+    gt_mline = "marked_line"
+    gt_line = "line"
+    gt_type = "type"
+    gt_op = "operand"
+    gt_double_op = "double_operand"
+    gt_double_type = "double_type"
+
+    grammar = {
+        (tt_mark, gt_line): gt_mline,
+        (tt_mark, tt_eof): gt_mline,
+        (tt_mark, tt_newline): gt_mline,
+        (tt_inst, gt_double_op): gt_line,
+        (tt_inst, gt_op): gt_line,
+        (gt_type, tt_comma, gt_type): gt_double_type,
+        (gt_type, tt_comma, gt_type): gt_double_type,
+        (gt_double_type, tt_eof): gt_double_op,
+        (gt_double_type, tt_newline): gt_double_op,
+        (gt_type, tt_eof): gt_op,
+        (gt_type, tt_newline): gt_op,
+        (tt_imm,): gt_type,
+        (tt_reg,): gt_type,
+        (tt_mem,): gt_type,
+        (tt_mark_op,): gt_type
+    }
+
+    #######################
+    # TREE
+    #######################
+
+    class Node:
+        def __init__(self, data, left=None, right=None):
+            self.data = data
+            self.left = left
+            self.right = right
+
+    #######################
+    # ERROR
+    #######################
+
+    class Error:
+        def __init__(self, name, details, pos_start=None, pos_end=None):
+            self.name = name
+            self.details = details
+            self.pos_start = pos_start
+            self.pos_end = pos_end
+
+        def __repr__(self):
+            if self.pos_start and self.pos_end:
+                return f'{self.name}: {self.details} at line {self.pos_start.ln}'
+            elif self.pos_start:
+                return f'{self.name}: {self.details} at line {self.pos_start.ln}'
+            else:
+                return f'{self.name}: {self.details}'
+
+    class ErrorManager:
+        def __init__(self, output_source=None):
+            self.output_source = output_source
+
+        def display(self, error):
+            if self.output_source:
+                pass
+            else:
+                print(error)
+
+    #######################
+    # POSITION
+    #######################
+
+    class Position:
+        def __init__(self, idx=0, ln=0, col=0):
+            self.idx = idx
+            self.ln = ln
+            self.col = col
+
+        def advance(self, curr_char):
+            self.idx += 1
+            self.col += 1
+            if curr_char == '\n':
+                self.ln += 1
+                self.col = 0
+            return self
+
+        def __copy__(self):
+            return Position(self.idx, self.ln, self.col)
+
+        def copy(self):
+            return Position(self.idx, self.ln, self.col)
+
+        def __repr__(self):
+            return f'{self.idx} {self.ln} {self.col}'
+
+    #######################
+    # LEXER
+    #######################
+
+    class Lexer:
+        def __init__(self, text):
+            self.text = text
+            self.pos = Position(-1, 0, -1)
+            self.curr_char = None
+            self.advance()
+
+        def advance(self):
+            self.pos.advance(self.curr_char)
+            if self.pos.idx < len(self.text):
+                self.curr_char = self.text[self.pos.idx]
+            else:
+                self.curr_char = None
+
+        def __iter__(self):
+            while self.curr_char is not None:
+                if self.curr_char in " \t":
+                    self.advance()
+                elif self.curr_char == '\n':
+                    yield Token(tt_newline)
+                    self.advance()
+                elif self.curr_char == ';':
+                    while self.curr_char is not None and self.curr_char != '\n':
+                        self.advance()
+                elif self.curr_char == ',':
+                    yield Token(tt_comma)
+                    self.advance()
+                elif self.curr_char == '[':
+                    yield self.mem_lex()
+                elif self.curr_char.isalpha():
+                    yield self.word_lex()
+                elif self.curr_char in "0123456789":
+                    yield self.num_lex()
+                else:
+                    yield Token(tt_undefined,
+                                Error("Lexical error", f"Unknown symbol: \"{self.curr_char}\"",
+                                      self.pos.copy()))
+                    self.advance()
+            yield Token(tt_eof)
+            return None
+
+        def mem_lex(self):
+            pos_start = self.pos.copy()
+            mem = self.curr_char
+            self.advance()
+            if not self.curr_char.isalpha():
+                mem += self.curr_char
+                return Token(tt_undefined,
+                             Error("Lexical error", f"Memory operand should start with letter: \"{mem}\"",
+                                   pos_start, self.pos.copy()))
+            if self.curr_char == ']':
+                mem += self.curr_char
+                return Token(tt_undefined,
+                             Error("Lexical error", f"Empty memory operand: \"{mem}\"",
+                                   pos_start, self.pos.copy()))
+            while self.curr_char is not None and (self.curr_char.isalpha() or self.curr_char in "0123456789"):
+                mem += self.curr_char
+                self.advance()
+
+            if self.curr_char == ']':
+                mem += self.curr_char
+                self.advance()
+                if self.curr_char is not None and self.curr_char not in " \t\n,":
+                    return Token(tt_undefined,
+                                 Error("Lexical error", f"No indent after operand: \"{mem}\"",
+                                       pos_start, self.pos.copy()))
+                return Token(tt_mem, mem, pos_start, self.pos.copy())
+            else:
+                return Token(tt_undefined,
+                             Error("Lexical error", f"Memory operand not closed:\"{mem}\"",
+                                   pos_start, self.pos.copy()))
+
+        def word_lex(self):
+            pos_start = self.pos.copy()
+            word = ''
+            while self.curr_char is not None and self.curr_char.isalpha():
+                word += self.curr_char
+                self.advance()
+
+            if self.curr_char is None or self.curr_char in " \t\n,":
+                if word in registers:
+                    return Token(tt_reg, word, pos_start, self.pos.copy())
+                elif word in instructions:
+                    return Token(tt_inst, word, pos_start, self.pos.copy())
+                else:
+                    return Token(tt_mark_op, word, pos_start, self.pos.copy())
+            while self.curr_char is not None and (self.curr_char.isalpha() or self.curr_char in "0123456789"):
+                word += self.curr_char
+                self.advance()
+            if self.curr_char == ':':
+                word += self.curr_char
+                self.advance()
+                return Token(tt_mark, word, pos_start, self.pos.copy())
+            elif self.curr_char is None or self.curr_char in " \t\n":
+                return Token(tt_mark_op, word, pos_start, self.pos.copy())
+            else:
+                return Token(tt_undefined,
+                             Error("Lexical error", f"Unrecognized input:\"{word}\"",
+                                   pos_start, self.pos.copy()))
+
+        def num_lex(self):
+            pos_start = self.pos.copy()
+            num = ''
+            while self.curr_char is not None and self.curr_char in "0123456789":
+                num += self.curr_char
+                self.advance()
+            if self.curr_char is None or self.curr_char in " \t\n,":
+                return Token(tt_imm, int(num), pos_start, self.pos.copy())
+            else:
+                return Token(tt_undefined,
+                             Error("Lexical error", f"Incorrect number: \"{str(num)}\"",
+                                   pos_start, self.pos.copy()))
+
+    #######################
+    # PARSER
+    #######################
+
+    class Parser:
+        def __init__(self, token_source):
+            self.token_source = iter(token_source)
+            self.tok_idx = -1
+            self.curr_tok = None
+            self.stack = deque()
+            self.buffer = []
+            self.line_end_flag = False
+            self.shift()
+
+        def shift(self):
+            self.tok_idx += 1
+            self.curr_tok = next(self.token_source)
+            if self.curr_tok is not None and self.curr_tok.t_type != tt_undefined:
+                self.stack.append(Node(self.curr_tok))
+                self.buffer.append(self.curr_tok.t_type)
+                if self.curr_tok.t_type in (tt_eof, tt_newline):
+                    self.line_end_flag = True
+
+        def reduce(self):
+            for i in range(len(self.buffer)):
+                if tuple(self.buffer[-(i+1):]) in grammar:
+                    to_add = Node(Token(grammar[tuple(self.buffer[-(i+1):])]))
+                    for x in range(i+1):
+                        element = self.stack.pop()
+                        if element.data.t_type not in [tt_comma, tt_newline, tt_eof]:
+                            if to_add.left is None:
+                                to_add.left = element
+                            elif to_add.right is None:
+                                to_add.right = element
+                            else:
+                                print("ERROR in Parser grammar")
+                        self.buffer.pop()
+                    self.stack.append(to_add)
+                    self.buffer.append(to_add.data.t_type)
+                    return True
+            return False
+
+        def __iter__(self):
+            while self.curr_tok is not None:
+                if not self.reduce():
+                    if self.line_end_flag and self.stack[-1].data.t_type in (gt_line, gt_mline) and \
+                            len(self.stack) == 1:
+                        self.line_end_flag = False
+                        self.buffer.clear()
+                        yield self.stack.pop(), None
+                    elif self.line_end_flag and len(self.stack) == 1:
+                        self.line_end_flag = False
+                        self.stack.pop()
+                        self.shift()
+                    elif self.line_end_flag:
+                        yield None, Error("Syntax Error", "")  # TODO: Error
+                    elif self.curr_tok is None:
+                        if not self.stack:
+                            yield None, None
+                        else:
+                            yield None, Error("Syntax Error", "")  # TODO: Error
+                    elif self.curr_tok.t_type == tt_undefined:
+                        yield None, self.curr_tok.t_value
+                    else:
+                        self.shift()
+
+    #######################
+    # SEMANTIC ANALYZER
+    #######################
+
+    class SemanticAnalyzer:
+        def __init__(self):
+            self.marker_table = {}
+            with open('./decode.json') as f:
+                self.decode_data = json.load(f)
+
+        def check_tree(self, tree):
+            curr_instruction = None
+            curr_operands = []
+            for node in self.parse_tree(tree):
+                if node.t_type == tt_mark:
+                    if node.t_value[:-1] in self.marker_table and \
+                            self.marker_table[node.t_value[:-1]].t_type != tt_mark_op:
+                        return Error("Semantic error", "Marker already defined", node.pos_start)
+                    else:
+                        self.marker_table[node.t_value[:-1]] = node
+                elif node.t_type == tt_inst:
+                    curr_instruction = node
+                elif node.t_type in (tt_mem, tt_imm, tt_reg):
+                    curr_operands.append(node)
+                elif node.t_type == tt_mark_op:
+                    if node.t_value not in self.marker_table:
+                        self.marker_table[node.t_value] = node
+                    elif self.marker_table[node.t_value].t_type == tt_mark and \
+                            self.marker_table[node.t_value].pos_start.ln == node.pos_start.ln:
+                        return Error("Semantic error", "Marker and node on the same line", node.pos_start)
+                    else:
+                        curr_operands.append(node)
+            if curr_instruction is not None and curr_operands:
+                search_str1 = ''
+                search_str2 = ''
+                for k, i in enumerate(curr_operands):
+                    if i.t_type == tt_imm:
+                        search_str1 += 'i'
+                        search_str2 += 'i'
+                    elif i.t_type == tt_mem:
+                        search_str1 += 'm'
+                        search_str2 += 'm'
+                    elif i.t_type == tt_mark_op:
+                        search_str1 += 'mark'
+                        search_str2 += 'mark'
+                    elif i.t_type == tt_reg:
+                        search_str1 += 'r'
+                        if i.t_value in registers_64:
+                            search_str2 += 'r64'
+                        elif i.t_value in registers_32:
+                            search_str2 += 'r32'
+                        elif i.t_value in registers_16:
+                            search_str2 += 'r16'
+                        elif i.t_value in registers_8h:
+                            search_str2 += 'r8h'
+                        elif i.t_value in registers_8l:
+                            search_str2 += 'r8l'
+                    if len(curr_operands) == 2 and k == 0:
+                        search_str1 += ','
+                        search_str2 += ','
+                if search_str1 not in self.decode_data[curr_instruction.t_value.lower()] and \
+                        search_str2 not in self.decode_data[curr_instruction.t_value.lower()]:
+                    return Error("Semantic error", "Instruction does not support inputted operands "
+                                                   "or they are not supported", curr_instruction.pos_start)
+            return None
+
+        def check_markers(self):
+            for mark in self.marker_table.keys():
+                if self.marker_table[mark].t_type != tt_mark:
+                    return Error("Semantic error", "Marker not defined", self.marker_table[mark].pos_start)
+            return None
+
+        def parse_tree(self, tree):
+            if tree.right:
+                yield from self.parse_tree(tree.right)
+            yield tree.data
+            if tree.left:
+                yield from self.parse_tree(tree.left)
+
+    #######################
+    # CODE CHECK
+    #######################
+    analyzer = SemanticAnalyzer()
+    error_manager = ErrorManager()
+    for tree, error in Parser(Lexer(code)):
+        if error:
+            error_manager.display(error)
+            return False
+        else:
+            if tree is not None:
+                semantic_error = analyzer.check_tree(tree)
+                if semantic_error:
+                    error_manager.display(semantic_error)
+                    return False
+    semantic_error = analyzer.check_markers()
+    if semantic_error:
+        error_manager.display(semantic_error)
+        return False
     return True
 
 
@@ -528,8 +959,6 @@ def simulation(ev):
         code_table.clear()
         mark_list.clear()
         end_of_simulation_popup()
-    else:
-        pass
 
 
 def end_of_simulation_popup():
@@ -816,15 +1245,15 @@ def get_op_type(op):
         return ""
     elif g_intRegex.match(str(op).strip()) is not None:
         return "i"
-    elif op.upper() in ['RAX', 'RCX', 'RDX', 'RBX', 'RSP', 'RBP', 'RSI', 'RDI']:
+    elif op.upper() in ('RAX', 'RCX', 'RDX', 'RBX', 'RSP', 'RBP', 'RSI', 'RDI'):
         return "r64"
-    elif op.upper() in ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']:
+    elif op.upper() in ('EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI'):
         return "r32"
-    elif op.upper() in ['AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI']:
+    elif op.upper() in ('AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI'):
         return "r16"
-    elif op.upper() in ['AH', 'BH', 'CH', 'DH']:
+    elif op.upper() in ('AH', 'BH', 'CH', 'DH'):
         return "r8h"
-    elif op.upper() in ['AL', 'BL', 'CL', 'DL', 'SPL', 'BPL', 'SIL', 'DIL']:
+    elif op.upper() in ('AL', 'BL', 'CL', 'DL', 'SPL', 'BPL', 'SIL', 'DIL'):
         return "r8l"
     elif '[' in op and ']' in op:
         return "m"
