@@ -466,6 +466,8 @@ def code_check(code):
         def __repr__(self):
             if self.t_value and self.pos_start:
                 return f'{self.t_type}:"{self.t_value}" {self.pos_start} {self.pos_end}'
+            elif self.pos_start:
+                return f'{self.t_type} {self.pos_start}'
             elif self.t_value:
                 return f'{self.t_type}:"{self.t_value}"'
             return f'{self.t_type}'
@@ -588,13 +590,13 @@ def code_check(code):
                 if self.curr_char in " \t":
                     self.advance()
                 elif self.curr_char == '\n':
-                    yield Token(tt_newline)
+                    yield Token(tt_newline, None, self.pos.copy())
                     self.advance()
                 elif self.curr_char == ';':
                     while self.curr_char is not None and self.curr_char != '\n':
                         self.advance()
                 elif self.curr_char == ',':
-                    yield Token(tt_comma)
+                    yield Token(tt_comma, None, self.pos.copy())
                     self.advance()
                 elif self.curr_char == '[':
                     yield self.mem_lex()
@@ -607,7 +609,7 @@ def code_check(code):
                                 Error("Lexical error", f"Unknown symbol: \"{self.curr_char}\"",
                                       self.pos.copy()))
                     self.advance()
-            yield Token(tt_eof)
+            yield Token(tt_eof, None, self.pos.copy())
             return None
 
         def mem_lex(self):
@@ -665,6 +667,7 @@ def code_check(code):
             elif self.curr_char is None or self.curr_char in " \t\n":
                 return Token(tt_mark_op, word, pos_start, self.pos.copy())
             else:
+                word += self.curr_char
                 return Token(tt_undefined,
                              Error("Lexical error", f"Unrecognized input:\"{word}\"",
                                    pos_start, self.pos.copy()))
@@ -701,14 +704,16 @@ def code_check(code):
             self.curr_tok = next(self.token_source)
             if self.curr_tok is not None and self.curr_tok.t_type != tt_undefined:
                 self.stack.append(Node(self.curr_tok))
-                self.buffer.append(self.curr_tok.t_type)
+                self.buffer.append(self.curr_tok)
                 if self.curr_tok.t_type in (tt_eof, tt_newline):
                     self.line_end_flag = True
 
         def reduce(self):
             for i in range(len(self.buffer)):
-                if tuple(self.buffer[-(i+1):]) in grammar:
-                    to_add = Node(Token(grammar[tuple(self.buffer[-(i+1):])]))
+                test_grammar = [i.t_type for i in self.buffer[-(i+1):]]
+                if tuple(test_grammar) in grammar:
+                    to_add = Node(Token(grammar[tuple(test_grammar)], "",
+                                        self.buffer[-(i+1):][0].pos_start, self.buffer[-(i+1):][-1].pos_end))
                     for x in range(i+1):
                         element = self.stack.pop()
                         if element.data.t_type not in [tt_comma, tt_newline, tt_eof]:
@@ -720,9 +725,51 @@ def code_check(code):
                                 print("ERROR in Parser grammar")
                         self.buffer.pop()
                     self.stack.append(to_add)
-                    self.buffer.append(to_add.data.t_type)
+                    self.buffer.append(to_add.data)
                     return True
             return False
+
+        def generate_error(self):
+            node = Token("")
+            while self.stack:
+                node = self.stack.pop().data
+                if node.t_type in (tt_eof, tt_newline):
+                    pass
+                elif node.t_type == tt_comma:
+                    return Error("Syntax error", "Expected operand",
+                                 node.pos_start, node.pos_end)
+                elif node.t_type == tt_inst:
+                    return Error("Syntax error", "Expected operands",
+                                 node.pos_start, node.pos_end)
+                elif node.t_type == tt_mark:
+                    if self.stack:
+                        return Error("Syntax error", "Input before marker",
+                                     node.pos_start, node.pos_end)
+                    break
+                elif node.t_type == gt_type:
+                    break
+                elif node.t_type == gt_op:
+                    return Error("Syntax error", "Expected instruction before operand",
+                                 node.pos_start, node.pos_end)
+                elif node.t_type == gt_double_op:
+                    return Error("Syntax error", "Expected instruction before operands",
+                                 node.pos_start, node.pos_end)
+                elif node.t_type == gt_double_type:
+                    break
+                elif node.t_type == gt_line:
+                    if self.stack:
+                        return Error("Syntax error", "Unexpected input before instruction",
+                                     node.pos_start, node.pos_end)
+                    break
+                elif node.t_type == gt_mline:
+                    if self.stack:
+                        return Error("Syntax error", "Input before marker",
+                                     node.pos_start, node.pos_end)
+                    break
+                else:
+                    break
+            return Error("Syntax error", "Unknown error",
+                         node.pos_start, node.pos_end)
 
         def __iter__(self):
             while self.curr_tok is not None:
@@ -732,17 +779,18 @@ def code_check(code):
                         self.line_end_flag = False
                         self.buffer.clear()
                         yield self.stack.pop(), None
-                    elif self.line_end_flag and len(self.stack) == 1:
+                    elif self.line_end_flag and len(self.stack) == 1 and \
+                            self.stack[-1].data.t_type in (tt_newline, tt_eof):
                         self.line_end_flag = False
                         self.stack.pop()
                         self.shift()
                     elif self.line_end_flag:
-                        yield None, Error("Syntax Error", "")  # TODO: Error
+                        yield None, self.generate_error()
                     elif self.curr_tok is None:
                         if not self.stack:
                             yield None, None
                         else:
-                            yield None, Error("Syntax Error", "")  # TODO: Error
+                            yield None, self.generate_error()
                     elif self.curr_tok.t_type == tt_undefined:
                         yield None, self.curr_tok.t_value
                     else:
@@ -846,6 +894,7 @@ def code_check(code):
     if semantic_error:
         error_manager.display(semantic_error)
         return False
+    print("CHECK DONE")
     return True
 
 
