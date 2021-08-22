@@ -539,6 +539,7 @@ def code_check(code):
                 pass
             else:
                 print(error)
+                print("")
 
     #######################
     # POSITION
@@ -894,7 +895,6 @@ def code_check(code):
     if semantic_error:
         error_manager.display(semantic_error)
         return False
-    print("CHECK DONE")
     return True
 
 
